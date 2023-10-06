@@ -1,0 +1,9 @@
+*.exe
+.vscode
+include/SDL2
+lib
+output
+resources/dev
+Makefile
+SDL2_image.dll
+SDL2.dll
