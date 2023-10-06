@@ -4,7 +4,7 @@
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
 
-// g++ -I include -L lib -o main src/* -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -Wall
+// g++ -I include -L lib -o main src/* -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf  -Wall
 
 int main ( int argc, char *argv[] )
 {
@@ -18,34 +18,65 @@ int main ( int argc, char *argv[] )
         std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
     }
 
-    RenderWindow window("GAME V1.0", 1280, 720);
-    SDL_Texture* grassTexture = window.loadTexture("resources/gfx/grass.png");
+    if(TTF_Init() != 0)
+    {
+        std::cout << "TTF_init has failed. Error: " << TTF_GetError() << std::endl;
+    }
 
+    
+    SDL_Window* window = SDL_CreateWindow(
+        "VisualSort V0", 
+        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+        1280, 1000, 
+        SDL_WINDOW_SHOWN
+        );
 
-    Entity platform0(100, 300, grassTexture);
+    if(window == NULL)
+    {
+        std::cout << "Window failed to init. Error: " << SDL_GetError() << std::endl;
+    }
 
-    bool gameRunning = true;
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    TTF_Font* Arial =  TTF_OpenFont("Arial.ttf", 24);
+    if(Arial == NULL)
+    {
+        std::cout << "Couldn't find fount." << std::endl;
+    }
+    SDL_Color White = {255, 255, 255};
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Arial, "Testee", White);
+    SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+    SDL_FreeSurface(surfaceMessage);
+    SDL_Rect Message_rect;
+    Message_rect.x = 000;
+    Message_rect.y = 100;
+    Message_rect.w = 300;
+    Message_rect.h = 300;
+
+    bool running = true;
     SDL_Event event;
     
-    while (gameRunning)
+    while (running)
     {
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
             {
-                gameRunning = false;
+                running = false;
             }
         }
 
-        window.clear();
-        platform0.xpp();
-        window.render(platform0);
-        window.display();
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
+        SDL_RenderPresent(renderer);
     }
 
     std::cout << "Success!" << std::endl;
 
-    window.cleanUp();
+    SDL_DestroyWindow(window);
+    SDL_DestroyTexture(Message);
+    TTF_CloseFont(Arial);
+    TTF_Quit();
     SDL_Quit();
 
     return 0;
