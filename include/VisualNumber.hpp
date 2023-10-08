@@ -10,6 +10,7 @@ public:
     VisualNumber();
     VisualNumber(int val, TTF_Font* font, SDL_Color color, SDL_Renderer* renderer);
     int increment();
+    int getVal();
     SDL_Texture* getTexture();
 private:
     int val;

@@ -1,3 +1,4 @@
+
 SDL_Window* initializeVisualSort()
 {
     if (SDL_Init(SDL_INIT_VIDEO) > 0)
@@ -19,7 +20,7 @@ SDL_Window* initializeVisualSort()
     SDL_Window* window = SDL_CreateWindow(
         "VisualSort V0", 
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
-        1200, 500, 
+        1280 , 500, 
         SDL_WINDOW_SHOWN
         );
 

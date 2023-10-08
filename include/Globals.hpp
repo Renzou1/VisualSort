@@ -1,0 +1,3 @@
+#define SIZE 5
+#define NUMBER_SIZE 100
+#define DISTANCE NUMBER_SIZE * 2

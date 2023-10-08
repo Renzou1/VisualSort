@@ -2,36 +2,43 @@
 #include <iostream>
 #include <stdlib.h>
 
+#include<SDL2/SDL.h>
+#include<SDL2/SDL_image.h>
+#include<SDL2/SDL_ttf.h>
+
+#include "Globals.hpp"
+#include "Main_f.hpp"
+#include "VisualArray.hpp"
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
 #include "VisualNumber.hpp"
-#include "VisualArray.hpp"
-#include "Main_f.hpp"
+
+
+
 
 // g++ -I include -L lib -o main src/* -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf  -Wall
 
 int main ( int argc, char *argv[] )
 {
 
-    SDL_Window* window = initializeVisualSort();
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-
+    SDL_Window* window_ptr = initializeVisualSort();
+    SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Texture* red_square_texture_ptr = IMG_LoadTexture(renderer_ptr, "resources/gfx/red_square_texture.png");
     TTF_Font* arial =  TTF_OpenFont("Arial.ttf", 20);
     if( arial == NULL )
     {
         std::cout << "Couldn't find font." << std::endl;
     }
     
-    SDL_Rect i_rect;
-    i_rect.x = 000;
-    i_rect.y = 100;
-    i_rect.w = 175;
-    i_rect.h = 300;
+    SDL_Rect initial_rect;
+    initial_rect.x = 100;
+    initial_rect.y = 150;
+    initial_rect.w = NUMBER_SIZE;
+    initial_rect.h = NUMBER_SIZE * 1.5;
 
     SDL_Color white = {255, 255, 255};
-    int array[2] = {10, 6};
-    int size = 2;
-    VisualArray main(array, size, i_rect, arial, white, renderer);
+    int array[SIZE] = {4, 6, 10, 12, 3};
+    VisualArray visualArray(array, SIZE, &initial_rect, red_square_texture_ptr, arial, white, renderer_ptr);
 
     bool running = true;
     SDL_Event event;
@@ -45,13 +52,13 @@ int main ( int argc, char *argv[] )
             }
         }
 
-        SDL_RenderClear(renderer);
-        main.renderArray();
-        SDL_RenderPresent(renderer);
+        SDL_RenderClear(renderer_ptr);
+        visualArray.renderArray();
+        SDL_RenderPresent(renderer_ptr);
         SDL_Delay(10);
     }
 
     std::cout << "Success!" << std::endl;
-    destroyVisualSort(window, arial);
+    destroyVisualSort(window_ptr, arial);
     return 0;
 }

@@ -17,3 +17,6 @@ VisualNumber::VisualNumber(int val, TTF_Font* font, SDL_Color color, SDL_Rendere
 SDL_Texture* VisualNumber::getTexture()
 {  return number_texture;  }
 
+int VisualNumber::getVal()
+{  return val;  }
+
