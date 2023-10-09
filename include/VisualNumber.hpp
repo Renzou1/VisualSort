@@ -8,10 +8,11 @@ class VisualNumber
 {
 public:
     VisualNumber();
-    VisualNumber(int val, TTF_Font* font, SDL_Color color, SDL_Renderer* renderer);
+    VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr);
     int increment();
     int getVal();
     SDL_Texture* getTexture();
+    void destroy();
 private:
     int val;
     SDL_Texture* number_texture;

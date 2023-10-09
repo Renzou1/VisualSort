@@ -1,20 +1,33 @@
 #include <VisualArray.hpp>
-#include <VisualNumber.hpp>
 #include <Globals.hpp>
 
-VisualArray::VisualArray(int array[], int size, 
-                        SDL_Rect* first_rect_ptr, SDL_Texture* red_square_texture_ptr, 
-                        TTF_Font* font_ptr, SDL_Color color, SDL_Renderer* renderer_ptr)
+VisualArray::VisualArray(int array[], int size, int pointersSize, 
+                        SDL_Rect* first_rect_ptr, 
+                        SDL_Renderer* renderer_ptr,
+                        TTF_Font* font_ptr)
 {
+    currentPointerIndex = 0;
     this->size = size;
     this->first_rect_ptr = first_rect_ptr;
-    this->red_square_texture_ptr = red_square_texture_ptr;
+    this->red_square_texture_ptr = IMG_LoadTexture(renderer_ptr, "resources/red_square_texture.png");
     this->renderer_ptr = renderer_ptr;
+
     visualArray = new VisualNumber[size];
     for(int i = 0; i < size; i++)
     {
-        this->visualArray[i] = VisualNumber(array[i], font_ptr, color, renderer_ptr);
+        this->visualArray[i] = VisualNumber(array[i], font_ptr, renderer_ptr);
     }
+    visualPointers = new VisualPointer[pointersSize]; //remember to free
+}
+
+void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, SDL_Rect* first_rect_ptr)
+{
+    int spaceBetweenNumbers = DISTANCE - first_rect_ptr->w;
+    square_rect_ptr->x = number_rect_ptr->x - spaceBetweenNumbers/2; //needs this to align
+    int number_center = number_rect_ptr->y + number_rect_ptr->h/2;
+    square_rect_ptr->w = number_rect_ptr->w + spaceBetweenNumbers;
+    square_rect_ptr->y = number_center - square_rect_ptr->w/2;
+    square_rect_ptr->h = square_rect_ptr->w;
 }
 
 void VisualArray::renderArray()
@@ -31,17 +44,66 @@ void VisualArray::renderArray()
         number_rect.x = first_rect_ptr->x + DISTANCE*i;
         SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);
 
-        int spaceBetweenNumbers = DISTANCE - first_rect_ptr->w;
-        red_square_rect.x = number_rect.x - spaceBetweenNumbers/2; //needs this to align
-        int number_center = number_rect.y + number_rect.h/2;
-        red_square_rect.w = number_rect.w + spaceBetweenNumbers;
-        red_square_rect.y = number_center - red_square_rect.w/2;
-        red_square_rect.h = red_square_rect.w;
+        alignSquareWithNumber(&number_rect, &red_square_rect, first_rect_ptr);
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
+    }
+
+    renderPointers();
+}
+
+void VisualArray::renderPointers()
+{
+    for(int i = 0; i < currentPointerIndex; i++)
+    {
+        visualPointers[i].render(renderer_ptr);
     }
 }
 
 int VisualArray::getVal(int index)
 {
     return visualArray[index].getVal();
+}
+
+void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr, std::string name)
+{
+    SDL_Rect temp_name_rect;
+    temp_name_rect.w = 100;
+    temp_name_rect.h = 100;
+    temp_name_rect.x = first_rect_ptr->x += DISTANCE * index;
+    SDL_Rect temp_arrow_rect;
+    temp_name_rect.w = 100;
+    temp_name_rect.h = 100;
+    temp_name_rect.x = first_rect_ptr->x += DISTANCE * index;
+
+    if(isAbovePointer)
+    {
+        temp_name_rect.y = first_rect_ptr->y - DISTANCE;
+        temp_arrow_rect.y = first_rect_ptr->y - 50;
+
+    }  else
+    {
+        temp_name_rect.y = first_rect_ptr->y + DISTANCE;
+        temp_arrow_rect.y = first_rect_ptr->y + 50;
+    }
+    
+    visualPointers[currentPointerIndex] = VisualPointer(isAbovePointer, temp_name_rect, temp_arrow_rect, 
+                                                        font_ptr, renderer_ptr, name);
+    currentPointerIndex++;
+}
+
+void VisualArray::destroy()
+{
+    // dont know if done
+    for(int i = 0; i < size; i++)
+    {
+        visualArray[i].destroy();
+    }
+    delete visualArray;
+
+    for(int i = 0; i < currentPointerIndex; i++)
+    {
+        visualPointers[i].destroy();
+    }
+    delete visualPointers;
+    SDL_DestroyTexture(red_square_texture_ptr);
 }

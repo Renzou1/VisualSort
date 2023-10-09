@@ -1,3 +1,7 @@
+#pragma once
+
+#include <Globals.hpp>
+#include <VisualArray.hpp>
 
 SDL_Window* initializeVisualSort()
 {
@@ -20,7 +24,7 @@ SDL_Window* initializeVisualSort()
     SDL_Window* window = SDL_CreateWindow(
         "VisualSort V0", 
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
-        1280 , 500, 
+        WINDOW_WIDTH , WINDOW_HEIGHT, 
         SDL_WINDOW_SHOWN
         );
 
@@ -32,10 +36,11 @@ SDL_Window* initializeVisualSort()
     return window;
 }
 
-void destroyVisualSort(SDL_Window* window, TTF_Font* font)
+void destroyVisualSort(SDL_Window* window, TTF_Font* font, VisualArray* visualArray)
 {
     SDL_DestroyWindow(window);
     TTF_CloseFont(font);
+    (*visualArray).destroy();
     TTF_Quit();
     SDL_Quit();
 }
