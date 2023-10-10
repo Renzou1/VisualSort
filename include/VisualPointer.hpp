@@ -1,7 +1,10 @@
+#pragma once
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <string>
+#include "VisualArray.hpp"
 
 class VisualPointer
 {
@@ -9,6 +12,9 @@ public:
     VisualPointer();
     VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect arrow_rect,
                     TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, std::string name);
+    void slidePointer(int _index, SDL_Renderer* renderer_ptr, VisualArray* visualArray);
+    int getIndex();
+    std::string getName();
     void render(SDL_Renderer* renderer_ptr);
     void destroy();
 private:

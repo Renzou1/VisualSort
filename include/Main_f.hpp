@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Globals.hpp>
-#include <VisualArray.hpp>
+#include "Globals.hpp"
+#include "VisualArray.hpp"
 
 SDL_Window* initializeVisualSort()
 {

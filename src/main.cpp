@@ -9,16 +9,16 @@
 #include "Globals.hpp"
 #include "Main_f.hpp"
 #include "VisualArray.hpp"
+#include "VisualPointer.hpp"
 #include "VisualNumber.hpp"
+#include "SortingAlgorithms.hpp"
 
 // g++ -I include -L lib -o main src/* -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf  -Wall
 
 int main ( int argc, char *argv[] )
 {
-
     SDL_Window* window_ptr = initializeVisualSort();
     SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_ACCELERATED);
-
     TTF_Font* font_ptr =  TTF_OpenFont("C:/Windows/Fonts/Rubik-Regular.ttf", FONT_SIZE);
     if( font_ptr == NULL )
     {
@@ -30,9 +30,11 @@ int main ( int argc, char *argv[] )
     VisualArray visualArray(array, SIZE, 2, &initial_rect, renderer_ptr, font_ptr);
     visualArray.addPointer(false, 0, font_ptr, "i");
     visualArray.addPointer(true, 0, font_ptr, "j");
+    //selectionSort(array, SIZE);
 
     bool running = true;
     SDL_Event event;
+    bool flag = true;
     while (running)
     {
         while (SDL_PollEvent(&event))
@@ -45,8 +47,10 @@ int main ( int argc, char *argv[] )
 
         SDL_RenderClear(renderer_ptr);
         visualArray.renderArray();
+        if(flag)
+        {  visualArray.getPointer("i")->slidePointer(1, renderer_ptr, &visualArray);  flag = false;  }
         SDL_RenderPresent(renderer_ptr);
-        SDL_Delay(10);
+        SDL_Delay(10 / SPEED);
     }
 
     destroyVisualSort(window_ptr, font_ptr, &visualArray);

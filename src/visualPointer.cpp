@@ -1,10 +1,15 @@
 #include <VisualPointer.hpp>
+#include <VisualArray.hpp>
+#include <Globals.hpp>
+
+VisualPointer::VisualPointer()
+:name("i"), index(0), isAbovePointer(true), name_texture_ptr(NULL), arrow_texture_ptr(NULL)
+{}
 
 VisualPointer::VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect arrow_rect, 
                             TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, std::string name)
 {
     SDL_Color white = {255, 255, 255};
-    
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, name.c_str(), white);
     name_texture_ptr = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
     this->name_rect.w = temp_surface->w;
@@ -20,12 +25,42 @@ VisualPointer::VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect a
     this->name = name;
     //this->name_rect = name_rect;
     this->arrow_rect = arrow_rect;
-
+    this->index = 0;
 }
 
-VisualPointer::VisualPointer()
-:name("i"), index(0), isAbovePointer(true), name_texture_ptr(NULL), arrow_texture_ptr(NULL)
-{}
+int VisualPointer::getIndex()
+{  return this->index;  }
+
+std::string VisualPointer::getName()
+{  return this->name;  }
+
+void VisualPointer::slidePointer(int _index, SDL_Renderer* renderer_ptr, VisualArray* visualArray_ptr)
+{
+    int initial_x = name_rect.x;
+    
+    if(_index > index)
+    {
+        int distanceToIndex = _index - index;
+        
+        while(name_rect.x < initial_x + distanceToIndex * DISTANCE)
+        {
+            name_rect.x++;
+            arrow_rect.x++;
+            SDL_RenderClear(renderer_ptr);
+            SDL_RenderCopy(renderer_ptr, name_texture_ptr, NULL, &name_rect);
+            SDL_RenderCopy(renderer_ptr, arrow_texture_ptr, NULL, &arrow_rect);
+            visualArray_ptr->renderArray();
+            SDL_RenderPresent(renderer_ptr);
+            SDL_Delay(10 / SPEED);
+        }
+    }
+    if(index < this->index)
+    {
+
+    }
+
+
+}
 
 void VisualPointer::render(SDL_Renderer* renderer_ptr)
 {

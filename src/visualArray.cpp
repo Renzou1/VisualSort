@@ -17,7 +17,7 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
     {
         this->visualArray[i] = VisualNumber(array[i], font_ptr, renderer_ptr);
     }
-    visualPointers = new VisualPointer[pointersSize]; //remember to free
+    visualPointers = new VisualPointer[pointersSize];
 }
 
 void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, SDL_Rect* first_rect_ptr)
@@ -61,6 +61,31 @@ void VisualArray::renderPointers()
 int VisualArray::getVal(int index)
 {
     return visualArray[index].getVal();
+}
+
+VisualPointer* VisualArray::getPointer(std::string name)
+{  
+    for(int i = 0; i < currentPointerIndex; i++)
+    {
+        if(visualPointers[i].getName() == name)
+        {
+            return &visualPointers[i];
+        }
+    }
+
+    return NULL;
+}
+VisualPointer* VisualArray::getPointer(int index)
+{   
+    for(int i = 0; i < currentPointerIndex; i++)
+    {
+        if(visualPointers[i].getIndex() == index)
+        {
+            return &visualPointers[i];
+        }
+    }
+
+    return NULL;
 }
 
 void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr, std::string name)
