@@ -34,9 +34,12 @@ int VisualPointer::getIndex()
 std::string VisualPointer::getName()
 {  return this->name;  }
 
-bool VisualPointer::slidePointer(int _index, SDL_Renderer* renderer_ptr, VisualArray* visualArray_ptr,
-                                SDL_Event* event_ptr)
+bool VisualPointer::slidePointer(int _index, Configuration config)
 {
+    SDL_Renderer* renderer_ptr = config.renderer_ptr;
+    SDL_Event* event_ptr = config.event_ptr;
+    VisualArray* visualArray_ptr = config.visualArray_ptr;
+
     int initial_x = name_rect.x;
     int distanceToIndex = _index - index;
     int increment = _index - index;

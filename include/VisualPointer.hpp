@@ -6,14 +6,20 @@
 #include <string>
 #include "VisualArray.hpp"
 
+typedef struct Configuration
+{
+    SDL_Renderer* renderer_ptr;
+    VisualArray* visualArray_ptr;
+    SDL_Event* event_ptr;
+}config;
+
 class VisualPointer
 {
 public:
     VisualPointer();
     VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect arrow_rect,
                     TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, std::string name);
-    bool slidePointer(int _index, SDL_Renderer* renderer_ptr, VisualArray* visualArray_ptr,
-                                SDL_Event* event_ptr);
+    bool slidePointer(int _index, Configuration config);
     int getIndex();
     std::string getName();
     void render(SDL_Renderer* renderer_ptr);

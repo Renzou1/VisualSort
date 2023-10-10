@@ -12,6 +12,7 @@
 #include "VisualPointer.hpp"
 #include "VisualNumber.hpp"
 #include "SortingAlgorithms.hpp"
+#include "Main_f.hpp"
 
 // g++ -I include -L lib -o main src/* -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf  -Wall
 
@@ -37,6 +38,7 @@ int main ( int argc, char *argv[] )
     SDL_Event event;
     bool flag = true;
     bool flag2 = true;
+    config config = {renderer_ptr, &visualArray, &event};
     while (running)
     {
         while (SDL_PollEvent(&event))
@@ -51,13 +53,13 @@ int main ( int argc, char *argv[] )
         visualArray.renderArray();
         if(flag)
         {  
-            if (!visualArray.getPointer("i")->slidePointer(4, renderer_ptr, &visualArray, &event))
+            if (!visualArray.getPointer("i")->slidePointer(4, config))
             {  break;  }
             flag = false;  
         }
         if(flag2)
         {  
-            if (!visualArray.getPointer("i")->slidePointer(0, renderer_ptr, &visualArray, &event))
+            if (!visualArray.getPointer("i")->slidePointer(0, config))
             {  break;  }
             flag2 = false;  
         }

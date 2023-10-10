@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL2/SDL.h>
 #include "Globals.hpp"
 #include "VisualArray.hpp"
 
