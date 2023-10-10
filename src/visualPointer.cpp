@@ -34,18 +34,28 @@ int VisualPointer::getIndex()
 std::string VisualPointer::getName()
 {  return this->name;  }
 
-void VisualPointer::slidePointer(int _index, SDL_Renderer* renderer_ptr, VisualArray* visualArray_ptr)
+bool VisualPointer::slidePointer(int _index, SDL_Renderer* renderer_ptr, VisualArray* visualArray_ptr,
+                                SDL_Event* event_ptr)
 {
     int initial_x = name_rect.x;
+    int distanceToIndex = _index - index;
+    int increment = _index - index;
+    int goal_x = initial_x + distanceToIndex * DISTANCE;
     
-    if(_index > index)
-    {
-        int distanceToIndex = _index - index;
-        
-        while(name_rect.x < initial_x + distanceToIndex * DISTANCE)
+    //if(_index > index)
+    //{
+        // kinda dangerous but maybe works
+        while(name_rect.x != goal_x)
         {
-            name_rect.x++;
-            arrow_rect.x++;
+            while (SDL_PollEvent(event_ptr))
+            {
+                if (event_ptr->type == SDL_QUIT)
+                {
+                    return false;
+                }
+            }
+            name_rect.x+= increment; // speed is based on distance 
+            arrow_rect.x+= increment;
             SDL_RenderClear(renderer_ptr);
             SDL_RenderCopy(renderer_ptr, name_texture_ptr, NULL, &name_rect);
             SDL_RenderCopy(renderer_ptr, arrow_texture_ptr, NULL, &arrow_rect);
@@ -53,11 +63,24 @@ void VisualPointer::slidePointer(int _index, SDL_Renderer* renderer_ptr, VisualA
             SDL_RenderPresent(renderer_ptr);
             SDL_Delay(10 / SPEED);
         }
-    }
-    if(index < this->index)
+        index = _index;
+        return true;
+    //}
+    /*if(_index < index)
     {
-
-    }
+        index = _index;
+        while(name_rect.x > initial_x + distanceToIndex * DISTANCE)
+        {
+            name_rect.x--;
+            arrow_rect.x--;
+            SDL_RenderClear(renderer_ptr);
+            SDL_RenderCopy(renderer_ptr, name_texture_ptr, NULL, &name_rect);
+            SDL_RenderCopy(renderer_ptr, arrow_texture_ptr, NULL, &arrow_rect);
+            visualArray_ptr->renderArray();
+            SDL_RenderPresent(renderer_ptr);
+            SDL_Delay(10 / SPEED);
+        }
+    }*/
 
 
 }

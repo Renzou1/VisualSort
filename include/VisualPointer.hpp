@@ -12,7 +12,8 @@ public:
     VisualPointer();
     VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect arrow_rect,
                     TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, std::string name);
-    void slidePointer(int _index, SDL_Renderer* renderer_ptr, VisualArray* visualArray);
+    bool slidePointer(int _index, SDL_Renderer* renderer_ptr, VisualArray* visualArray_ptr,
+                                SDL_Event* event_ptr);
     int getIndex();
     std::string getName();
     void render(SDL_Renderer* renderer_ptr);

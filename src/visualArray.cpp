@@ -114,19 +114,15 @@ void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr,
     currentPointerIndex++;
 }
 
+void VisualArray::swap(int index1, int index2)
+{
+
+}
+
 void VisualArray::destroy()
 {
     // dont know if done
-    for(int i = 0; i < size; i++)
-    {
-        visualArray[i].destroy();
-    }
-    delete visualArray;
-
-    for(int i = 0; i < currentPointerIndex; i++)
-    {
-        visualPointers[i].destroy();
-    }
-    delete visualPointers;
+    delete [] visualArray;
+    delete [] visualPointers;
     SDL_DestroyTexture(red_square_texture_ptr);
 }

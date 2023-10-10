@@ -14,7 +14,7 @@ public:
                 SDL_Renderer* renderer_ptr,
                 TTF_Font* font_ptr);
     void split();
-    void swap();
+    void swap(int index1, int index2);
     void renderArray();
     void renderPointers();
     VisualPointer* getPointer(std::string name);
