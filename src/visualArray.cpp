@@ -33,17 +33,16 @@ void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr,
 void VisualArray::renderArray()
 {
     SDL_Rect number_rect;
-    number_rect.h = first_rect_ptr->h;
-    number_rect.w = first_rect_ptr->w;
     number_rect.x = first_rect_ptr->x;
     number_rect.y = first_rect_ptr->y;
+    number_rect.h = first_rect_ptr->h;
+    number_rect.w = first_rect_ptr->w;
 
     SDL_Rect red_square_rect;
     for(int i = 0; i < size; i++)
     {
         number_rect.x = first_rect_ptr->x + DISTANCE*i;
         SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);
-
         alignSquareWithNumber(&number_rect, &red_square_rect, first_rect_ptr);
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
     }
@@ -67,23 +66,22 @@ int VisualArray::getVal(int index)
 void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr, std::string name)
 {
     SDL_Rect temp_name_rect;
-    temp_name_rect.w = 100;
-    temp_name_rect.h = 100;
-    temp_name_rect.x = first_rect_ptr->x += DISTANCE * index;
+    temp_name_rect.x = first_rect_ptr->x + DISTANCE * index + INDEX_TEXTURE_OFFSET;
+
     SDL_Rect temp_arrow_rect;
-    temp_name_rect.w = 100;
-    temp_name_rect.h = 100;
-    temp_name_rect.x = first_rect_ptr->x += DISTANCE * index;
+    temp_arrow_rect.w = 100;
+    temp_arrow_rect.h = 100;
+    temp_arrow_rect.x = first_rect_ptr->x + DISTANCE * index + ARROW_TEXTURE_OFFSET;
 
     if(isAbovePointer)
     {
-        temp_name_rect.y = first_rect_ptr->y - DISTANCE;
-        temp_arrow_rect.y = first_rect_ptr->y - 50;
+        temp_name_rect.y = first_rect_ptr->y - DISTANCE - temp_arrow_rect.h;
+        temp_arrow_rect.y = first_rect_ptr->y - 150;
 
     }  else
     {
-        temp_name_rect.y = first_rect_ptr->y + DISTANCE;
-        temp_arrow_rect.y = first_rect_ptr->y + 50;
+        temp_name_rect.y = first_rect_ptr->y + DISTANCE + temp_arrow_rect.h;
+        temp_arrow_rect.y = first_rect_ptr->y + 150;
     }
     
     visualPointers[currentPointerIndex] = VisualPointer(isAbovePointer, temp_name_rect, temp_arrow_rect, 

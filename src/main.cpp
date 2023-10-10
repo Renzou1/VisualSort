@@ -18,23 +18,18 @@ int main ( int argc, char *argv[] )
 
     SDL_Window* window_ptr = initializeVisualSort();
     SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_ACCELERATED);
-    SDL_Texture* arrow_texture_ptr = IMG_LoadTexture(renderer_ptr, "resources/arrow.png");
 
-    TTF_Font* arial =  TTF_OpenFont("Arial.ttf", FONT_SIZE);
-    if( arial == NULL )
+    TTF_Font* font_ptr =  TTF_OpenFont("C:/Windows/Fonts/Rubik-Regular.ttf", FONT_SIZE);
+    if( font_ptr == NULL )
     {
         std::cout << "Couldn't find font." << std::endl;
     }
     
-    SDL_Rect initial_rect;
-    initial_rect.x = 100;
-    initial_rect.y = 400;
-    initial_rect.w = NUMBER_SIZE;
-    initial_rect.h = NUMBER_SIZE * 1.2;
-
-    int array[SIZE] = {4, 6, 10, 12, 3};
-    VisualArray visualArray(array, SIZE, 2, &initial_rect, renderer_ptr, arial);
-    visualArray.addPointer(true, 0, arial, "L");
+    int array[SIZE] = {4, 6, 2, 9, 3, 1, 5};
+    SDL_Rect initial_rect = makeInitialRect(array, font_ptr);
+    VisualArray visualArray(array, SIZE, 2, &initial_rect, renderer_ptr, font_ptr);
+    visualArray.addPointer(false, 0, font_ptr, "i");
+    visualArray.addPointer(true, 0, font_ptr, "j");
 
     bool running = true;
     SDL_Event event;
@@ -54,6 +49,6 @@ int main ( int argc, char *argv[] )
         SDL_Delay(10);
     }
 
-    destroyVisualSort(window_ptr, arial, &visualArray);
+    destroyVisualSort(window_ptr, font_ptr, &visualArray);
     return 0;
 }

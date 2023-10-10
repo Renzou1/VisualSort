@@ -36,6 +36,20 @@ SDL_Window* initializeVisualSort()
     return window;
 }
 
+SDL_Rect makeInitialRect(int* array, TTF_Font* font_ptr)
+{
+    SDL_Color white = {255, 255, 255};
+    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, std::to_string(array[0]).c_str(), white);
+    SDL_Rect initial_rect;
+    initial_rect.x = 100;
+    initial_rect.y = 250;
+    initial_rect.w = temp_surface->w;
+    initial_rect.h = temp_surface->h;
+    SDL_FreeSurface(temp_surface);
+
+    return initial_rect;
+}
+
 void destroyVisualSort(SDL_Window* window, TTF_Font* font, VisualArray* visualArray)
 {
     SDL_DestroyWindow(window);
