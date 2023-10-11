@@ -2,9 +2,11 @@
 
 class VisualArray;
 class VisualPointer;
+struct Configuration;
 #include "VisualNumber.hpp"
 #include "VisualPointer.hpp"
 #include <iostream>
+#include <string>
 
 class VisualArray
 {
@@ -14,7 +16,11 @@ public:
                 SDL_Renderer* renderer_ptr,
                 TTF_Font* font_ptr);
     void split();
-    void swap(int index1, int index2);
+    void swapElements(int index1, int index2);
+    bool swap(int index1, int index2, Configuration config);
+    bool slidePointer(std::string name, int _index, Configuration config);
+    bool incrementPointer(std::string name, Configuration config);
+    bool decrementPointer(std::string name, Configuration config);
     void renderArray();
     void renderPointers();
     VisualPointer* getPointer(std::string name);

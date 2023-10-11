@@ -18,8 +18,24 @@ VisualNumber::VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_p
 SDL_Texture* VisualNumber::getTexture()
 {  return number_texture;  }
 
+bool VisualNumber::shouldntSkip()
+{  return dontSkip;  }
+
+void VisualNumber::skipRender()
+{  dontSkip = false;  }
+
+void VisualNumber::unskip()
+{  dontSkip = true;  }
+
 int VisualNumber::getVal()
 {  return val;  }
+
+void VisualNumber::operator=(const VisualNumber& V)
+{
+    val = V.val;
+    dontSkip = V.dontSkip;
+    number_texture = V.number_texture;
+}
 
 void VisualNumber::destroy()
 {  SDL_DestroyTexture(number_texture);  }

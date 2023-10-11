@@ -37,7 +37,6 @@ int main ( int argc, char *argv[] )
     bool running = true;
     SDL_Event event;
     bool flag = true;
-    bool flag2 = true;
     config config = {renderer_ptr, &visualArray, &event};
     while (running)
     {
@@ -53,15 +52,11 @@ int main ( int argc, char *argv[] )
         visualArray.renderArray();
         if(flag)
         {  
-            if (!visualArray.getPointer("i")->slidePointer(4, config))
+            if (!visualArray.incrementPointer("i", config))
             {  break;  }
             flag = false;  
-        }
-        if(flag2)
-        {  
-            if (!visualArray.getPointer("i")->slidePointer(0, config))
+            if (!visualArray.swap(0, 4, config))
             {  break;  }
-            flag2 = false;  
         }
         SDL_RenderPresent(renderer_ptr);
         //SDL_Delay(10 / SPEED); delays should probably be more local
