@@ -7,23 +7,17 @@ VisualPointer::VisualPointer()
 {}
 
 VisualPointer::VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect arrow_rect, 
-                            TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, std::string name)
+                            TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, 
+                            std::string name, SDL_Texture* name_texture_ptr)
 {
-    SDL_Color white = {255, 255, 255};
-    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, name.c_str(), white);
-    name_texture_ptr = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
-    this->name_rect.w = temp_surface->w;
-    this->name_rect.h = temp_surface->h;
-    this->name_rect.y = name_rect.y;
-    this->name_rect.x = name_rect.x;
-    SDL_FreeSurface(temp_surface);
     this->isAbovePointer = isAbovePointer;
     if(isAbovePointer)
     {  arrow_texture_ptr = IMG_LoadTexture(renderer_ptr, "resources/down_arrow.png");  }
         else
     {  arrow_texture_ptr = IMG_LoadTexture(renderer_ptr, "resources/up_arrow.png");  }
     this->name = name;
-    //this->name_rect = name_rect;
+    this->name_texture_ptr = name_texture_ptr;
+    this->name_rect = name_rect;
     this->arrow_rect = arrow_rect;
     this->index = 0;
 }
@@ -92,6 +86,17 @@ void VisualPointer::render(SDL_Renderer* renderer_ptr)
 {
     SDL_RenderCopy(renderer_ptr, name_texture_ptr, NULL, &name_rect);
     SDL_RenderCopy(renderer_ptr, arrow_texture_ptr, NULL, &arrow_rect);
+}
+
+void VisualPointer::operator=(const VisualPointer& V)
+{
+    name = V.name;
+    index = V.index;
+    isAbovePointer = V.isAbovePointer;
+    name_texture_ptr = V.name_texture_ptr;
+    arrow_texture_ptr = V.arrow_texture_ptr;
+    name_rect = V.name_rect;
+    arrow_rect = V.arrow_rect;
 }
 
 void VisualPointer::destroy()

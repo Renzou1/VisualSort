@@ -1,4 +1,6 @@
-#include <VisualArray.hpp>
+#include "VisualArray.hpp"
+#include "Globals.hpp"
+#include "Main_f.hpp"
 
 void swap(int* x, int* y)
 {
@@ -6,18 +8,36 @@ void swap(int* x, int* y)
     *x = *y;
     *y = temp;
 }
-/*void selectionSort(int array[], int size, VisualArray visualArray)
+void selectionSort(int array[], Configuration config)
 {
-    int smallest = 0;
-    for(int i = 0; i < size; i++)
+    int pointersNumber = 3;
+    VisualArray visualArray = makeVisualArray(array, pointersNumber, &config);
+    bool upward = true;
+
+    int min = 0;
+    visualArray.addPointer(!upward, 0, config.font_ptr, "min");
+    visualArray.addPointer(upward, 0, config.font_ptr, "i");
+    visualArray.addPointer(upward, 0, config.font_ptr, "j");
+    visualArray.renderArray();
+    for(int i = 0; i < SIZE; i++)
     {
-        for(int j = i; j < size; j++)
+        SDL_Delay(100);
+        while(SDL_PollEvent(config.event_ptr))
         {
-            if(array[j] < array[smallest])
+            if (config.event_ptr->type == SDL_QUIT)
+            {  destroyVisualSort(config.window_ptr, config.font_ptr, config.visualArray_ptr);  }
+        }
+        visualArray.slidePointer("j", "i", config);
+        for(int j = i; j < SIZE; j++)
+        {
+            if(array[j] < array[min])
             {
-                smallest = j;
+                visualArray.slidePointer("min", "j", config);
+                min = j;
             }
         }
-        swap(&array[i], &array[smallest]);
+        visualArray.swapElementsPointedBy("i", "j", config);
+        swap(&array[i], &array[min]);
     }
-}*/
+
+}

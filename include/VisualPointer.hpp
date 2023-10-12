@@ -11,14 +11,17 @@ typedef struct Configuration
     SDL_Renderer* renderer_ptr;
     VisualArray* visualArray_ptr;
     SDL_Event* event_ptr;
-}config;
+    TTF_Font* font_ptr;
+    SDL_Window* window_ptr;
+} Configuration;
 
 class VisualPointer
 {
 public:
     VisualPointer();
-    VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect arrow_rect,
-                    TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, std::string name);
+    VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect arrow_rect, 
+                            TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, 
+                            std::string name, SDL_Texture* name_texture_ptr);
     bool slidePointer(int _index, Configuration config);
     int getIndex();
     void setIndex(int _index)  {  index = _index;  }
@@ -29,6 +32,7 @@ public:
     SDL_Texture* getArrowTexturePtr()  {  return arrow_texture_ptr;  }
     void render(SDL_Renderer* renderer_ptr);
     void destroy();
+    void operator=(const VisualPointer& V);
 private:
     std::string name;
     int index;

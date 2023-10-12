@@ -51,11 +51,29 @@ SDL_Rect makeInitialRect(int* array, TTF_Font* font_ptr)
     return initial_rect;
 }
 
+VisualArray makeVisualArray(int array[], int pointers, Configuration* config_ptr )
+{
+
+    SDL_Rect initial_rect = makeInitialRect(array, config_ptr->font_ptr);
+    VisualArray visualArray(array, SIZE, pointers, initial_rect, config_ptr->renderer_ptr, config_ptr->font_ptr);
+    config_ptr->visualArray_ptr = &visualArray;
+    return visualArray;
+}
+
 void destroyVisualSort(SDL_Window* window, TTF_Font* font, VisualArray* visualArray)
 {
     SDL_DestroyWindow(window);
     TTF_CloseFont(font);
     (*visualArray).destroy();
+    TTF_Quit();
+    SDL_Quit();
+}
+
+void destroyVisualSort(Configuration* config)
+{
+    SDL_DestroyWindow(config->window_ptr);
+    TTF_CloseFont(config->font_ptr);
+    config->visualArray_ptr->destroy();
     TTF_Quit();
     SDL_Quit();
 }

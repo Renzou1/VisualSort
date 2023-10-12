@@ -25,19 +25,23 @@ int main ( int argc, char *argv[] )
     {
         std::cout << "Couldn't find font." << std::endl;
     }
-    
+
+    SDL_Event event;
     int array[SIZE] = {4, 6, 2, 9, 3, 1, 5};
-    SDL_Rect initial_rect = makeInitialRect(array, font_ptr);
-    VisualArray visualArray(array, SIZE, 2, &initial_rect, renderer_ptr, font_ptr);
+    
+    Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr};
+    //selectionSort(array, config);
+
     bool upPointer = false;
-    visualArray.addPointer(upPointer, 0, font_ptr, "i");
+    VisualArray visualArray = makeVisualArray(array, 2, &config);
+    visualArray.addPointer(upPointer, 0, font_ptr, "smallest");
     visualArray.addPointer(!upPointer, 0, font_ptr, "j");
-    //selectionSort(array, SIZE);
+    
 
     bool running = true;
-    SDL_Event event;
+    
     bool flag = true;
-    config config = {renderer_ptr, &visualArray, &event};
+    
     while (running)
     {
         while (SDL_PollEvent(&event))
@@ -52,7 +56,7 @@ int main ( int argc, char *argv[] )
         visualArray.renderArray();
         if(flag)
         {  
-            if (!visualArray.incrementPointer("i", config))
+            if (!visualArray.incrementPointer("smallest", config))
             {  break;  }
             flag = false;  
             if (!visualArray.swap(0, 4, config))
@@ -62,6 +66,5 @@ int main ( int argc, char *argv[] )
         //SDL_Delay(10 / SPEED); delays should probably be more local
     }
 
-    destroyVisualSort(window_ptr, font_ptr, &visualArray);
     return 0;
 }

@@ -1,16 +1,17 @@
-#include <VisualArray.hpp>
-#include <Globals.hpp>
+#include "VisualArray.hpp"
+#include "Globals.hpp"
 
 VisualArray::VisualArray(int array[], int size, int pointersSize, 
-                        SDL_Rect* first_rect_ptr, 
+                        SDL_Rect first_rect, 
                         SDL_Renderer* renderer_ptr,
                         TTF_Font* font_ptr)
 {
     currentPointerIndex = 0;
     this->size =                   size;
-    this->first_rect_ptr =         first_rect_ptr;
+    this->first_rect             = first_rect;
     this->red_square_texture_ptr = IMG_LoadTexture(renderer_ptr, "resources/red_square_texture.png");
     this->renderer_ptr =           renderer_ptr;
+    this->pointersSize =           pointersSize;
 
     visualArray = new VisualNumber[size];
     for(int i = 0; i < size; i++)
@@ -33,18 +34,18 @@ void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr,
 void VisualArray::renderArray()
 {
     SDL_Rect number_rect;
-    number_rect.x = first_rect_ptr->x;
-    number_rect.y = first_rect_ptr->y;
-    number_rect.h = first_rect_ptr->h;
-    number_rect.w = first_rect_ptr->w;
+    number_rect.x = first_rect.x;
+    number_rect.y = first_rect.y;
+    number_rect.h = first_rect.h;
+    number_rect.w = first_rect.w;
 
     SDL_Rect red_square_rect;
     for(int i = 0; i < size; i++)
     {
-        number_rect.x = first_rect_ptr->x + DISTANCE*i;
+        number_rect.x = first_rect.x + DISTANCE*i;
         if(visualArray[i].shouldntSkip())
         {  SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);  }
-        alignSquareWithNumber(&number_rect, &red_square_rect, first_rect_ptr);
+        alignSquareWithNumber(&number_rect, &red_square_rect, &first_rect);
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
     }
 
@@ -126,6 +127,46 @@ bool VisualArray::slidePointer(std::string name, int _index, Configuration confi
     }
     pointer->setIndex(_index);
     return true;
+}
+
+bool VisualArray::slidePointer(std::string name, std::string name2, Configuration config)
+{
+    VisualPointer* pointer = getPointer(name);
+    int _index = getPointer(name2)->getIndex();
+    if(pointer == NULL)
+    {  
+        std::cout << "couldnt find pointer" << std::endl;
+        return false;  
+    }
+    SDL_Renderer* renderer_ptr = config.renderer_ptr;
+    SDL_Event* event_ptr = config.event_ptr;
+    VisualArray* visualArray_ptr = config.visualArray_ptr;
+
+    int initial_x = pointer->getNameRect()->x;
+    int distanceToIndex = _index - pointer->getIndex();
+    int increment = _index - pointer->getIndex();
+    int goal_x = initial_x + distanceToIndex * DISTANCE;
+
+    while(pointer->getNameRect()->x != goal_x)
+    {
+        while (SDL_PollEvent(event_ptr))
+        {
+            if (event_ptr->type == SDL_QUIT)
+            {
+                return false;
+            }
+        }
+        pointer->getNameRect()->x+= increment; // speed is based on distance 
+        pointer->getArrowRect()->x+= increment;
+        SDL_RenderClear(renderer_ptr);
+        SDL_RenderCopy(renderer_ptr, pointer->getNameTexturePtr(), NULL, pointer->getNameRect());
+        SDL_RenderCopy(renderer_ptr, pointer->getArrowTexturePtr(), NULL, pointer->getArrowRect());
+        visualArray_ptr->renderArray();
+        SDL_RenderPresent(renderer_ptr);
+        SDL_Delay(10 / SPEED);
+    }
+    pointer->setIndex(_index);
+    return true;
 
 }
 
@@ -141,31 +182,39 @@ bool VisualArray::decrementPointer(std::string name, Configuration config)
 
 void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr, std::string name)
 {
+    SDL_Color white = {255, 255, 255};
+    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, name.c_str(), white);
+    SDL_Texture* name_texture_ptr = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
+    int middle = temp_surface->w/2;
+
     SDL_Rect temp_name_rect;
-    temp_name_rect.x = first_rect_ptr->x + DISTANCE * index + INDEX_TEXTURE_OFFSET;
+    temp_name_rect.x = first_rect.x + DISTANCE * index + INDEX_TEXTURE_OFFSET - middle;
 
     SDL_Rect temp_arrow_rect;
     temp_arrow_rect.w = 100;
     temp_arrow_rect.h = 100;
-    temp_arrow_rect.x = first_rect_ptr->x + DISTANCE * index + ARROW_TEXTURE_OFFSET;
+    temp_arrow_rect.x = first_rect.x + DISTANCE * index + ARROW_TEXTURE_OFFSET;
 
     if(isAbovePointer)
     {
-        temp_name_rect.y =  first_rect_ptr->y - DISTANCE - temp_arrow_rect.h;
-        temp_arrow_rect.y = first_rect_ptr->y - 150;
+        temp_name_rect.y =  first_rect.y - DISTANCE - temp_arrow_rect.h;
+        temp_arrow_rect.y = first_rect.y - 150;
 
     }  else
     {
-        temp_name_rect.y =  first_rect_ptr->y + DISTANCE + temp_arrow_rect.h;
-        temp_arrow_rect.y = first_rect_ptr->y + 150;
+        temp_name_rect.y =  first_rect.y + DISTANCE + temp_arrow_rect.h;
+        temp_arrow_rect.y = first_rect.y + 150;
     }
+    temp_name_rect.w = temp_surface->w;
+    temp_name_rect.h = temp_surface->h;
     
     visualPointers[currentPointerIndex] = VisualPointer(isAbovePointer, temp_name_rect, temp_arrow_rect, 
-                                                        font_ptr, renderer_ptr, name);
+                                                        font_ptr, renderer_ptr, name, name_texture_ptr);
     currentPointerIndex++;
+    SDL_FreeSurface(temp_surface);
 }
 
-void VisualArray::swapElements(int index1, int index2)
+void VisualArray::swapElementsInArray(int index1, int index2)
 {
     VisualNumber temp;
     temp = visualArray[index1];
@@ -181,15 +230,15 @@ bool VisualArray::swap(int index1, int index2, Configuration config)
     visualArray[index1].skipRender();
     visualArray[index2].skipRender();
 
-    int index1_initial_x = first_rect_ptr->x + index1*DISTANCE;
+    int index1_initial_x = first_rect.x + index1*DISTANCE;
     int index1_current_x = index1_initial_x;
-    int index2_x         = first_rect_ptr->x + index2*DISTANCE;
+    int index2_x         = first_rect.x + index2*DISTANCE;
     int index2_current_x = index2_x;
     int increment        = index1 - index2;
     SDL_Rect temp_rect;
-    temp_rect.w = first_rect_ptr->w;
-    temp_rect.h = first_rect_ptr->h; 
-    temp_rect.y = first_rect_ptr->y;
+    temp_rect.w = first_rect.w;
+    temp_rect.h = first_rect.h; 
+    temp_rect.y = first_rect.y;
     temp_rect.x = index1_current_x;
 
     while(index1_current_x != index2_x)
@@ -216,11 +265,32 @@ bool VisualArray::swap(int index1, int index2, Configuration config)
     } 
     visualArray[index1].unskip();
     visualArray[index2].unskip(); 
-    swapElements(index1, index2);
+    swapElementsInArray(index1, index2);
 
     return true;
 }
 
+void VisualArray::operator=(const VisualArray& V)
+{
+    size = V.size;
+    currentPointerIndex = V.currentPointerIndex;
+    red_square_texture_ptr = V.red_square_texture_ptr;
+    first_rect =  V.first_rect;
+    renderer_ptr = V.renderer_ptr;
+    for(int i = 0; i < size; i++)
+    {
+        visualArray[i] = V.visualArray[i];
+    }
+    for(int i = 0; i < pointersSize; i++)
+    {
+        visualPointers[i] = V.visualPointers[i];
+    }
+}
+
+void VisualArray::swapElementsPointedBy(std::string pointer1, std::string pointer2, Configuration config)
+{
+    swap(getPointer(pointer1)->getIndex(), getPointer(pointer2)->getIndex(), config);
+}
 void VisualArray::destroy()
 {
     // dont know if done
