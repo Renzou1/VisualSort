@@ -2,17 +2,16 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include<SDL2/SDL.h>
-#include<SDL2/SDL_image.h>
-#include<SDL2/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
-#include "Globals.hpp"
 #include "Main_f.hpp"
+#include "Globals.hpp"
 #include "VisualArray.hpp"
 #include "VisualPointer.hpp"
 #include "VisualNumber.hpp"
 #include "SortingAlgorithms.hpp"
-#include "Main_f.hpp"
 
 // g++ -I include -L lib -o main src/* -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf  -Wall
 
@@ -56,11 +55,10 @@ int main ( int argc, char *argv[] )
         visualArray.renderArray();
         if(flag)
         {  
-            if (!visualArray.incrementPointer("smallest", config))
-            {  break;  }
+            visualArray.incrementPointer("smallest", config);
             flag = false;  
-            if (!visualArray.swap(0, 4, config))
-            {  break;  }
+            visualArray.swap(0, 4, config);
+            visualArray.swapElementsPointedBy("smallest", "j", config);
         }
         SDL_RenderPresent(renderer_ptr);
         //SDL_Delay(10 / SPEED); delays should probably be more local

@@ -67,6 +67,7 @@ void destroyVisualSort(SDL_Window* window, TTF_Font* font, VisualArray* visualAr
     (*visualArray).destroy();
     TTF_Quit();
     SDL_Quit();
+    std::exit(0);
 }
 
 void destroyVisualSort(Configuration* config)
@@ -76,4 +77,5 @@ void destroyVisualSort(Configuration* config)
     config->visualArray_ptr->destroy();
     TTF_Quit();
     SDL_Quit();
+    std::exit(0);
 }

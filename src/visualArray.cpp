@@ -1,6 +1,8 @@
 #include "VisualArray.hpp"
 #include "Globals.hpp"
 
+void destroyVisualSort(Configuration* config);
+
 VisualArray::VisualArray(int array[], int size, int pointersSize, 
                         SDL_Rect first_rect, 
                         SDL_Renderer* renderer_ptr,
@@ -90,13 +92,13 @@ VisualPointer* VisualArray::getPointer(int index)
     return NULL;
 }
 
-bool VisualArray::slidePointer(std::string name, int _index, Configuration config)
+void VisualArray::slidePointer(std::string name, int _index, Configuration config)
 {
     VisualPointer* pointer = getPointer(name);
     if(pointer == NULL)
     {  
         std::cout << "couldnt find pointer" << std::endl;
-        return false;  
+        destroyVisualSort(&config);  
     }
     SDL_Renderer* renderer_ptr = config.renderer_ptr;
     SDL_Event* event_ptr = config.event_ptr;
@@ -113,7 +115,7 @@ bool VisualArray::slidePointer(std::string name, int _index, Configuration confi
         {
             if (event_ptr->type == SDL_QUIT)
             {
-                return false;
+                destroyVisualSort(&config);
             }
         }
         pointer->getNameRect()->x+= increment; // speed is based on distance 
@@ -126,17 +128,16 @@ bool VisualArray::slidePointer(std::string name, int _index, Configuration confi
         SDL_Delay(10 / SPEED);
     }
     pointer->setIndex(_index);
-    return true;
 }
 
-bool VisualArray::slidePointer(std::string name, std::string name2, Configuration config)
+void VisualArray::slidePointer(std::string name, std::string name2, Configuration config)
 {
     VisualPointer* pointer = getPointer(name);
     int _index = getPointer(name2)->getIndex();
     if(pointer == NULL)
     {  
         std::cout << "couldnt find pointer" << std::endl;
-        return false;  
+        destroyVisualSort(&config);  
     }
     SDL_Renderer* renderer_ptr = config.renderer_ptr;
     SDL_Event* event_ptr = config.event_ptr;
@@ -153,7 +154,7 @@ bool VisualArray::slidePointer(std::string name, std::string name2, Configuratio
         {
             if (event_ptr->type == SDL_QUIT)
             {
-                return false;
+                destroyVisualSort(&config);
             }
         }
         pointer->getNameRect()->x+= increment; // speed is based on distance 
@@ -166,18 +167,17 @@ bool VisualArray::slidePointer(std::string name, std::string name2, Configuratio
         SDL_Delay(10 / SPEED);
     }
     pointer->setIndex(_index);
-    return true;
 
 }
 
-bool VisualArray::incrementPointer(std::string name, Configuration config)
+void VisualArray::incrementPointer(std::string name, Configuration config)
 {
-    return slidePointer(name, getPointer(name)->getIndex() + 1, config);
+    slidePointer(name, getPointer(name)->getIndex() + 1, config);
 }
 
-bool VisualArray::decrementPointer(std::string name, Configuration config)
+void VisualArray::decrementPointer(std::string name, Configuration config)
 {
-    return slidePointer(name, getPointer(name)->getIndex() - 1, config);
+    slidePointer(name, getPointer(name)->getIndex() - 1, config);
 }
 
 void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr, std::string name)
@@ -222,7 +222,7 @@ void VisualArray::swapElementsInArray(int index1, int index2)
     visualArray[index2] = temp;
 }
 
-bool VisualArray::swap(int index1, int index2, Configuration config)
+void VisualArray::swap(int index1, int index2, Configuration config)
 {
     SDL_Renderer* renderer_ptr = config.renderer_ptr;
     SDL_Event* event_ptr = config.event_ptr;
@@ -247,7 +247,7 @@ bool VisualArray::swap(int index1, int index2, Configuration config)
         {
             if (event_ptr->type == SDL_QUIT)
             {
-                return false;
+                destroyVisualSort(&config);
             }
         }
 
@@ -266,8 +266,6 @@ bool VisualArray::swap(int index1, int index2, Configuration config)
     visualArray[index1].unskip();
     visualArray[index2].unskip(); 
     swapElementsInArray(index1, index2);
-
-    return true;
 }
 
 void VisualArray::operator=(const VisualArray& V)

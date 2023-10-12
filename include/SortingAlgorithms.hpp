@@ -1,6 +1,5 @@
 #include "VisualArray.hpp"
 #include "Globals.hpp"
-#include "Main_f.hpp"
 
 void swap(int* x, int* y)
 {
@@ -18,6 +17,7 @@ void selectionSort(int array[], Configuration config)
     visualArray.addPointer(!upward, 0, config.font_ptr, "min");
     visualArray.addPointer(upward, 0, config.font_ptr, "i");
     visualArray.addPointer(upward, 0, config.font_ptr, "j");
+    SDL_RenderClear(config.renderer_ptr);
     visualArray.renderArray();
     for(int i = 0; i < SIZE; i++)
     {
@@ -25,7 +25,7 @@ void selectionSort(int array[], Configuration config)
         while(SDL_PollEvent(config.event_ptr))
         {
             if (config.event_ptr->type == SDL_QUIT)
-            {  destroyVisualSort(config.window_ptr, config.font_ptr, config.visualArray_ptr);  }
+            {  destroyVisualSort(&config);  }
         }
         visualArray.slidePointer("j", "i", config);
         for(int j = i; j < SIZE; j++)
