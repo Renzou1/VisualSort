@@ -8,4 +8,4 @@
 #define INDEX_ASPECT_RATIO 1.5
 #define ARROW_TEXTURE_OFFSET -26
 #define INDEX_TEXTURE_OFFSET 22
-#define SPEED 1
+#define SPEED 1.75

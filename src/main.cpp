@@ -43,26 +43,26 @@ int main ( int argc, char *argv[] )
     
     while (running)
     {
-        while (SDL_PollEvent(&event))
-        {
-            if (event.type == SDL_QUIT)
-            {
-                running = false;
-            }
-        }
-
-        SDL_RenderClear(renderer_ptr);
-        visualArray.renderArray();
         if(flag)
         {  
-            visualArray.incrementPointer("smallest", config);
+            waitForInput(&config);
+            visualArray.incrementPointer("smallest", &config);
             flag = false;  
-            visualArray.swap(0, 4, config);
-            visualArray.swapElementsPointedBy("smallest", "j", config);
+
+            waitForInput(&config);
+            visualArray.swap(0, 4, &config);
+
+            waitForInput(&config);
+            visualArray.swapElementsPointedBy("smallest", "j", &config);
         }
+        SDL_RenderClear(renderer_ptr);
+        visualArray.renderArray();
         SDL_RenderPresent(renderer_ptr);
+        running = false;
         //SDL_Delay(10 / SPEED); delays should probably be more local
     }
 
+    waitForInput(&config);
+    destroyVisualSort(&config);
     return 0;
 }

@@ -79,3 +79,24 @@ void destroyVisualSort(Configuration* config)
     SDL_Quit();
     std::exit(0);
 }
+
+void waitForInput(Configuration* config_ptr)
+{
+    while(true)
+    {
+        while(SDL_PollEvent(config_ptr->event_ptr))
+        {
+            switch(config_ptr->event_ptr->type)
+            {
+                case SDL_QUIT:
+                    destroyVisualSort(config_ptr);  
+                case SDL_KEYDOWN:
+                    return;  
+            }
+        }
+        SDL_RenderClear(config_ptr->renderer_ptr);
+        config_ptr->visualArray_ptr->renderArray();
+        SDL_RenderPresent(config_ptr->renderer_ptr);
+    }
+}
+

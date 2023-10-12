@@ -92,17 +92,17 @@ VisualPointer* VisualArray::getPointer(int index)
     return NULL;
 }
 
-void VisualArray::slidePointer(std::string name, int _index, Configuration config)
+void VisualArray::slidePointer(std::string name, int _index, Configuration* config_ptr)
 {
     VisualPointer* pointer = getPointer(name);
     if(pointer == NULL)
     {  
         std::cout << "couldnt find pointer" << std::endl;
-        destroyVisualSort(&config);  
+        destroyVisualSort(config_ptr);  
     }
-    SDL_Renderer* renderer_ptr = config.renderer_ptr;
-    SDL_Event* event_ptr = config.event_ptr;
-    VisualArray* visualArray_ptr = config.visualArray_ptr;
+    SDL_Renderer* renderer_ptr = config_ptr->renderer_ptr;
+    SDL_Event* event_ptr = config_ptr->event_ptr;
+    VisualArray* visualArray_ptr = config_ptr->visualArray_ptr;
 
     int initial_x = pointer->getNameRect()->x;
     int distanceToIndex = _index - pointer->getIndex();
@@ -115,7 +115,7 @@ void VisualArray::slidePointer(std::string name, int _index, Configuration confi
         {
             if (event_ptr->type == SDL_QUIT)
             {
-                destroyVisualSort(&config);
+                destroyVisualSort(config_ptr);
             }
         }
         pointer->getNameRect()->x+= increment; // speed is based on distance 
@@ -130,18 +130,18 @@ void VisualArray::slidePointer(std::string name, int _index, Configuration confi
     pointer->setIndex(_index);
 }
 
-void VisualArray::slidePointer(std::string name, std::string name2, Configuration config)
+void VisualArray::slidePointer(std::string name, std::string name2, Configuration* config_ptr)
 {
     VisualPointer* pointer = getPointer(name);
     int _index = getPointer(name2)->getIndex();
     if(pointer == NULL)
     {  
         std::cout << "couldnt find pointer" << std::endl;
-        destroyVisualSort(&config);  
+        destroyVisualSort(config_ptr);  
     }
-    SDL_Renderer* renderer_ptr = config.renderer_ptr;
-    SDL_Event* event_ptr = config.event_ptr;
-    VisualArray* visualArray_ptr = config.visualArray_ptr;
+    SDL_Renderer* renderer_ptr = config_ptr->renderer_ptr;
+    SDL_Event* event_ptr = config_ptr->event_ptr;
+    VisualArray* visualArray_ptr = config_ptr->visualArray_ptr;
 
     int initial_x = pointer->getNameRect()->x;
     int distanceToIndex = _index - pointer->getIndex();
@@ -154,7 +154,7 @@ void VisualArray::slidePointer(std::string name, std::string name2, Configuratio
         {
             if (event_ptr->type == SDL_QUIT)
             {
-                destroyVisualSort(&config);
+                destroyVisualSort(config_ptr);
             }
         }
         pointer->getNameRect()->x+= increment; // speed is based on distance 
@@ -170,14 +170,14 @@ void VisualArray::slidePointer(std::string name, std::string name2, Configuratio
 
 }
 
-void VisualArray::incrementPointer(std::string name, Configuration config)
+void VisualArray::incrementPointer(std::string name, Configuration* config_ptr)
 {
-    slidePointer(name, getPointer(name)->getIndex() + 1, config);
+    slidePointer(name, getPointer(name)->getIndex() + 1, config_ptr);
 }
 
-void VisualArray::decrementPointer(std::string name, Configuration config)
+void VisualArray::decrementPointer(std::string name, Configuration* config_ptr)
 {
-    slidePointer(name, getPointer(name)->getIndex() - 1, config);
+    slidePointer(name, getPointer(name)->getIndex() - 1, config_ptr);
 }
 
 void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr, std::string name)
@@ -222,11 +222,11 @@ void VisualArray::swapElementsInArray(int index1, int index2)
     visualArray[index2] = temp;
 }
 
-void VisualArray::swap(int index1, int index2, Configuration config)
+void VisualArray::swap(int index1, int index2, Configuration* config_ptr)
 {
-    SDL_Renderer* renderer_ptr = config.renderer_ptr;
-    SDL_Event* event_ptr = config.event_ptr;
-    VisualArray* visualArray_ptr = config.visualArray_ptr;
+    SDL_Renderer* renderer_ptr = config_ptr->renderer_ptr;
+    SDL_Event* event_ptr = config_ptr->event_ptr;
+    VisualArray* visualArray_ptr = config_ptr->visualArray_ptr;
     visualArray[index1].skipRender();
     visualArray[index2].skipRender();
 
@@ -247,7 +247,7 @@ void VisualArray::swap(int index1, int index2, Configuration config)
         {
             if (event_ptr->type == SDL_QUIT)
             {
-                destroyVisualSort(&config);
+                destroyVisualSort(config_ptr);
             }
         }
 
@@ -285,9 +285,9 @@ void VisualArray::operator=(const VisualArray& V)
     }
 }
 
-void VisualArray::swapElementsPointedBy(std::string pointer1, std::string pointer2, Configuration config)
+void VisualArray::swapElementsPointedBy(std::string pointer1, std::string pointer2, Configuration* config_ptr)
 {
-    swap(getPointer(pointer1)->getIndex(), getPointer(pointer2)->getIndex(), config);
+    swap(getPointer(pointer1)->getIndex(), getPointer(pointer2)->getIndex(), config_ptr);
 }
 void VisualArray::destroy()
 {

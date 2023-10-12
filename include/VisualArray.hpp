@@ -16,12 +16,12 @@ public:
                 SDL_Renderer* renderer_ptr,
                 TTF_Font* font_ptr);
     void split();
-    void swapElementsPointedBy(std::string pointer1, std::string pointer2, Configuration config);
-    void swap(int index1, int index2, Configuration config);
-    void slidePointer(std::string name, int _index, Configuration config);
-    void slidePointer(std::string name, std::string name2, Configuration config);
-    void incrementPointer(std::string name, Configuration config);
-    void decrementPointer(std::string name, Configuration config);
+    void swapElementsPointedBy(std::string pointer1, std::string pointer2, Configuration* config_ptr);
+    void swap(int index1, int index2, Configuration* config_ptr);
+    void slidePointer(std::string name, int _index, Configuration* config_ptr);
+    void slidePointer(std::string name, std::string name2, Configuration* config_ptr);
+    void incrementPointer(std::string name, Configuration* config_ptr);
+    void decrementPointer(std::string name, Configuration* config_ptr);
     void renderArray();
     VisualPointer* getPointer(std::string name);
     VisualPointer* getPointer(int index);
