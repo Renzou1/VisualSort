@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <stdlib.h>
+#include <time.h>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -26,10 +27,11 @@ int main ( int argc, char *argv[] )
     }
 
     SDL_Event event;
+    srand(time(NULL));
     int array[SIZE];
     for(int i = 0; i < SIZE; i++)
     {
-        array[i] = i;
+        array[i] = rand() % 100;
     }
     
     Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr};

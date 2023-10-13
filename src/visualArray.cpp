@@ -15,6 +15,12 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
     this->renderer_ptr =           renderer_ptr;
     this->pointersSize =           pointersSize;
 
+    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "0", {255, 255, 255});
+    this->single_digit_width = temp_surface->w;
+    temp_surface = TTF_RenderText_Solid(font_ptr, "10", {255, 255, 255});
+    this->double_digit_width = temp_surface->w;
+    SDL_FreeSurface(temp_surface);
+
     visualArray = new VisualNumber[size];
     for(int i = 0; i < size; i++)
     {
@@ -46,7 +52,13 @@ void VisualArray::renderArray()
     {
         number_rect.x = first_rect.x + DISTANCE*i;
         if(visualArray[i].shouldntSkip())
-        {  SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);  }
+        {
+            if(visualArray[i].getVal() >= 10)
+            {  number_rect.w = double_digit_width;  }
+            else
+            {  number_rect.w = single_digit_width;  }
+            SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);  
+        }
         alignSquareWithNumber(&number_rect, &red_square_rect, &first_rect);
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
     }

@@ -35,6 +35,8 @@ private:
     int size;
     int pointersSize;
     int currentPointerIndex;
+    int single_digit_width;
+    int double_digit_width;
     SDL_Texture* red_square_texture_ptr;
     SDL_Rect first_rect;
     SDL_Renderer* renderer_ptr;
