@@ -32,7 +32,7 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
 void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, int double_digit_width)
 {
     int spaceBetweenNumbers = DISTANCE - double_digit_width;
-    square_rect_ptr->x      = number_rect_ptr->x - spaceBetweenNumbers/2; //needs this to align
+    square_rect_ptr->x      = number_rect_ptr->x - spaceBetweenNumbers/2;
     int number_center       = number_rect_ptr->y + number_rect_ptr->h/2;
     square_rect_ptr->w      = DISTANCE;
     square_rect_ptr->y      = number_center - square_rect_ptr->w/2;
@@ -60,11 +60,13 @@ void VisualArray::renderArray()
 
             }  else
             {  
-                int temp_x = number_rect.x;
                 number_rect.w = single_digit_width;
-                number_rect.x = first_rect.x + DISTANCE*i - single_digit_width/2 + double_digit_width/2;
+
+                int difference_in_centers = double_digit_width/2 - single_digit_width/2;
+                
+                number_rect.x += difference_in_centers;
                 SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);
-                number_rect.x = temp_x;
+                number_rect.x -= difference_in_centers;
             }
              
         }
@@ -182,7 +184,7 @@ void VisualArray::slidePointer(std::string name, std::string name2, Configuratio
                 destroyVisualSort(config_ptr);
             }
         }
-        pointer->getNameRect()->x+= increment; // speed is based on distance 
+        pointer->getNameRect()->x+= increment;
         pointer->getArrowRect()->x+= increment;
         SDL_RenderClear(renderer_ptr);
         SDL_RenderCopy(renderer_ptr, pointer->getNameTexturePtr(), NULL, pointer->getNameRect());
@@ -212,7 +214,7 @@ void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr,
     SDL_Texture* name_texture_ptr = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
 
     SDL_Rect temp_name_rect;
-    temp_name_rect.x = first_rect.x + DISTANCE * index + double_digit_width/2 - temp_surface->w/2; //+ INDEX_TEXTURE_OFFSET - middle;
+    temp_name_rect.x = first_rect.x + DISTANCE * index + double_digit_width/2 - temp_surface->w/2;
 
     SDL_Rect temp_arrow_rect;
     temp_arrow_rect.w = FONT_SIZE * 1.25;

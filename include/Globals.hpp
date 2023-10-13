@@ -1,4 +1,4 @@
-#define SIZE 30
+#define SIZE 20
 #define FONT_SIZE 40 // best: 80 
 #define DISTANCE FONT_SIZE * 2
 #define WINDOW_WIDTH DISTANCE * SIZE + 200

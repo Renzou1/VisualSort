@@ -36,7 +36,5 @@ int main ( int argc, char *argv[] )
     Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr};
     selectionSort(array, &config);
 
-    waitForInput(&config);
-    destroyVisualSort(&config);
     return 0;
 }
