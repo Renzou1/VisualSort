@@ -28,7 +28,7 @@ void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr,
     int spaceBetweenNumbers = DISTANCE - first_rect_ptr->w;
     square_rect_ptr->x      = number_rect_ptr->x - spaceBetweenNumbers/2; //needs this to align
     int number_center       = number_rect_ptr->y + number_rect_ptr->h/2;
-    square_rect_ptr->w      = number_rect_ptr->w + spaceBetweenNumbers;
+    square_rect_ptr->w      = DISTANCE; // first rect ptr w + DISTANCE - first_rectptr w
     square_rect_ptr->y      = number_center - square_rect_ptr->w/2;
     square_rect_ptr->h      = square_rect_ptr->w;
 }
@@ -199,13 +199,13 @@ void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr,
 
     if(isAbovePointer)
     {
-        temp_name_rect.y =  first_rect.y - DISTANCE - temp_arrow_rect.h;
         temp_arrow_rect.y = first_rect.y - temp_arrow_rect.h * ARROW_DISTANCE_MULTIPLIER; // guess
+        temp_name_rect.y =  temp_arrow_rect.y - temp_arrow_rect.h;
 
     }  else
     {
-        temp_name_rect.y =  first_rect.y + DISTANCE + temp_arrow_rect.h;
         temp_arrow_rect.y = first_rect.y + temp_arrow_rect.h * ARROW_DISTANCE_MULTIPLIER;
+        temp_name_rect.y =  temp_arrow_rect.y + temp_arrow_rect.h;
     }
     temp_name_rect.w = temp_surface->w;
     temp_name_rect.h = temp_surface->h;

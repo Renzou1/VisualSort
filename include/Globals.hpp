@@ -1,7 +1,7 @@
-#define SIZE 10
-#define FONT_SIZE 80 // best: 80 
+#define SIZE 30
+#define FONT_SIZE 40 // best: 80 
 #define DISTANCE FONT_SIZE * 2
-#define WINDOW_WIDTH 1800 //mudar dps spa pra SIZE * DISTANCE + NUMBER_SIZE
+#define WINDOW_WIDTH DISTANCE * SIZE + 200
 #define WINDOW_HEIGHT 600 // /2
 #define ARROW_TEXTURE_OFFSET -50
 #define ARROW_DISTANCE_MULTIPLIER 1.5

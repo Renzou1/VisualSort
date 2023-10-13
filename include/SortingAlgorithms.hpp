@@ -9,30 +9,42 @@ void swap(int* x, int* y)
 }
 void selectionSort(int array[], Configuration* config_ptr)
 {
-    int pointersNumber = 3;
-    VisualArray visualArray = makeVisualArray(array, pointersNumber, config_ptr);
-    bool upward = true;
-
+    bool upPointer = true;
+    VisualArray visualArray = makeVisualArray(array, 3, config_ptr);
+    int j = 0;
+    visualArray.addPointer(upPointer, 0, config_ptr->font_ptr, "i");
+    int i = 0;
+    visualArray.addPointer(upPointer, 0, config_ptr->font_ptr, "j");
     int min = 0;
-    visualArray.addPointer(!upward, 0, config_ptr->font_ptr, "min");
-    visualArray.addPointer(upward, 0, config_ptr->font_ptr, "i");
-    visualArray.addPointer(upward, 0, config_ptr->font_ptr, "j");
-    SDL_RenderClear(config_ptr->renderer_ptr);
-    visualArray.renderArray();
-    for(int i = 0; i < SIZE; i++)
+    visualArray.addPointer(!upPointer, 0, config_ptr->font_ptr, "min");
+    
+    
+    while(i < SIZE)
     {
         waitForInput(config_ptr);
+        j = i;
         visualArray.slidePointer("j", "i", config_ptr);
-        for(int j = i; j < SIZE; j++)
+        while(j < SIZE)
         {
             if(array[j] < array[min])
             {
+                waitForInput(config_ptr);
                 visualArray.slidePointer("min", "j", config_ptr);
                 min = j;
             }
+            waitForInput(config_ptr);
+            j++;
+            visualArray.incrementPointer("j", config_ptr);
         }
-        visualArray.swapElementsPointedBy("i", "j", config_ptr);
+        waitForInput(config_ptr);
+        visualArray.swapElementsPointedBy("i", "min", config_ptr);
         swap(&array[i], &array[min]);
+        waitForInput(config_ptr);
+        i++;
+        visualArray.incrementPointer("i", config_ptr);
+        waitForInput(config_ptr);
+        min = i;
+        visualArray.slidePointer("min", "i", config_ptr);
     }
 
 }

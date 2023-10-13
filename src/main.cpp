@@ -33,42 +33,7 @@ int main ( int argc, char *argv[] )
     }
     
     Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr};
-    //selectionSort(array, config);
-
-    bool upPointer = true;
-    VisualArray visualArray = makeVisualArray(array, 3, &config);
-    int j = 0;
-    visualArray.addPointer(upPointer, 0, font_ptr, "i");
-    int i = 0;
-    visualArray.addPointer(upPointer, 0, font_ptr, "j");
-    int min = 0;
-    visualArray.addPointer(!upPointer, 0, font_ptr, "min");
-    
-    
-    while(i < SIZE)
-    {
-        waitForInput(&config);
-        j = i;
-        visualArray.slidePointer("j", "i", &config);
-        while(j < SIZE)
-        {
-            if(array[j] < array[min])
-            {
-                waitForInput(&config);
-                visualArray.slidePointer("min", "j", &config);
-                min = j;
-            }
-            waitForInput(&config);
-            j++;
-            visualArray.incrementPointer("j", &config);
-        }
-        waitForInput(&config);
-        visualArray.swapElementsPointedBy("i", "min", &config);
-        swap(&array[i], &array[min]);
-        waitForInput(&config);
-        i++;
-        visualArray.incrementPointer("i", &config);
-    }
+    selectionSort(array, &config);
 
     waitForInput(&config);
     destroyVisualSort(&config);
