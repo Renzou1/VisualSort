@@ -21,12 +21,7 @@ void selectionSort(int array[], Configuration* config_ptr)
     visualArray.renderArray();
     for(int i = 0; i < SIZE; i++)
     {
-        SDL_Delay(100);
-        while(SDL_PollEvent(config_ptr->event_ptr))
-        {
-            if (config_ptr->event_ptr->type == SDL_QUIT)
-            {  destroyVisualSort(config_ptr);  }
-        }
+        waitForInput(config_ptr);
         visualArray.slidePointer("j", "i", config_ptr);
         for(int j = i; j < SIZE; j++)
         {

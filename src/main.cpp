@@ -26,40 +26,48 @@ int main ( int argc, char *argv[] )
     }
 
     SDL_Event event;
-    int array[SIZE] = {4, 6, 2, 9, 3, 1, 5};
+    int array[SIZE];
+    for(int i = 0; i < SIZE; i++)
+    {
+        array[i] = i;
+    }
     
     Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr};
     //selectionSort(array, config);
 
-    bool upPointer = false;
-    VisualArray visualArray = makeVisualArray(array, 2, &config);
-    visualArray.addPointer(upPointer, 0, font_ptr, "smallest");
-    visualArray.addPointer(!upPointer, 0, font_ptr, "j");
+    bool upPointer = true;
+    VisualArray visualArray = makeVisualArray(array, 3, &config);
+    int j = 0;
+    visualArray.addPointer(upPointer, 0, font_ptr, "i");
+    int i = 0;
+    visualArray.addPointer(upPointer, 0, font_ptr, "j");
+    int min = 0;
+    visualArray.addPointer(!upPointer, 0, font_ptr, "min");
     
-
-    bool running = true;
     
-    bool flag = true;
-    
-    while (running)
+    while(i < SIZE)
     {
-        if(flag)
-        {  
+        waitForInput(&config);
+        j = i;
+        visualArray.slidePointer("j", "i", &config);
+        while(j < SIZE)
+        {
+            if(array[j] < array[min])
+            {
+                waitForInput(&config);
+                visualArray.slidePointer("min", "j", &config);
+                min = j;
+            }
             waitForInput(&config);
-            visualArray.incrementPointer("smallest", &config);
-            flag = false;  
-
-            waitForInput(&config);
-            visualArray.swap(0, 4, &config);
-
-            waitForInput(&config);
-            visualArray.swapElementsPointedBy("smallest", "j", &config);
+            j++;
+            visualArray.incrementPointer("j", &config);
         }
-        SDL_RenderClear(renderer_ptr);
-        visualArray.renderArray();
-        SDL_RenderPresent(renderer_ptr);
-        running = false;
-        //SDL_Delay(10 / SPEED); delays should probably be more local
+        waitForInput(&config);
+        visualArray.swapElementsPointedBy("i", "min", &config);
+        swap(&array[i], &array[min]);
+        waitForInput(&config);
+        i++;
+        visualArray.incrementPointer("i", &config);
     }
 
     waitForInput(&config);

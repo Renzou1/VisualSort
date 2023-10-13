@@ -77,6 +77,7 @@ VisualPointer* VisualArray::getPointer(std::string name)
         }
     }
 
+    std::cout << "failed to find pointer named " << name << std::endl;
     return NULL;
 }
 VisualPointer* VisualArray::getPointer(int index)
@@ -139,6 +140,8 @@ void VisualArray::slidePointer(std::string name, std::string name2, Configuratio
         std::cout << "couldnt find pointer" << std::endl;
         destroyVisualSort(config_ptr);  
     }
+    if(pointer->getIndex() == _index)
+    {  return;  }
     SDL_Renderer* renderer_ptr = config_ptr->renderer_ptr;
     SDL_Event* event_ptr = config_ptr->event_ptr;
     VisualArray* visualArray_ptr = config_ptr->visualArray_ptr;
@@ -185,25 +188,24 @@ void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr,
     SDL_Color white = {255, 255, 255};
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, name.c_str(), white);
     SDL_Texture* name_texture_ptr = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
-    int middle = temp_surface->w/2;
 
     SDL_Rect temp_name_rect;
-    temp_name_rect.x = first_rect.x + DISTANCE * index + INDEX_TEXTURE_OFFSET - middle;
+    temp_name_rect.x = first_rect.x + DISTANCE * index + first_rect.w/2 - temp_surface->w/2; //+ INDEX_TEXTURE_OFFSET - middle;
 
     SDL_Rect temp_arrow_rect;
-    temp_arrow_rect.w = 100;
-    temp_arrow_rect.h = 100;
-    temp_arrow_rect.x = first_rect.x + DISTANCE * index + ARROW_TEXTURE_OFFSET;
+    temp_arrow_rect.w = FONT_SIZE * 1.25;
+    temp_arrow_rect.h = FONT_SIZE * 1.25;
+    temp_arrow_rect.x = first_rect.x - temp_arrow_rect.w/2 + first_rect.w/2;
 
     if(isAbovePointer)
     {
         temp_name_rect.y =  first_rect.y - DISTANCE - temp_arrow_rect.h;
-        temp_arrow_rect.y = first_rect.y - 150;
+        temp_arrow_rect.y = first_rect.y - temp_arrow_rect.h * ARROW_DISTANCE_MULTIPLIER; // guess
 
     }  else
     {
         temp_name_rect.y =  first_rect.y + DISTANCE + temp_arrow_rect.h;
-        temp_arrow_rect.y = first_rect.y + 150;
+        temp_arrow_rect.y = first_rect.y + temp_arrow_rect.h * ARROW_DISTANCE_MULTIPLIER;
     }
     temp_name_rect.w = temp_surface->w;
     temp_name_rect.h = temp_surface->h;
