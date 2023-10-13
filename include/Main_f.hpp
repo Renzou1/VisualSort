@@ -89,7 +89,6 @@ void waitForInput(Configuration* config_ptr)
         SDL_RenderClear(config_ptr->renderer_ptr);
         config_ptr->visualArray_ptr->renderArray();
         SDL_RenderPresent(config_ptr->renderer_ptr);
-        SDL_Delay(10);
     }
 }
 

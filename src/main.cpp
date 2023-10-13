@@ -19,7 +19,7 @@
 int main ( int argc, char *argv[] )
 {
     SDL_Window* window_ptr = initializeVisualSort();
-    SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_PRESENTVSYNC);
     TTF_Font* font_ptr =  TTF_OpenFont("C:/Windows/Fonts/Rubik-Regular.ttf", FONT_SIZE);
     if( font_ptr == NULL )
     {

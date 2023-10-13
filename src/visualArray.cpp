@@ -143,58 +143,24 @@ void VisualArray::slidePointer(std::string name, int _index, Configuration* conf
                 destroyVisualSort(config_ptr);
             }
         }
-        pointer->getNameRect()->x+= increment; // speed is based on distance 
-        pointer->getArrowRect()->x+= increment;
+        for(int i = 0; i < SPEED && pointer->getNameRect()->x != goal_x; i++)
+        {
+            pointer->getNameRect()->x+= increment;
+            pointer->getArrowRect()->x+= increment;
+        }
         SDL_RenderClear(renderer_ptr);
         SDL_RenderCopy(renderer_ptr, pointer->getNameTexturePtr(), NULL, pointer->getNameRect());
         SDL_RenderCopy(renderer_ptr, pointer->getArrowTexturePtr(), NULL, pointer->getArrowRect());
         visualArray_ptr->renderArray();
         SDL_RenderPresent(renderer_ptr);
-        SDL_Delay(10 / SPEED);
     }
     pointer->setIndex(_index);
 }
 
 void VisualArray::slidePointer(std::string name, std::string name2, Configuration* config_ptr)
 {
-    VisualPointer* pointer = getPointer(name);
     int _index = getPointer(name2)->getIndex();
-    if(pointer == NULL)
-    {  
-        std::cout << "couldnt find pointer" << std::endl;
-        destroyVisualSort(config_ptr);  
-    }
-    if(pointer->getIndex() == _index)
-    {  return;  }
-    SDL_Renderer* renderer_ptr = config_ptr->renderer_ptr;
-    SDL_Event* event_ptr = config_ptr->event_ptr;
-    VisualArray* visualArray_ptr = config_ptr->visualArray_ptr;
-
-    int initial_x = pointer->getNameRect()->x;
-    int distanceToIndex = _index - pointer->getIndex();
-    int increment = _index - pointer->getIndex();
-    int goal_x = initial_x + distanceToIndex * DISTANCE;
-
-    while(pointer->getNameRect()->x != goal_x)
-    {
-        while (SDL_PollEvent(event_ptr))
-        {
-            if (event_ptr->type == SDL_QUIT)
-            {
-                destroyVisualSort(config_ptr);
-            }
-        }
-        pointer->getNameRect()->x+= increment;
-        pointer->getArrowRect()->x+= increment;
-        SDL_RenderClear(renderer_ptr);
-        SDL_RenderCopy(renderer_ptr, pointer->getNameTexturePtr(), NULL, pointer->getNameRect());
-        SDL_RenderCopy(renderer_ptr, pointer->getArrowTexturePtr(), NULL, pointer->getArrowRect());
-        visualArray_ptr->renderArray();
-        SDL_RenderPresent(renderer_ptr);
-        SDL_Delay(10 / SPEED);
-    }
-    pointer->setIndex(_index);
-
+    slidePointer(name, _index, config_ptr);
 }
 
 void VisualArray::incrementPointer(std::string name, Configuration* config_ptr)
@@ -276,9 +242,11 @@ void VisualArray::swap(int index1, int index2, Configuration* config_ptr)
                 destroyVisualSort(config_ptr);
             }
         }
-
-        index1_current_x-= increment;
-        index2_current_x+= increment;
+        for(int i = 0; i < SPEED && index1_current_x != index2_x; i++)
+        {
+            index1_current_x-= increment;
+            index2_current_x+= increment;
+        }
 
         SDL_RenderClear(renderer_ptr);
         temp_rect.x = index1_current_x;
@@ -287,7 +255,6 @@ void VisualArray::swap(int index1, int index2, Configuration* config_ptr)
         SDL_RenderCopy(renderer_ptr, visualArray[index2].getTexture(), NULL, &temp_rect);
         visualArray_ptr->renderArray();
         SDL_RenderPresent(renderer_ptr);
-        SDL_Delay(10 / SPEED);
     } 
     visualArray[index1].unskip();
     visualArray[index2].unskip(); 

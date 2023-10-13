@@ -58,7 +58,6 @@ bool VisualPointer::slidePointer(int _index, Configuration config)
             SDL_RenderCopy(renderer_ptr, arrow_texture_ptr, NULL, &arrow_rect);
             visualArray_ptr->renderArray();
             SDL_RenderPresent(renderer_ptr);
-            SDL_Delay(10 / SPEED);
         }
         index = _index;
         return true;
@@ -75,7 +74,6 @@ bool VisualPointer::slidePointer(int _index, Configuration config)
             SDL_RenderCopy(renderer_ptr, arrow_texture_ptr, NULL, &arrow_rect);
             visualArray_ptr->renderArray();
             SDL_RenderPresent(renderer_ptr);
-            SDL_Delay(10 / SPEED);
         }
     }*/
 
