@@ -33,7 +33,6 @@ int main ( int argc, char *argv[] )
     {
         array[i] = rand() % 100;
     }
-    
     Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr};
     selectionSort(array, &config);
 

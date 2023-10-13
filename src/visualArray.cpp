@@ -29,12 +29,12 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
     visualPointers = new VisualPointer[pointersSize];
 }
 
-void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr)
+void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, int double_digit_width)
 {
-    int spaceBetweenNumbers = DISTANCE - number_rect_ptr->w;
+    int spaceBetweenNumbers = DISTANCE - double_digit_width;
     square_rect_ptr->x      = number_rect_ptr->x - spaceBetweenNumbers/2; //needs this to align
     int number_center       = number_rect_ptr->y + number_rect_ptr->h/2;
-    square_rect_ptr->w      = DISTANCE; // first rect ptr w + DISTANCE - first_rectptr w
+    square_rect_ptr->w      = DISTANCE;
     square_rect_ptr->y      = number_center - square_rect_ptr->w/2;
     square_rect_ptr->h      = square_rect_ptr->w;
 }
@@ -48,16 +48,25 @@ void VisualArray::renderArray()
     number_rect.w = first_rect.w;
 
     SDL_Rect red_square_rect;
-    alignSquareWithNumber(&number_rect, &red_square_rect);
+    alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width);
     for(int i = 0; i < size; i++)
     {   
         if(visualArray[i].shouldntSkip())
         {
             if(visualArray[i].getVal() >= 10)
-            {  number_rect.w = double_digit_width;  }
-            else
-            {  number_rect.w = single_digit_width;  }
-            SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);  
+            {  
+                number_rect.w = double_digit_width;  
+                SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);
+
+            }  else
+            {  
+                int temp_x = number_rect.x;
+                number_rect.w = single_digit_width;
+                number_rect.x = first_rect.x + DISTANCE*i - single_digit_width/2 + double_digit_width/2;
+                SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);
+                number_rect.x = temp_x;
+            }
+             
         }
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
         number_rect.x += DISTANCE;
@@ -203,12 +212,12 @@ void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr,
     SDL_Texture* name_texture_ptr = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
 
     SDL_Rect temp_name_rect;
-    temp_name_rect.x = first_rect.x + DISTANCE * index + first_rect.w/2 - temp_surface->w/2; //+ INDEX_TEXTURE_OFFSET - middle;
+    temp_name_rect.x = first_rect.x + DISTANCE * index + double_digit_width/2 - temp_surface->w/2; //+ INDEX_TEXTURE_OFFSET - middle;
 
     SDL_Rect temp_arrow_rect;
     temp_arrow_rect.w = FONT_SIZE * 1.25;
     temp_arrow_rect.h = FONT_SIZE * 1.25;
-    temp_arrow_rect.x = first_rect.x - temp_arrow_rect.w/2 + first_rect.w/2;
+    temp_arrow_rect.x = first_rect.x + DISTANCE * index - temp_arrow_rect.w/2 + double_digit_width/2;
 
     if(isAbovePointer)
     {
