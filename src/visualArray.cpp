@@ -29,9 +29,9 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
     visualPointers = new VisualPointer[pointersSize];
 }
 
-void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, SDL_Rect* first_rect_ptr)
+void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr)
 {
-    int spaceBetweenNumbers = DISTANCE - first_rect_ptr->w;
+    int spaceBetweenNumbers = DISTANCE - number_rect_ptr->w;
     square_rect_ptr->x      = number_rect_ptr->x - spaceBetweenNumbers/2; //needs this to align
     int number_center       = number_rect_ptr->y + number_rect_ptr->h/2;
     square_rect_ptr->w      = DISTANCE; // first rect ptr w + DISTANCE - first_rectptr w
@@ -48,9 +48,9 @@ void VisualArray::renderArray()
     number_rect.w = first_rect.w;
 
     SDL_Rect red_square_rect;
+    alignSquareWithNumber(&number_rect, &red_square_rect);
     for(int i = 0; i < size; i++)
-    {
-        number_rect.x = first_rect.x + DISTANCE*i;
+    {   
         if(visualArray[i].shouldntSkip())
         {
             if(visualArray[i].getVal() >= 10)
@@ -59,8 +59,9 @@ void VisualArray::renderArray()
             {  number_rect.w = single_digit_width;  }
             SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);  
         }
-        alignSquareWithNumber(&number_rect, &red_square_rect, &first_rect);
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
+        number_rect.x += DISTANCE;
+        red_square_rect.x += DISTANCE;
     }
 
     renderPointers();
