@@ -22,6 +22,7 @@ public:
     void slidePointer(std::string name, std::string name2, Configuration* config_ptr);
     void incrementPointer(std::string name, Configuration* config_ptr);
     void decrementPointer(std::string name, Configuration* config_ptr);
+    void setComparing(int index1, int index2, bool boolean);
     void renderArray();
     VisualPointer* getPointer(std::string name);
     VisualPointer* getPointer(int index);

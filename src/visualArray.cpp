@@ -71,6 +71,26 @@ void VisualArray::renderArray()
              
         }
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
+        if(visualArray[i].isComparing())
+        {
+            int time = 120;
+            int flag2 = visualArray[i].getFlag2();
+            if(flag2 < time/2)
+            {
+                SDL_Rect temp_square_rect = red_square_rect;
+                temp_square_rect.w = red_square_rect.w*0.8;
+                temp_square_rect.h = red_square_rect.h*0.8;
+
+                int length_difference = red_square_rect.w - temp_square_rect.w;
+                temp_square_rect.x = red_square_rect.x + (length_difference/2);
+                temp_square_rect.y = red_square_rect.y + (length_difference/2);
+
+                SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &temp_square_rect);
+            }  else if (flag2 > time)
+            {  visualArray[i].resetFlag2();  }
+
+            visualArray[i].incrementFlag2();
+        }
         number_rect.x += DISTANCE;
         red_square_rect.x += DISTANCE;
     }
@@ -204,6 +224,12 @@ void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr,
                                                         font_ptr, renderer_ptr, name, name_texture_ptr);
     currentPointerIndex++;
     SDL_FreeSurface(temp_surface);
+}
+
+void VisualArray::setComparing(int index1, int index2, bool boolean)
+{
+    visualArray[index1].setComparing(boolean);
+    visualArray[index2].setComparing(boolean);
 }
 
 void VisualArray::swapElementsInArray(int index1, int index2)

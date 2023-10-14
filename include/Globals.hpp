@@ -1,4 +1,4 @@
-#define SIZE 20
+#define SIZE 4
 #define FONT_SIZE 40 // best: 80 
 #define DISTANCE FONT_SIZE * 2
 #define WINDOW_WIDTH DISTANCE * SIZE + 200
@@ -6,4 +6,4 @@
 #define ARROW_TEXTURE_OFFSET -50
 #define ARROW_DISTANCE_MULTIPLIER 1.5
 #define INDEX_TEXTURE_OFFSET 22
-#define SPEED 4
+#define SPEED 2

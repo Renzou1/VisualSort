@@ -26,12 +26,18 @@ void selectionSort(int array[], Configuration* config_ptr)
         visualArray.slidePointer("j", "i", config_ptr);
         while(j < SIZE)
         {
+            waitForInput(config_ptr);
+            visualArray.setComparing(j, min, true);
             if(array[j] < array[min])
             {
+                waitForInput(config_ptr);
+                visualArray.setComparing(j, min, false);
                 waitForInput(config_ptr);
                 visualArray.slidePointer("min", "j", config_ptr);
                 min = j;
             }
+            waitForInput(config_ptr);
+            visualArray.setComparing(j, min, false);
             waitForInput(config_ptr);
             j++;
             visualArray.incrementPointer("j", config_ptr);

@@ -2,7 +2,7 @@
 #include <iostream>
 
 VisualNumber::VisualNumber()
-:val(0), number_texture(NULL)
+:val(0), dontSkip(false), isComparing_(false), isComparingFlag2_(0), number_texture(NULL)
 {}
 
 VisualNumber::VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr)
@@ -29,6 +29,21 @@ void VisualNumber::unskip()
 
 int VisualNumber::getVal()
 {  return val;  }
+
+bool VisualNumber::isComparing()
+{  return isComparing_;  }
+
+void VisualNumber::setComparing(bool param)
+{  isComparing_ = param;  }
+
+int VisualNumber::getFlag2()
+{  return isComparingFlag2_;  }
+
+void VisualNumber::incrementFlag2()
+{  isComparingFlag2_++;  }
+
+void VisualNumber::resetFlag2()
+{  isComparingFlag2_ = 0;  }
 
 void VisualNumber::operator=(const VisualNumber& V)
 {
