@@ -28,17 +28,15 @@ void selectionSort(int array[], Configuration* config_ptr)
         {
             waitForInput(config_ptr);
             visualArray.setComparing(j, min, true);
+            waitForInput(config_ptr);
             if(array[j] < array[min])
             {
-                waitForInput(config_ptr);
                 visualArray.setComparing(j, min, false);
-                waitForInput(config_ptr);
                 visualArray.slidePointer("min", "j", config_ptr);
                 min = j;
+                waitForInput(config_ptr);
             }
-            waitForInput(config_ptr);
             visualArray.setComparing(j, min, false);
-            waitForInput(config_ptr);
             j++;
             visualArray.incrementPointer("j", config_ptr);
             SDL_Delay(100 / SPEED);

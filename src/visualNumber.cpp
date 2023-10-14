@@ -34,7 +34,13 @@ bool VisualNumber::isComparing()
 {  return isComparing_;  }
 
 void VisualNumber::setComparing(bool param)
-{  isComparing_ = param;  }
+{  
+    isComparing_ = param;
+    if(param == false)
+    {
+        isComparingFlag2_ = 0;
+    }
+}
 
 int VisualNumber::getFlag2()
 {  return isComparingFlag2_;  }
