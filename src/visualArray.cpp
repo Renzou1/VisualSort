@@ -6,7 +6,8 @@ void destroyVisualSort(Configuration* config);
 VisualArray::VisualArray(int array[], int size, int pointersSize, 
                         SDL_Rect first_rect, 
                         SDL_Renderer* renderer_ptr,
-                        TTF_Font* font_ptr)
+                        TTF_Font* font_ptr,
+                        int font_size)
 {
     currentPointerIndex = 0;
     this->size =                   size;
@@ -14,6 +15,7 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
     this->red_square_texture_ptr = IMG_LoadTexture(renderer_ptr, "resources/red_square_texture.png");
     this->renderer_ptr =           renderer_ptr;
     this->pointersSize =           pointersSize;
+    this->font_size = font_size;
 
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "0", {255, 255, 255});
     this->single_digit_width = temp_surface->w;
@@ -29,12 +31,13 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
     visualPointers = new VisualPointer[pointersSize];
 }
 
-void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, int double_digit_width)
+void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, int double_digit_width, int font_size)
 {
-    int spaceBetweenNumbers = DISTANCE - double_digit_width;
+    //font_size*2 = DISTANCE
+    int spaceBetweenNumbers = font_size*2 - double_digit_width;
     square_rect_ptr->x      = number_rect_ptr->x - spaceBetweenNumbers/2;
     int number_center       = number_rect_ptr->y + number_rect_ptr->h/2;
-    square_rect_ptr->w      = DISTANCE;
+    square_rect_ptr->w      = font_size*2;
     square_rect_ptr->y      = number_center - square_rect_ptr->w/2;
     square_rect_ptr->h      = square_rect_ptr->w;
 }
@@ -48,7 +51,7 @@ void VisualArray::renderArray()
     number_rect.w = first_rect.w;
 
     SDL_Rect red_square_rect;
-    alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width);
+    alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width, font_size);
     for(int i = 0; i < size; i++)
     {   
         if(visualArray[i].shouldntSkip())
@@ -203,8 +206,8 @@ void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr,
     temp_name_rect.x = first_rect.x + DISTANCE * index + double_digit_width/2 - temp_surface->w/2;
 
     SDL_Rect temp_arrow_rect;
-    temp_arrow_rect.w = FONT_SIZE * 1.25;
-    temp_arrow_rect.h = FONT_SIZE * 1.25;
+    temp_arrow_rect.w = font_size * 1.25;
+    temp_arrow_rect.h = font_size * 1.25;
     temp_arrow_rect.x = first_rect.x + DISTANCE * index - temp_arrow_rect.w/2 + double_digit_width/2;
 
     if(isAbovePointer)

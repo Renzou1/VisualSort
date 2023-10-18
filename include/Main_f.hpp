@@ -4,7 +4,7 @@
 #include "Globals.hpp"
 #include "VisualArray.hpp"
 
-SDL_Window* initializeVisualSort()
+SDL_Window* initializeVisualSort(int size, int font_size)
 {
     if (SDL_Init(SDL_INIT_VIDEO) > 0)
     {
@@ -21,11 +21,12 @@ SDL_Window* initializeVisualSort()
         std::cout << "TTF_init has failed. Error: " << TTF_GetError() << std::endl;
     }
 
-    
+    const int window_width = font_size * 2 * size + 200;
+    const int window_height = 600;
     SDL_Window* window = SDL_CreateWindow(
         "VisualSort V0", 
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
-        WINDOW_WIDTH , WINDOW_HEIGHT, 
+        window_width , window_height, 
         SDL_WINDOW_SHOWN
         );
 
@@ -41,13 +42,14 @@ VisualArray makeVisualArray(int array[], int pointers, Configuration* config_ptr
 {
     SDL_Surface* temp_surface = TTF_RenderText_Solid(config_ptr->font_ptr, std::to_string(array[0]).c_str(), {255, 255, 255});
     SDL_Rect initial_rect;
-    initial_rect.x = 100;
+    initial_rect.x = config_ptr->DISTANCE;
     initial_rect.y = 250;
     initial_rect.w = temp_surface->w;
     initial_rect.h = temp_surface->h;
     SDL_FreeSurface (temp_surface);
 
-    VisualArray visualArray(array, SIZE, pointers, initial_rect, config_ptr->renderer_ptr, config_ptr->font_ptr);
+    VisualArray visualArray(array, config_ptr->size, pointers, initial_rect, 
+    config_ptr->renderer_ptr, config_ptr->font_ptr, config_ptr->font_size);
     config_ptr->visualArray_ptr = &visualArray;
     return visualArray;
 }
@@ -74,6 +76,8 @@ void destroyVisualSort(Configuration* config)
 
 void waitForInput(Configuration* config_ptr)
 {
+    if(NO_WAITING == 1)
+    {  return;  }
     while(true)
     {
         while(SDL_PollEvent(config_ptr->event_ptr))

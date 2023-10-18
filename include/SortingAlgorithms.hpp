@@ -19,12 +19,12 @@ void selectionSort(int array[], Configuration* config_ptr)
     visualArray.addPointer(!upPointer, 0, config_ptr->font_ptr, "min");
     
     
-    while(i < SIZE)
+    while(i < config_ptr->size)
     {
         waitForInput(config_ptr);
         j = i;
         visualArray.slidePointer("j", "i", config_ptr);
-        while(j < SIZE)
+        while(j < config_ptr->size)
         {
             waitForInput(config_ptr);
             visualArray.setComparing(j, min, true);
@@ -52,8 +52,9 @@ void selectionSort(int array[], Configuration* config_ptr)
         visualArray.slidePointer("min", "i", config_ptr);
     }
 
-    while(true)
+    while(NO_WAITING != 1)
     {
         waitForInput(config_ptr);
     }
+    SDL_Delay(1000);
 }

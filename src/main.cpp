@@ -18,22 +18,52 @@
 
 int main ( int argc, char *argv[] )
 {
-    SDL_Window* window_ptr = initializeVisualSort();
+    srand(time(NULL));
+    std::cout << "How many elements in your array? (60 max)" << std::endl;
+
+    int size;
+    scanf("%d", &size);
+    int* array = (int*)malloc(sizeof(int)* size); 
+
+    printf("1- Random numbers\n2- Choose numbers\n");
+    int choice;
+    int i = 0;    
+    scanf("%d", &choice);
+    if(choice == 1)
+    {
+        for(i = 0; i < size; i++)
+        {
+            array[i] = rand() % 100;
+        }
+    }  else
+    {
+        std::cout << "Type your desired array:" << std::endl;
+
+        for(i = 0; i < size; i++)
+        {
+            scanf("%d", &array[i]);
+        }
+    }
+    while(i < size)
+    {  SDL_Delay(10);  }
+
+    int font_size = 80;
+    if(DISTANCE * size + DISTANCE > 1920)
+    {
+        font_size = 1720/ (2 * size);
+    }
+    std::cout << font_size;
+        
+    SDL_Window* window_ptr = initializeVisualSort(size, font_size);
     SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_PRESENTVSYNC);
-    TTF_Font* font_ptr =  TTF_OpenFont("C:/Windows/Fonts/Rubik-Regular.ttf", FONT_SIZE);
+    TTF_Font* font_ptr =  TTF_OpenFont("C:/Windows/Fonts/Rubik-Regular.ttf", font_size);
     if( font_ptr == NULL )
     {
         std::cout << "Couldn't find font." << std::endl;
     }
+    SDL_Event event;    
+    Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr, size, font_size};
 
-    SDL_Event event;
-    srand(time(NULL));
-    int array[SIZE];
-    for(int i = 0; i < SIZE; i++)
-    {
-        array[i] = rand() % 100;
-    }
-    Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr};
     selectionSort(array, &config);
 
     return 0;
