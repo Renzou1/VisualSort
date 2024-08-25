@@ -5,5 +5,5 @@ Makefile
 include/SDL2
 lib
 output
-resources
 Makefile
+main

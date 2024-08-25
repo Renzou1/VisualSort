@@ -19,6 +19,7 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
 
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "0", {255, 255, 255});
     this->single_digit_width = temp_surface->w;
+    SDL_FreeSurface(temp_surface);
     temp_surface = TTF_RenderText_Solid(font_ptr, "10", {255, 255, 255});
     this->double_digit_width = temp_surface->w;
     SDL_FreeSurface(temp_surface);

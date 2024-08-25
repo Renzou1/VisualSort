@@ -2,7 +2,7 @@
 #include <iostream>
 
 VisualNumber::VisualNumber()
-:val(0), dontSkip(false), isComparing_(false), isComparingFlag2_(0), number_texture(NULL)
+:val(0), dontSkip(true), isComparing_(false), isComparingFlag2_(0), number_texture(NULL)
 {}
 
 VisualNumber::VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr)
@@ -13,6 +13,7 @@ VisualNumber::VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_p
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, std::to_string(val).c_str(), white);
     number_texture = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
     SDL_FreeSurface(temp_surface);
+    this->dontSkip = true;
 }
 
 SDL_Texture* VisualNumber::getTexture()
