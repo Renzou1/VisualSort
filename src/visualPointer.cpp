@@ -12,9 +12,9 @@ VisualPointer::VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect a
 {
     this->isAbovePointer = isAbovePointer;
     if(isAbovePointer)
-    {  arrow_texture_ptr = IMG_LoadTexture(renderer_ptr, "resources/down_arrow.png");  }
+    {  arrow_texture_ptr = IMG_LoadTexture(renderer_ptr, "textures/down_arrow.png");  }
         else
-    {  arrow_texture_ptr = IMG_LoadTexture(renderer_ptr, "resources/up_arrow.png");  }
+    {  arrow_texture_ptr = IMG_LoadTexture(renderer_ptr, "textures/up_arrow.png");  }
     this->name = name;
     this->name_texture_ptr = name_texture_ptr;
     this->name_rect = name_rect;

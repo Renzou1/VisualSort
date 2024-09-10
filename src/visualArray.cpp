@@ -12,7 +12,7 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
     currentPointerIndex = 0;
     this->size =                   size;
     this->first_rect             = first_rect;
-    this->red_square_texture_ptr = IMG_LoadTexture(renderer_ptr, "resources/red_square_texture.png");
+    this->red_square_texture_ptr = IMG_LoadTexture(renderer_ptr, "textures/red_square.png");
     this->renderer_ptr =           renderer_ptr;
     this->pointersSize =           pointersSize;
     this->font_size = font_size;
