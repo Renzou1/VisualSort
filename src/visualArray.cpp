@@ -20,9 +20,7 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "0", {255, 255, 255});
     this->single_digit_width = temp_surface->w;
     SDL_FreeSurface(temp_surface);
-    temp_surface = TTF_RenderText_Solid(font_ptr, "10", {255, 255, 255});
-    this->double_digit_width = temp_surface->w;
-    SDL_FreeSurface(temp_surface);
+    this->double_digit_width = first_rect.w; // width is almost identical to font size, but not quite
 
     visualArray = new VisualNumber[size];
     for(int i = 0; i < size; i++)
@@ -34,13 +32,11 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
 
 void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, int double_digit_width, int font_size)
 {
-    //font_size*2 = DISTANCE
-    int spaceBetweenNumbers = font_size*2 - double_digit_width;
-    square_rect_ptr->x      = number_rect_ptr->x - spaceBetweenNumbers/2;
-    int number_center       = number_rect_ptr->y + number_rect_ptr->h/2;
-    square_rect_ptr->w      = font_size*2;
-    square_rect_ptr->y      = number_center - square_rect_ptr->w/2;
+    square_rect_ptr->w      = RED_SQUARE_WIDTH;
     square_rect_ptr->h      = square_rect_ptr->w;
+    square_rect_ptr->x      = number_rect_ptr->x - double_digit_width/2;
+    int number_center       = number_rect_ptr->y + number_rect_ptr->h/2;
+    square_rect_ptr->y      = number_center - double_digit_width;
 }
 
 void VisualArray::renderArray()

@@ -20,7 +20,8 @@ SDL_Window* initializeVisualSort(int size, int font_size)
     {
         std::cout << "TTF_init has failed. Error: " << TTF_GetError() << std::endl;
     }
-
+    
+    // should be RED_SQUARE_WIDTH + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH
     const int window_width = font_size * 2 * size + 200;
     const int window_height = 600;
     SDL_Window* window = SDL_CreateWindow(
@@ -40,12 +41,13 @@ SDL_Window* initializeVisualSort(int size, int font_size)
 
 VisualArray makeVisualArray(int array[], int pointers, Configuration* config_ptr )
 {
-    SDL_Surface* temp_surface = TTF_RenderText_Solid(config_ptr->font_ptr, std::to_string(array[0]).c_str(), {255, 255, 255});
+    SDL_Surface* temp_surface = TTF_RenderText_Solid(config_ptr->font_ptr, "10", {255, 255, 255});
     SDL_Rect initial_rect;
-    initial_rect.x = config_ptr->DISTANCE;
-    initial_rect.y = 250;
-    initial_rect.w = temp_surface->w;
-    initial_rect.h = temp_surface->h;
+    const int double_digit_width = temp_surface->w;
+    initial_rect.w = double_digit_width;
+    initial_rect.h = temp_surface->h;    
+    initial_rect.x = RED_SQUARE_WIDTH;
+    initial_rect.y = DISTANCE_TO_TOP_OF_SCREEN;
     SDL_FreeSurface (temp_surface);
 
     VisualArray visualArray(array, config_ptr->size, pointers, initial_rect, 

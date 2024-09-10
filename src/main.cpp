@@ -10,9 +10,9 @@
 #include "VisualNumber.hpp"
 #include "SortingAlgorithms.hpp"
 
-// g++ -I include -L lib -o main src/* -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf  -Wall
 // g++ -I include -o main src/* -lSDL2 -lSDL2_image -lSDL2_ttf -pthread -Wall
-// TODO: red_square_texture png size is probably off, boxes dont align perfectly.
+// TODO: make makefile
+// TODO: insertion sort, quick sort, merge sort
 
 int main ( int argc, char *argv[] )
 {
@@ -48,10 +48,13 @@ int main ( int argc, char *argv[] )
     //{  SDL_Delay(10);  }
 
     int font_size = 80;
-    if(DISTANCE * size + DISTANCE > 1920)
+    const int width = 1920;
+    if(DISTANCE * size + DISTANCE > width)
     {
-        font_size = 1720/ (2 * size);
+        font_size = (width - 200)/ (2 * size);
     }
+    std::cout << font_size;
+
 
     std::cout << "Please select the sorting algorithm.\n";
     std::cout << "1. selectionsort\n2. insertionsort\n3. quicksort\n4. mergesort\n";
