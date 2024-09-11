@@ -15,7 +15,8 @@ public:
     VisualArray(const int array[], const unsigned int size, const unsigned int pointersSize, 
                 SDL_Rect initial_digit_rect, 
                 SDL_Renderer* renderer_ptr,
-                TTF_Font* font_ptr);
+                TTF_Font* font_ptr,
+                unsigned int font_size);
     void split();
     void swapElementsPointedBy(std::string pointer1, std::string pointer2, Configuration* config_ptr);
     void swap(const index_t index1, const index_t index2, Configuration* config_ptr);
@@ -25,6 +26,7 @@ public:
     void decrementPointer(std::string name, Configuration* config_ptr);
     void setComparing(const index_t index1, const index_t index2, bool boolean);
     void renderArray();
+    void renderCopyInfo(std::string info, unsigned int* width_accumulator);
     VisualPointer* getPointer(std::string name);
     VisualPointer* getPointer(const index_t index);
     int getVal(const index_t index);
@@ -39,13 +41,16 @@ private:
     unsigned int currentPointerIndex;
     unsigned int single_digit_width;
     unsigned int double_digit_width;
+    unsigned int text_height;
     unsigned int swaps;
-    unsigned int inserts;
+    unsigned int insertions;
     unsigned int comparisons;
+    unsigned int font_size;
     SDL_Texture* red_square_texture_ptr;
     SDL_Rect initial_digit_rect;
     SDL_Renderer* renderer_ptr;
     TTF_Font* font_ptr;
+    TTF_Font* small_font_ptr;
     VisualNumber* visualArray;
     VisualPointer* visualPointers;
 };

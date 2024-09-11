@@ -16,6 +16,7 @@
 // TODO: change flag 2 name in visualNumber
 // TODO: render swap, increments and comparison count
 // TODO: should swap count when with itself in selection sort? currently we skip swap if index == index
+// TODO: make a visualArray::compare() that substitutes complicated if logic in SortingAlgorithms.hpp !maybe!
 
 int main ( int argc, char *argv[] )
 {

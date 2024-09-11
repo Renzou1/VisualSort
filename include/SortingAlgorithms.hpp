@@ -8,6 +8,7 @@ void swap(int* x, int* y)
     *x = *y;
     *y = temp;
 }
+
 void selectionSort(int array[], Configuration* config_ptr)
 {
     bool upPointer = true;
@@ -29,23 +30,28 @@ void selectionSort(int array[], Configuration* config_ptr)
         {
             waitForInput(config_ptr, 0);
             visualArray.setComparing(j, min, true);
-            waitForInput(config_ptr, 100);
+            waitForInput(config_ptr, DEFAULT_DELAY / 2);
             if(array[j] < array[min])
             {
                 visualArray.setComparing(j, min, false);
                 visualArray.slidePointer("min", "j", config_ptr);
                 min = j;
-                waitForInput(config_ptr, 200);
+                waitForInput(config_ptr, DEFAULT_DELAY);
             }
             visualArray.setComparing(j, min, false);
             j++;
             visualArray.incrementPointer("j", config_ptr);
         }
         waitForInput(config_ptr, 0);
+        visualArray.setComparing(i, min, true); // test with these new ones commented out
+        waitForInput(config_ptr, DEFAULT_DELAY / 2);
         if (visualArray.getPointer("i")->getIndex() != visualArray.getPointer("min")->getIndex()){
+            visualArray.setComparing(i, min, false);
             visualArray.swapElementsPointedBy("i", "min", config_ptr);
-            swap(&array[i], &array[min]);            
+            swap(&array[i], &array[min]);
+            waitForInput(config_ptr, DEFAULT_DELAY);
         }
+        visualArray.setComparing(i, min, false);
         waitForInput(config_ptr, 0);
         i++;
         visualArray.incrementPointer("i", config_ptr);

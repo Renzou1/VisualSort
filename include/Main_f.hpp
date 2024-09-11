@@ -84,7 +84,7 @@ VisualArray makeVisualArray(const int array[], const int pointersSize, Configura
     SDL_FreeSurface (temp_surface);
 
     VisualArray visualArray(array, config_ptr->size, pointersSize, initial_digit_rect, 
-    config_ptr->renderer_ptr, config_ptr->font_ptr);
+    config_ptr->renderer_ptr, config_ptr->font_ptr, config_ptr->font_size);
     config_ptr->visualArray_ptr = &visualArray;
     return visualArray;
 }

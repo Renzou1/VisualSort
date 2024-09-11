@@ -6,7 +6,8 @@ void destroyVisualSort(Configuration* config);
 VisualArray::VisualArray(const int array[], const unsigned int size, const unsigned int pointersSize, 
                         SDL_Rect initial_digit_rect, 
                         SDL_Renderer* renderer_ptr,
-                        TTF_Font* font_ptr)
+                        TTF_Font* font_ptr,
+                        const unsigned int font_size)
 {
     currentPointerIndex = 0;
     this->size =                   size;
@@ -15,12 +16,20 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
     this->renderer_ptr =           renderer_ptr;
     this->pointersSize =           pointersSize;
     this->swaps =                  0;
-    this->inserts =                0;
+    this->insertions =             0;
     this->comparisons =            0;
     this->font_ptr =               font_ptr;
+    this->font_size =              font_size;
+
+    this->small_font_ptr =         TTF_OpenFont("Rubik-Regular.ttf", font_size);
+    if (small_font_ptr == NULL)
+    {
+        std::cout << "Error opening font: " << SDL_GetError() << std::endl;
+    } 
 
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "0", WHITE);
     this->single_digit_width =     temp_surface->w;
+    this->text_height =            temp_surface->h;
     SDL_FreeSurface(temp_surface);
     this->double_digit_width =     initial_digit_rect.w; // width is almost identical to font size, but not quite
 
@@ -98,17 +107,32 @@ void VisualArray::renderArray()
         red_square_rect.x += RED_SQUARE_WIDTH;
     }
 
-    std::string swaps_string = "Swaps: " + std::to_string(swaps);
-    SDL_Surface* swaps_surface = TTF_RenderText_Solid(font_ptr, swaps_string.c_str(), WHITE);
-    SDL_Texture* swaps_texture = SDL_CreateTextureFromSurface(renderer_ptr, swaps_surface);
-    SDL_Rect swaps_rect;
-    swaps_rect.x = initial_digit_rect.x;
-    swaps_rect.y = DISTANCE_TO_TOP_OF_SCREEN + RED_SQUARE_WIDTH;
-    swaps_rect.h = swaps_surface->h;
-    swaps_rect.w = swaps_surface->w;
-    SDL_RenderCopy(renderer_ptr, swaps_texture, NULL, &swaps_rect);
-    SDL_FreeSurface(swaps_surface);
+    unsigned int width_accumulator = 0;
+    renderCopyInfo("Comparisons: " + std::to_string(comparisons) + " | ", &width_accumulator);
+    renderCopyInfo("Swaps: " + std::to_string(swaps) + " | ", &width_accumulator);
+    renderCopyInfo("Insertions: " + std::to_string(insertions), &width_accumulator);
+
     renderPointers();
+}
+
+void VisualArray::renderCopyInfo(std::string info, unsigned int* width_accumulator){
+    
+    //SDL_Surface* info_surface = TTF_RenderText_Solid(small_font_ptr, info.c_str(), WHITE);
+    SDL_Surface* info_surface = TTF_RenderText_Solid(font_ptr, info.c_str(), WHITE);
+    if (info_surface == NULL){
+        std::cout << "Error:" << TTF_GetError() << std::endl;
+    }
+    SDL_Texture* info_texture = SDL_CreateTextureFromSurface(renderer_ptr, info_surface);
+    
+    SDL_Rect info_rect;
+    info_rect.x = (initial_digit_rect.x - RED_SQUARE_WIDTH/4) + *width_accumulator;
+    info_rect.y = DISTANCE_TO_TOP_OF_SCREEN + RED_SQUARE_WIDTH;
+    info_rect.h = info_surface->h;
+    info_rect.w = info_surface->w;
+
+    SDL_RenderCopy(renderer_ptr, info_texture, NULL, &info_rect);
+    SDL_FreeSurface(info_surface);
+    *width_accumulator += info_surface->w;
 }
 
 void VisualArray::renderPointers()

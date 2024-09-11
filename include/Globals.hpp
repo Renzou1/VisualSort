@@ -6,7 +6,8 @@
 #define INDEX_TEXTURE_OFFSET 22
 #define DISTANCE_TO_TOP_OF_SCREEN 250
 #define RED_SQUARE_WIDTH 2 * double_digit_width
-#define SPEED 2
+#define SPEED 3
+#define DEFAULT_DELAY 200
 #define WAIT_FOR_INPUT 1
 #define SELECTION_SORT 1
 #define INSERTION_SORT 2

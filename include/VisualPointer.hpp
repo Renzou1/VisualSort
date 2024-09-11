@@ -16,6 +16,7 @@ typedef struct Configuration
     SDL_Window* window_ptr;
     const int size;
     const int double_digit_width;
+    const unsigned int font_size;
 } Configuration;
 
 class VisualPointer
