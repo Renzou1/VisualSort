@@ -5,6 +5,13 @@
 #include "Globals.hpp"
 #include "VisualArray.hpp"
 
+const int getDoubleDigitWidth(TTF_Font* font_ptr){
+    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "10", {255, 255, 255});
+    const int double_digit_width = temp_surface->w;
+    SDL_FreeSurface (temp_surface);
+    return double_digit_width;
+}
+
 TTF_Font* initializeFont(const int font_size){
     if(TTF_Init() != 0)
     {
@@ -50,7 +57,7 @@ SDL_Window* initializeVisualSort(const int size, const int double_digit_width)
     return window;
 }
 
-VisualArray makeVisualArray(int array[], int pointers, Configuration* config_ptr )
+VisualArray makeVisualArray(const int array[], const int pointersSize, Configuration* config_ptr)
 {
     SDL_Surface* temp_surface = TTF_RenderText_Solid(config_ptr->font_ptr, "10", {255, 255, 255});
     SDL_Rect initial_digit_rect;
@@ -61,7 +68,7 @@ VisualArray makeVisualArray(int array[], int pointers, Configuration* config_ptr
     initial_digit_rect.y = DISTANCE_TO_TOP_OF_SCREEN;
     SDL_FreeSurface (temp_surface);
 
-    VisualArray visualArray(array, config_ptr->size, pointers, initial_digit_rect, 
+    VisualArray visualArray(array, config_ptr->size, pointersSize, initial_digit_rect, 
     config_ptr->renderer_ptr, config_ptr->font_ptr);
     config_ptr->visualArray_ptr = &visualArray;
     return visualArray;
@@ -71,7 +78,7 @@ void destroyVisualSort(SDL_Window* window, TTF_Font* font, VisualArray* visualAr
 {
     SDL_DestroyWindow(window);
     TTF_CloseFont(font);
-    (*visualArray).destroy();
+    visualArray->destroy();
     TTF_Quit();
     SDL_Quit();
     std::exit(0);

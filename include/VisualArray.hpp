@@ -39,6 +39,9 @@ private:
     unsigned int currentPointerIndex;
     unsigned int single_digit_width;
     unsigned int double_digit_width;
+    unsigned int swaps;
+    unsigned int inserts;
+    unsigned int comparisons;
     SDL_Texture* red_square_texture_ptr;
     SDL_Rect initial_digit_rect;
     SDL_Renderer* renderer_ptr;

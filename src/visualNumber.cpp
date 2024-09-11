@@ -2,7 +2,7 @@
 #include <iostream>
 
 VisualNumber::VisualNumber()
-:val(0), dontSkip(true), isComparing_(false), isComparingFlag2_(0), number_texture(NULL)
+:val(0), skipRender(false), isComparing_(false), isComparingFlag2_(0), number_texture(NULL)
 {}
 
 VisualNumber::VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr)
@@ -13,20 +13,17 @@ VisualNumber::VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_p
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, std::to_string(val).c_str(), white);
     number_texture = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
     SDL_FreeSurface(temp_surface);
-    this->dontSkip = true;
+    this->skipRender = false;
 }
 
 SDL_Texture* VisualNumber::getTexture()
 {  return number_texture;  }
 
-bool VisualNumber::shouldntSkip()
-{  return dontSkip;  }
+bool VisualNumber::getSkipRender()
+{  return skipRender;  }
 
-void VisualNumber::skipRender()
-{  dontSkip = false;  }
-
-void VisualNumber::unskip()
-{  dontSkip = true;  }
+void VisualNumber::setSkipRender(bool _skipRender)
+{  skipRender = _skipRender;  }
 
 int VisualNumber::getVal()
 {  return val;  }
@@ -55,7 +52,7 @@ void VisualNumber::resetFlag2()
 void VisualNumber::operator=(const VisualNumber& V)
 {
     val = V.val;
-    dontSkip = V.dontSkip;
+    skipRender = V.skipRender;
     number_texture = V.number_texture;
 }
 

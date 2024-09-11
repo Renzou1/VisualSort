@@ -10,15 +10,18 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
 {
     currentPointerIndex = 0;
     this->size =                   size;
-    this->initial_digit_rect       = initial_digit_rect;
+    this->initial_digit_rect =     initial_digit_rect;
     this->red_square_texture_ptr = IMG_LoadTexture(renderer_ptr, "textures/red_square.png");
     this->renderer_ptr =           renderer_ptr;
     this->pointersSize =           pointersSize;
+    this->swaps =                  0;
+    this->inserts =                0;
+    this->comparisons =            0;
 
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "0", {255, 255, 255});
-    this->single_digit_width = temp_surface->w;
+    this->single_digit_width =     temp_surface->w;
     SDL_FreeSurface(temp_surface);
-    this->double_digit_width = initial_digit_rect.w; // width is almost identical to font size, but not quite
+    this->double_digit_width =     initial_digit_rect.w; // width is almost identical to font size, but not quite
 
     visualArray = new VisualNumber[size];
     for(unsigned int i = 0; i < size; i++)
@@ -49,7 +52,7 @@ void VisualArray::renderArray()
     alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width);
     for(unsigned int i = 0; i < size; i++)
     {   
-        if(visualArray[i].shouldntSkip())
+        if(visualArray[i].getSkipRender() == false)
         {
             if(visualArray[i].getVal() >= 10)
             {  
@@ -240,11 +243,12 @@ void VisualArray::swapElementsInArray(index_t index1, index_t index2)
 
 void VisualArray::swap(index_t index1, index_t index2, Configuration* config_ptr)
 {
+    swaps++;
     SDL_Renderer* renderer_ptr = config_ptr->renderer_ptr;
     SDL_Event* event_ptr = config_ptr->event_ptr;
     VisualArray* visualArray_ptr = config_ptr->visualArray_ptr;
-    visualArray[index1].skipRender();
-    visualArray[index2].skipRender();
+    visualArray[index1].setSkipRender(true);
+    visualArray[index2].setSkipRender(true);
 
     int index1_initial_x = initial_digit_rect.x + index1*RED_SQUARE_WIDTH;
     int index1_current_x = index1_initial_x;
@@ -280,8 +284,8 @@ void VisualArray::swap(index_t index1, index_t index2, Configuration* config_ptr
         visualArray_ptr->renderArray();
         SDL_RenderPresent(renderer_ptr);
     } 
-    visualArray[index1].unskip();
-    visualArray[index2].unskip(); 
+    visualArray[index1].setSkipRender(false);
+    visualArray[index2].setSkipRender(false); 
     swapElementsInArray(index1, index2);
 }
 

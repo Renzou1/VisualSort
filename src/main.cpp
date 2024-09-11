@@ -75,10 +75,7 @@ int main ( int argc, char *argv[] )
     }    
 
     TTF_Font* font_ptr = initializeFont(font_size);
-    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "10", {255, 255, 255});
-    const int double_digit_width = temp_surface->w;
-    SDL_FreeSurface (temp_surface);
-
+    const int double_digit_width = getDoubleDigitWidth(font_ptr);
     SDL_Window* window_ptr = initializeVisualSort(size, double_digit_width);
     SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_PRESENTVSYNC);
 
