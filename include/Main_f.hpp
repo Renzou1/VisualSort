@@ -109,8 +109,12 @@ void destroyVisualSort(Configuration* config)
     std::exit(0);
 }
 
-void waitForInput(Configuration* config_ptr)
+void waitForInput(Configuration* config_ptr, const unsigned int delay_before_input)
 {
+    SDL_RenderClear(config_ptr->renderer_ptr);
+    config_ptr->visualArray_ptr->renderArray();
+    SDL_RenderPresent(config_ptr->renderer_ptr);
+    SDL_Delay(delay_before_input / SPEED);
     if(WAIT_FOR_INPUT == false)
     {  return;  }
     while(true)

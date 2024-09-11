@@ -9,8 +9,7 @@ VisualNumber::VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_p
 {
     this->val = val;
     //create number texture:
-    SDL_Color white = {255, 255, 255};
-    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, std::to_string(val).c_str(), white);
+    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, std::to_string(val).c_str(), WHITE);
     number_texture = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
     SDL_FreeSurface(temp_surface);
     this->skipRender = false;

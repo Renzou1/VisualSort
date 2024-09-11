@@ -22,40 +22,39 @@ void selectionSort(int array[], Configuration* config_ptr)
     
     while(i < config_ptr->size)
     {
-        waitForInput(config_ptr);
+        waitForInput(config_ptr, 0);
         j = i;
         visualArray.slidePointer("j", "i", config_ptr);
         while(j < config_ptr->size)
         {
-            waitForInput(config_ptr);
+            waitForInput(config_ptr, 0);
             visualArray.setComparing(j, min, true);
-            waitForInput(config_ptr);
+            waitForInput(config_ptr, 100);
             if(array[j] < array[min])
             {
                 visualArray.setComparing(j, min, false);
                 visualArray.slidePointer("min", "j", config_ptr);
                 min = j;
-                waitForInput(config_ptr);
+                waitForInput(config_ptr, 200);
             }
             visualArray.setComparing(j, min, false);
             j++;
             visualArray.incrementPointer("j", config_ptr);
-            SDL_Delay(100 / SPEED);
         }
-        waitForInput(config_ptr);
+        waitForInput(config_ptr, 0);
         visualArray.swapElementsPointedBy("i", "min", config_ptr);
         swap(&array[i], &array[min]);
-        waitForInput(config_ptr);
+        waitForInput(config_ptr, 0);
         i++;
         visualArray.incrementPointer("i", config_ptr);
-        waitForInput(config_ptr);
+        waitForInput(config_ptr, 0);
         min = i;
         visualArray.slidePointer("min", "i", config_ptr);
     }
 
-    while(WAIT_FOR_INPUT != true)
+    while(WAIT_FOR_INPUT == false) // busy waiting
     {
-        waitForInput(config_ptr);
+        waitForInput(config_ptr, 0);
     }
     SDL_Delay(1000);
 }

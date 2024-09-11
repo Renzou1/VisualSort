@@ -17,8 +17,9 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
     this->swaps =                  0;
     this->inserts =                0;
     this->comparisons =            0;
+    this->font_ptr =               font_ptr;
 
-    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "0", {255, 255, 255});
+    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "0", WHITE);
     this->single_digit_width =     temp_surface->w;
     SDL_FreeSurface(temp_surface);
     this->double_digit_width =     initial_digit_rect.w; // width is almost identical to font size, but not quite
@@ -96,6 +97,16 @@ void VisualArray::renderArray()
         red_square_rect.x += RED_SQUARE_WIDTH;
     }
 
+    std::string swaps_string = "Swaps: " + std::to_string(swaps);
+    SDL_Surface* swaps_surface = TTF_RenderText_Solid(font_ptr, swaps_string.c_str(), WHITE);
+    SDL_Texture* swaps_texture = SDL_CreateTextureFromSurface(renderer_ptr, swaps_surface);
+    SDL_Rect swaps_rect;
+    swaps_rect.x = initial_digit_rect.x;
+    swaps_rect.y = DISTANCE_TO_TOP_OF_SCREEN + RED_SQUARE_WIDTH;
+    swaps_rect.h = swaps_surface->h;
+    swaps_rect.w = swaps_surface->w;
+    SDL_RenderCopy(renderer_ptr, swaps_texture, NULL, &swaps_rect);
+    SDL_FreeSurface(swaps_surface);
     renderPointers();
 }
 

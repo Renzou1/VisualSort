@@ -86,10 +86,14 @@ int main ( int argc, char *argv[] )
         case SELECTION_SORT:
             selectionSort(array, &config);
             break;
-        //case 2:
+        case INSERTION_SORT:
+            break;
+        case MERGE_SORT:
+            break;
+        case QUICK_SORT:
+            break;
         
     }
-    selectionSort(array, &config);
 
     return 0;
 }

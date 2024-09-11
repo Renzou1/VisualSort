@@ -1,3 +1,5 @@
+#pragma once
+
 #define INITIAL_FONT_SIZE 80 // best through experimentation: 80 
 #define ARROW_TEXTURE_OFFSET -50
 #define ARROW_DISTANCE_MULTIPLIER 1.5
@@ -12,3 +14,4 @@
 #define QUICK_SORT     4
 
 typedef unsigned int index_t;
+const SDL_Color WHITE = {255, 255, 255};
