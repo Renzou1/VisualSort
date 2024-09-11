@@ -13,8 +13,8 @@ typedef struct Configuration
     SDL_Event* event_ptr;
     TTF_Font* font_ptr;
     SDL_Window* window_ptr;
-    int size;
-    int font_size;
+    const int size;
+    const int double_digit_width;
 } Configuration;
 
 class VisualPointer

@@ -12,10 +12,9 @@ class VisualArray
 {
 public:
     VisualArray(int array[], int size, int pointersSize, 
-                SDL_Rect first_rect, 
+                SDL_Rect initial_digit_rect, 
                 SDL_Renderer* renderer_ptr,
-                TTF_Font* font_ptr,
-                int font_size);
+                TTF_Font* font_ptr);
     void split();
     void swapElementsPointedBy(std::string pointer1, std::string pointer2, Configuration* config_ptr);
     void swap(int index1, int index2, Configuration* config_ptr);
@@ -35,13 +34,12 @@ private:
     void swapElementsInArray(int index1, int index2);
     void renderPointers();    
     int size;
-    int font_size;
     int pointersSize;
     int currentPointerIndex;
     int single_digit_width;
     int double_digit_width;
     SDL_Texture* red_square_texture_ptr;
-    SDL_Rect first_rect;
+    SDL_Rect initial_digit_rect;
     SDL_Renderer* renderer_ptr;
     VisualNumber* visualArray;
     VisualPointer* visualPointers;

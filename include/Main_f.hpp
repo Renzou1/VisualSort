@@ -4,7 +4,22 @@
 #include "Globals.hpp"
 #include "VisualArray.hpp"
 
-SDL_Window* initializeVisualSort(int size, int font_size)
+TTF_Font* initializeFont(const int font_size){
+    if(TTF_Init() != 0)
+    {
+        std::cout << "TTF_init has failed. Error: " << TTF_GetError() << std::endl;
+    }
+
+    TTF_Font* font_ptr =  TTF_OpenFont("Rubik-Regular.ttf", font_size);
+    if( font_ptr == NULL )
+    {
+        std::cout << "Couldn't find font." << std::endl;
+    }    
+
+    return font_ptr;
+}
+
+SDL_Window* initializeVisualSort(const int size, const int double_digit_width)
 {
     if (SDL_Init(SDL_INIT_VIDEO) > 0)
     {
@@ -15,14 +30,9 @@ SDL_Window* initializeVisualSort(int size, int font_size)
     {
         std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
     }
-
-    if(TTF_Init() != 0)
-    {
-        std::cout << "TTF_init has failed. Error: " << TTF_GetError() << std::endl;
-    }
     
     // should be RED_SQUARE_WIDTH + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH
-    const int window_width = font_size * 2 * size + 200;
+    const int window_width =  RED_SQUARE_WIDTH/2 + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH;
     const int window_height = 600;
     SDL_Window* window = SDL_CreateWindow(
         "VisualSort V0", 
@@ -42,16 +52,16 @@ SDL_Window* initializeVisualSort(int size, int font_size)
 VisualArray makeVisualArray(int array[], int pointers, Configuration* config_ptr )
 {
     SDL_Surface* temp_surface = TTF_RenderText_Solid(config_ptr->font_ptr, "10", {255, 255, 255});
-    SDL_Rect initial_rect;
+    SDL_Rect initial_digit_rect;
     const int double_digit_width = temp_surface->w;
-    initial_rect.w = double_digit_width;
-    initial_rect.h = temp_surface->h;    
-    initial_rect.x = RED_SQUARE_WIDTH;
-    initial_rect.y = DISTANCE_TO_TOP_OF_SCREEN;
+    initial_digit_rect.w = double_digit_width;
+    initial_digit_rect.h = temp_surface->h;    
+    initial_digit_rect.x = RED_SQUARE_WIDTH;
+    initial_digit_rect.y = DISTANCE_TO_TOP_OF_SCREEN;
     SDL_FreeSurface (temp_surface);
 
-    VisualArray visualArray(array, config_ptr->size, pointers, initial_rect, 
-    config_ptr->renderer_ptr, config_ptr->font_ptr, config_ptr->font_size);
+    VisualArray visualArray(array, config_ptr->size, pointers, initial_digit_rect, 
+    config_ptr->renderer_ptr, config_ptr->font_ptr);
     config_ptr->visualArray_ptr = &visualArray;
     return visualArray;
 }

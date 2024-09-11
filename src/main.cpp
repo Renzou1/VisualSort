@@ -44,12 +44,20 @@ int main ( int argc, char *argv[] )
             scanf("%d", &array[i]);
         }
     }
-    //while(i < size)
-    //{  SDL_Delay(10);  }
+    
+    SDL_DisplayMode dm;
+    int width;
+    const int default_width = 1920;
+    if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
+    {
+        SDL_Log("SDL_GetDesktopDisplayMode failed: %s; will assume screen width of 1920", SDL_GetError());
+        width = default_width;
+    }  else {
+        width = dm.w;
+    }
 
-    int font_size = 80;
-    const int width = 1920;
-    if(DISTANCE * size + DISTANCE > width)
+    int font_size = INITIAL_FONT_SIZE;
+    if(font_size * 2 * size + font_size * 2 > width)
     {
         font_size = (width - 200)/ (2 * size);
     }
@@ -65,16 +73,17 @@ int main ( int argc, char *argv[] )
         std::cout << "invalid number, try again.\n";
         scanf("%d", &input);
     }    
-        
-    SDL_Window* window_ptr = initializeVisualSort(size, font_size);
+
+    TTF_Font* font_ptr = initializeFont(font_size);
+    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "10", {255, 255, 255});
+    const int double_digit_width = temp_surface->w;
+    SDL_FreeSurface (temp_surface);
+
+    SDL_Window* window_ptr = initializeVisualSort(size, double_digit_width);
     SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_PRESENTVSYNC);
-    TTF_Font* font_ptr =  TTF_OpenFont("Rubik-Regular.ttf", font_size);
-    if( font_ptr == NULL )
-    {
-        std::cout << "Couldn't find font." << std::endl;
-    }
+
     SDL_Event event;    
-    Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr, size, font_size};
+    Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr, size, double_digit_width};
 
     switch (input){
         case 1:

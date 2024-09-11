@@ -4,23 +4,21 @@
 void destroyVisualSort(Configuration* config);
 
 VisualArray::VisualArray(int array[], int size, int pointersSize, 
-                        SDL_Rect first_rect, 
+                        SDL_Rect initial_digit_rect, 
                         SDL_Renderer* renderer_ptr,
-                        TTF_Font* font_ptr,
-                        int font_size)
+                        TTF_Font* font_ptr)
 {
     currentPointerIndex = 0;
     this->size =                   size;
-    this->first_rect             = first_rect;
+    this->initial_digit_rect       = initial_digit_rect;
     this->red_square_texture_ptr = IMG_LoadTexture(renderer_ptr, "textures/red_square.png");
     this->renderer_ptr =           renderer_ptr;
     this->pointersSize =           pointersSize;
-    this->font_size = font_size;
 
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "0", {255, 255, 255});
     this->single_digit_width = temp_surface->w;
     SDL_FreeSurface(temp_surface);
-    this->double_digit_width = first_rect.w; // width is almost identical to font size, but not quite
+    this->double_digit_width = initial_digit_rect.w; // width is almost identical to font size, but not quite
 
     visualArray = new VisualNumber[size];
     for(int i = 0; i < size; i++)
@@ -30,7 +28,7 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
     visualPointers = new VisualPointer[pointersSize];
 }
 
-void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, int double_digit_width, int font_size)
+void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, int double_digit_width)
 {
     square_rect_ptr->w      = RED_SQUARE_WIDTH;
     square_rect_ptr->h      = square_rect_ptr->w;
@@ -42,13 +40,13 @@ void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr,
 void VisualArray::renderArray()
 {
     SDL_Rect number_rect;
-    number_rect.x = first_rect.x;
-    number_rect.y = first_rect.y;
-    number_rect.h = first_rect.h;
-    number_rect.w = first_rect.w;
+    number_rect.x = initial_digit_rect.x;
+    number_rect.y = initial_digit_rect.y;
+    number_rect.h = initial_digit_rect.h;
+    number_rect.w = initial_digit_rect.w;
 
     SDL_Rect red_square_rect;
-    alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width, font_size);
+    alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width);
     for(int i = 0; i < size; i++)
     {   
         if(visualArray[i].shouldntSkip())
@@ -91,8 +89,8 @@ void VisualArray::renderArray()
 
             visualArray[i].incrementFlag2();
         }
-        number_rect.x += DISTANCE;
-        red_square_rect.x += DISTANCE;
+        number_rect.x += RED_SQUARE_WIDTH;
+        red_square_rect.x += RED_SQUARE_WIDTH;
     }
 
     renderPointers();
@@ -152,7 +150,7 @@ void VisualArray::slidePointer(std::string name, int _index, Configuration* conf
     int initial_x = pointer->getNameRect()->x;
     int distanceToIndex = _index - pointer->getIndex();
     int increment = _index - pointer->getIndex();
-    int goal_x = initial_x + distanceToIndex * DISTANCE;
+    int goal_x = initial_x + distanceToIndex * RED_SQUARE_WIDTH;
 
     while(pointer->getNameRect()->x != goal_x)
     {
@@ -200,21 +198,21 @@ void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr,
     SDL_Texture* name_texture_ptr = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
 
     SDL_Rect temp_name_rect;
-    temp_name_rect.x = first_rect.x + DISTANCE * index + double_digit_width/2 - temp_surface->w/2;
+    temp_name_rect.x = initial_digit_rect.x + RED_SQUARE_WIDTH * index + double_digit_width/2 - temp_surface->w/2;
 
     SDL_Rect temp_arrow_rect;
-    temp_arrow_rect.w = font_size * 1.25;
-    temp_arrow_rect.h = font_size * 1.25;
-    temp_arrow_rect.x = first_rect.x + DISTANCE * index - temp_arrow_rect.w/2 + double_digit_width/2;
+    temp_arrow_rect.w = double_digit_width * 1.25;
+    temp_arrow_rect.h = double_digit_width * 1.25;
+    temp_arrow_rect.x = initial_digit_rect.x + RED_SQUARE_WIDTH * index - temp_arrow_rect.w/2 + double_digit_width/2;
 
     if(isAbovePointer)
     {
-        temp_arrow_rect.y = first_rect.y - temp_arrow_rect.h * ARROW_DISTANCE_MULTIPLIER; // guess
+        temp_arrow_rect.y = initial_digit_rect.y - temp_arrow_rect.h * ARROW_DISTANCE_MULTIPLIER; // guess
         temp_name_rect.y =  temp_arrow_rect.y - temp_arrow_rect.h;
 
     }  else
     {
-        temp_arrow_rect.y = first_rect.y + temp_arrow_rect.h * ARROW_DISTANCE_MULTIPLIER;
+        temp_arrow_rect.y = initial_digit_rect.y + temp_arrow_rect.h * ARROW_DISTANCE_MULTIPLIER;
         temp_name_rect.y =  temp_arrow_rect.y + temp_arrow_rect.h;
     }
     temp_name_rect.w = temp_surface->w;
@@ -248,15 +246,15 @@ void VisualArray::swap(int index1, int index2, Configuration* config_ptr)
     visualArray[index1].skipRender();
     visualArray[index2].skipRender();
 
-    int index1_initial_x = first_rect.x + index1*DISTANCE;
+    int index1_initial_x = initial_digit_rect.x + index1*RED_SQUARE_WIDTH;
     int index1_current_x = index1_initial_x;
-    int index2_x         = first_rect.x + index2*DISTANCE;
+    int index2_x         = initial_digit_rect.x + index2*RED_SQUARE_WIDTH;
     int index2_current_x = index2_x;
     int increment        = index1 - index2;
     SDL_Rect temp_rect;
-    temp_rect.w = first_rect.w;
-    temp_rect.h = first_rect.h; 
-    temp_rect.y = first_rect.y;
+    temp_rect.w = initial_digit_rect.w;
+    temp_rect.h = initial_digit_rect.h; 
+    temp_rect.y = initial_digit_rect.y;
     temp_rect.x = index1_current_x;
 
     while(index1_current_x != index2_x)
@@ -292,7 +290,7 @@ void VisualArray::operator=(const VisualArray& V)
     size = V.size;
     currentPointerIndex = V.currentPointerIndex;
     red_square_texture_ptr = V.red_square_texture_ptr;
-    first_rect =  V.first_rect;
+    initial_digit_rect =  V.initial_digit_rect;
     renderer_ptr = V.renderer_ptr;
     for(int i = 0; i < size; i++)
     {
