@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "VisualArray.hpp"
 #include "Globals.hpp"
 
@@ -52,7 +53,7 @@ void selectionSort(int array[], Configuration* config_ptr)
         visualArray.slidePointer("min", "i", config_ptr);
     }
 
-    while(NO_WAITING != 1)
+    while(WAIT_FOR_INPUT != true)
     {
         waitForInput(config_ptr);
     }

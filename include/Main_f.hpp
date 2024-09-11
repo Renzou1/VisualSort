@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <stdbool.h>
 #include "Globals.hpp"
 #include "VisualArray.hpp"
 
@@ -88,7 +89,7 @@ void destroyVisualSort(Configuration* config)
 
 void waitForInput(Configuration* config_ptr)
 {
-    if(NO_WAITING == 1)
+    if(WAIT_FOR_INPUT == false)
     {  return;  }
     while(true)
     {

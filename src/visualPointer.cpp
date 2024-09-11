@@ -22,13 +22,13 @@ VisualPointer::VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect a
     this->index = 0;
 }
 
-int VisualPointer::getIndex()
+index_t VisualPointer::getIndex()
 {  return this->index;  }
 
 std::string VisualPointer::getName()
 {  return this->name;  }
 
-bool VisualPointer::slidePointer(int _index, Configuration config)
+bool VisualPointer::slidePointer(index_t _index, Configuration config)
 {
     SDL_Renderer* renderer_ptr = config.renderer_ptr;
     SDL_Event* event_ptr = config.event_ptr;

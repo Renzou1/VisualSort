@@ -3,7 +3,7 @@
 
 void destroyVisualSort(Configuration* config);
 
-VisualArray::VisualArray(int array[], int size, int pointersSize, 
+VisualArray::VisualArray(const int array[], const unsigned int size, const unsigned int pointersSize, 
                         SDL_Rect initial_digit_rect, 
                         SDL_Renderer* renderer_ptr,
                         TTF_Font* font_ptr)
@@ -21,14 +21,14 @@ VisualArray::VisualArray(int array[], int size, int pointersSize,
     this->double_digit_width = initial_digit_rect.w; // width is almost identical to font size, but not quite
 
     visualArray = new VisualNumber[size];
-    for(int i = 0; i < size; i++)
+    for(unsigned int i = 0; i < size; i++)
     {
         this->visualArray[i] = VisualNumber(array[i], font_ptr, renderer_ptr);
     }
     visualPointers = new VisualPointer[pointersSize];
 }
 
-void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, int double_digit_width)
+void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, const unsigned int double_digit_width)
 {
     square_rect_ptr->w      = RED_SQUARE_WIDTH;
     square_rect_ptr->h      = square_rect_ptr->w;
@@ -47,7 +47,7 @@ void VisualArray::renderArray()
 
     SDL_Rect red_square_rect;
     alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width);
-    for(int i = 0; i < size; i++)
+    for(unsigned int i = 0; i < size; i++)
     {   
         if(visualArray[i].shouldntSkip())
         {
@@ -98,20 +98,20 @@ void VisualArray::renderArray()
 
 void VisualArray::renderPointers()
 {
-    for(int i = 0; i < currentPointerIndex; i++)
+    for(index_t i = 0; i < currentPointerIndex; i++)
     {
         visualPointers[i].render(renderer_ptr);
     }
 }
 
-int VisualArray::getVal(int index)
+int VisualArray::getVal(index_t index)
 {
     return visualArray[index].getVal();
 }
 
 VisualPointer* VisualArray::getPointer(std::string name)
 {  
-    for(int i = 0; i < currentPointerIndex; i++)
+    for(index_t i = 0; i < currentPointerIndex; i++)
     {
         if(visualPointers[i].getName() == name)
         {
@@ -122,9 +122,9 @@ VisualPointer* VisualArray::getPointer(std::string name)
     std::cout << "failed to find pointer named " << name << std::endl;
     return NULL;
 }
-VisualPointer* VisualArray::getPointer(int index)
+VisualPointer* VisualArray::getPointer(index_t index)
 {   
-    for(int i = 0; i < currentPointerIndex; i++)
+    for(index_t i = 0; i < currentPointerIndex; i++)
     {
         if(visualPointers[i].getIndex() == index)
         {
@@ -135,7 +135,7 @@ VisualPointer* VisualArray::getPointer(int index)
     return NULL;
 }
 
-void VisualArray::slidePointer(std::string name, int _index, Configuration* config_ptr)
+void VisualArray::slidePointer(std::string name, index_t _index, Configuration* config_ptr)
 {
     VisualPointer* pointer = getPointer(name);
     if(pointer == NULL)
@@ -191,7 +191,7 @@ void VisualArray::decrementPointer(std::string name, Configuration* config_ptr)
     slidePointer(name, getPointer(name)->getIndex() - 1, config_ptr);
 }
 
-void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr, std::string name)
+void VisualArray::addPointer(bool isAbovePointer, index_t index, TTF_Font* font_ptr, std::string name)
 {
     SDL_Color white = {255, 255, 255};
     SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, name.c_str(), white);
@@ -224,13 +224,13 @@ void VisualArray::addPointer(bool isAbovePointer, int index, TTF_Font* font_ptr,
     SDL_FreeSurface(temp_surface);
 }
 
-void VisualArray::setComparing(int index1, int index2, bool boolean)
+void VisualArray::setComparing(index_t index1, index_t index2, bool boolean)
 {
     visualArray[index1].setComparing(boolean);
     visualArray[index2].setComparing(boolean);
 }
 
-void VisualArray::swapElementsInArray(int index1, int index2)
+void VisualArray::swapElementsInArray(index_t index1, index_t index2)
 {
     VisualNumber temp;
     temp = visualArray[index1];
@@ -238,7 +238,7 @@ void VisualArray::swapElementsInArray(int index1, int index2)
     visualArray[index2] = temp;
 }
 
-void VisualArray::swap(int index1, int index2, Configuration* config_ptr)
+void VisualArray::swap(index_t index1, index_t index2, Configuration* config_ptr)
 {
     SDL_Renderer* renderer_ptr = config_ptr->renderer_ptr;
     SDL_Event* event_ptr = config_ptr->event_ptr;
@@ -292,11 +292,11 @@ void VisualArray::operator=(const VisualArray& V)
     red_square_texture_ptr = V.red_square_texture_ptr;
     initial_digit_rect =  V.initial_digit_rect;
     renderer_ptr = V.renderer_ptr;
-    for(int i = 0; i < size; i++)
+    for(unsigned int i = 0; i < size; i++)
     {
         visualArray[i] = V.visualArray[i];
     }
-    for(int i = 0; i < pointersSize; i++)
+    for(unsigned int i = 0; i < pointersSize; i++)
     {
         visualPointers[i] = V.visualPointers[i];
     }

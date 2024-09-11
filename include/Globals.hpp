@@ -5,4 +5,6 @@
 #define DISTANCE_TO_TOP_OF_SCREEN 250
 #define RED_SQUARE_WIDTH 2 * double_digit_width
 #define SPEED 2
-#define NO_WAITING 0
+#define WAIT_FOR_INPUT 1
+
+typedef unsigned int index_t;
