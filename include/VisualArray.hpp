@@ -16,7 +16,9 @@ public:
                 SDL_Rect initial_digit_rect, 
                 SDL_Renderer* renderer_ptr,
                 TTF_Font* font_ptr,
-                unsigned int font_size);
+                unsigned int font_size,
+                const int window_height,
+                const int window_width);
     void split();
     void swapElementsPointedBy(std::string pointer1, std::string pointer2, Configuration* config_ptr);
     void swap(const index_t index1, const index_t index2, Configuration* config_ptr);
@@ -26,7 +28,7 @@ public:
     void decrementPointer(std::string name, Configuration* config_ptr);
     void setComparing(const index_t index1, const index_t index2, bool boolean);
     void renderArray();
-    void renderCopyInfo(std::string info, unsigned int* width_accumulator);
+    void renderCopyInfo(std::string info);
     VisualPointer* getPointer(std::string name);
     VisualPointer* getPointer(const index_t index);
     int getVal(const index_t index);
@@ -46,6 +48,8 @@ private:
     unsigned int insertions;
     unsigned int comparisons;
     unsigned int font_size;
+    unsigned int window_height;
+    unsigned int window_width;
     SDL_Texture* red_square_texture_ptr;
     SDL_Rect initial_digit_rect;
     SDL_Renderer* renderer_ptr;

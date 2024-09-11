@@ -54,7 +54,7 @@ int main ( int argc, char *argv[] )
     }
     
     SDL_DisplayMode dm;
-    int width;
+    unsigned int width;
     const int default_width = 1920;
     if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
     {
@@ -64,7 +64,7 @@ int main ( int argc, char *argv[] )
         width = dm.w;
     }
 
-    int font_size = INITIAL_FONT_SIZE;
+    unsigned int font_size = INITIAL_FONT_SIZE;
     if(font_size * 2 * size + font_size * 2 > width)
     {
         // scales font size depending on screen width and array size
@@ -87,7 +87,7 @@ int main ( int argc, char *argv[] )
     SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_PRESENTVSYNC);
 
     SDL_Event event;    
-    Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr, size, double_digit_width};
+    Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr, size, double_digit_width, font_size};
 
     switch (algorithm){
         case SELECTION_SORT:

@@ -41,7 +41,7 @@ SDL_Window* initializeVisualSort(const int size, const int double_digit_width, c
     
     // should be RED_SQUARE_WIDTH + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH
     const int window_width =  RED_SQUARE_WIDTH/2 + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH;
-    const int window_height = 600;
+    const int window_height = 600 + RED_SQUARE_WIDTH/2;
     std::string window_name = "VisualSort V0 - ";
     switch(algorithm){
         case SELECTION_SORT:
@@ -82,9 +82,11 @@ VisualArray makeVisualArray(const int array[], const int pointersSize, Configura
     initial_digit_rect.x = RED_SQUARE_WIDTH;
     initial_digit_rect.y = DISTANCE_TO_TOP_OF_SCREEN;
     SDL_FreeSurface (temp_surface);
+    int window_height, window_width;
+    SDL_GetWindowSize(config_ptr->window_ptr, &window_width, &window_height);
 
     VisualArray visualArray(array, config_ptr->size, pointersSize, initial_digit_rect, 
-    config_ptr->renderer_ptr, config_ptr->font_ptr, config_ptr->font_size);
+    config_ptr->renderer_ptr, config_ptr->font_ptr, config_ptr->font_size, window_height, window_width);
     config_ptr->visualArray_ptr = &visualArray;
     return visualArray;
 }

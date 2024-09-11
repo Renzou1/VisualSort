@@ -7,7 +7,9 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
                         SDL_Rect initial_digit_rect, 
                         SDL_Renderer* renderer_ptr,
                         TTF_Font* font_ptr,
-                        const unsigned int font_size)
+                        const unsigned int font_size,
+                        const int window_height,
+                        const int window_width)
 {
     currentPointerIndex = 0;
     this->size =                   size;
@@ -20,8 +22,10 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
     this->comparisons =            0;
     this->font_ptr =               font_ptr;
     this->font_size =              font_size;
+    this->window_height =          window_height;
+    this->window_width =           window_width;
 
-    this->small_font_ptr =         TTF_OpenFont("Rubik-Regular.ttf", font_size);
+    this->small_font_ptr =         TTF_OpenFont("Rubik-Regular.ttf", font_size / 2);
     if (small_font_ptr == NULL)
     {
         std::cout << "Error opening font: " << SDL_GetError() << std::endl;
@@ -107,32 +111,30 @@ void VisualArray::renderArray()
         red_square_rect.x += RED_SQUARE_WIDTH;
     }
 
-    unsigned int width_accumulator = 0;
-    renderCopyInfo("Comparisons: " + std::to_string(comparisons) + " | ", &width_accumulator);
-    renderCopyInfo("Swaps: " + std::to_string(swaps) + " | ", &width_accumulator);
-    renderCopyInfo("Insertions: " + std::to_string(insertions), &width_accumulator);
+    std::string info_string = "Comparisons: " + std::to_string(comparisons) + " | ";
+    info_string += "Swaps: " + std::to_string(swaps) + " | ";
+    info_string += "Insertions: " + std::to_string(insertions);
+    renderCopyInfo(info_string);
 
     renderPointers();
 }
 
-void VisualArray::renderCopyInfo(std::string info, unsigned int* width_accumulator){
+void VisualArray::renderCopyInfo(std::string info){
     
-    //SDL_Surface* info_surface = TTF_RenderText_Solid(small_font_ptr, info.c_str(), WHITE);
-    SDL_Surface* info_surface = TTF_RenderText_Solid(font_ptr, info.c_str(), WHITE);
+    SDL_Surface* info_surface = TTF_RenderText_Solid(small_font_ptr, info.c_str(), WHITE);
     if (info_surface == NULL){
         std::cout << "Error:" << TTF_GetError() << std::endl;
     }
     SDL_Texture* info_texture = SDL_CreateTextureFromSurface(renderer_ptr, info_surface);
     
     SDL_Rect info_rect;
-    info_rect.x = (initial_digit_rect.x - RED_SQUARE_WIDTH/4) + *width_accumulator;
-    info_rect.y = DISTANCE_TO_TOP_OF_SCREEN + RED_SQUARE_WIDTH;
-    info_rect.h = info_surface->h;
     info_rect.w = info_surface->w;
+    info_rect.h = info_surface->h;
+    info_rect.x = window_width/2 - info_rect.w/2;
+    info_rect.y = window_height - info_rect.h;    
 
     SDL_RenderCopy(renderer_ptr, info_texture, NULL, &info_rect);
     SDL_FreeSurface(info_surface);
-    *width_accumulator += info_surface->w;
 }
 
 void VisualArray::renderPointers()
@@ -265,6 +267,7 @@ void VisualArray::addPointer(bool isAbovePointer, index_t index, TTF_Font* font_
 
 void VisualArray::setComparing(index_t index1, index_t index2, bool boolean)
 {
+    if(boolean == true) {  comparisons++;  }
     visualArray[index1].setComparing(boolean);
     visualArray[index2].setComparing(boolean);
 }
