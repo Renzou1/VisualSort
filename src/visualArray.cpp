@@ -47,7 +47,8 @@ void VisualArray::renderArray()
     number_rect.x = initial_digit_rect.x;
     number_rect.y = initial_digit_rect.y;
     number_rect.h = initial_digit_rect.h;
-    number_rect.w = initial_digit_rect.w;
+    number_rect.w = -1;
+    //width is set later because it depends on number of digits
 
     SDL_Rect red_square_rect;
     alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width);
@@ -261,18 +262,31 @@ void VisualArray::swap(index_t index1, index_t index2, Configuration* config_ptr
     visualArray[index1].setSkipRender(true);
     visualArray[index2].setSkipRender(true);
 
-    int index1_initial_x = initial_digit_rect.x + index1*RED_SQUARE_WIDTH;
-    int index1_current_x = index1_initial_x;
+    int index1_x         = initial_digit_rect.x + index1*RED_SQUARE_WIDTH;
     int index2_x         = initial_digit_rect.x + index2*RED_SQUARE_WIDTH;
-    int index2_current_x = index2_x;
     int increment        = index1 - index2;
-    SDL_Rect temp_rect;
-    temp_rect.w = initial_digit_rect.w;
-    temp_rect.h = initial_digit_rect.h; 
-    temp_rect.y = initial_digit_rect.y;
-    temp_rect.x = index1_current_x;
 
-    while(index1_current_x != index2_x)
+    SDL_Rect index_1_rect;
+    if (visualArray[index1].getVal() < 10){
+        index_1_rect.w = single_digit_width;
+    }  else {
+        index_1_rect.w = double_digit_width;
+    }
+    index_1_rect.h = initial_digit_rect.h; 
+    index_1_rect.y = initial_digit_rect.y;
+    index_1_rect.x = index1_x;
+
+    SDL_Rect index_2_rect;
+    if (visualArray[index2].getVal() < 10){
+        index_2_rect.w = single_digit_width;
+    }  else {
+        index_2_rect.w = double_digit_width;
+    }
+    index_2_rect.h = initial_digit_rect.h; 
+    index_2_rect.y = initial_digit_rect.y;
+    index_2_rect.x = index2_x;
+
+    while(index_1_rect.x != index2_x)
     {
         while (SDL_PollEvent(event_ptr))
         {
@@ -281,17 +295,15 @@ void VisualArray::swap(index_t index1, index_t index2, Configuration* config_ptr
                 destroyVisualSort(config_ptr);
             }
         }
-        for(int i = 0; i < SPEED && index1_current_x != index2_x; i++)
+        for(int i = 0; i < SPEED && index_1_rect.x != index2_x; i++)
         {
-            index1_current_x-= increment;
-            index2_current_x+= increment;
+            index_1_rect.x-= increment;
+            index_2_rect.x+= increment;
         }
 
         SDL_RenderClear(renderer_ptr);
-        temp_rect.x = index1_current_x;
-        SDL_RenderCopy(renderer_ptr, visualArray[index1].getTexture(), NULL, &temp_rect);
-        temp_rect.x = index2_current_x;
-        SDL_RenderCopy(renderer_ptr, visualArray[index2].getTexture(), NULL, &temp_rect);
+        SDL_RenderCopy(renderer_ptr, visualArray[index1].getTexture(), NULL, &index_1_rect);
+        SDL_RenderCopy(renderer_ptr, visualArray[index2].getTexture(), NULL, &index_2_rect);
         visualArray_ptr->renderArray();
         SDL_RenderPresent(renderer_ptr);
     } 

@@ -39,11 +39,16 @@ int main ( int argc, char *argv[] )
         }
     }  else
     {
-        std::cout << "Type your desired array:" << std::endl;
+        std::cout << "Type your desired array: (example: 20 5 7 4 3)" << std::endl;
 
         for(int i = 0; i < size; i++)
         {
-            scanf("%d", &array[i]);
+            int temp;
+            scanf("%d", &temp);
+            std::cout << "here" << std::endl;
+            if (temp <  0){  temp*=-1;  }
+            if (temp > 99){  temp%=100; }
+            array[i] = temp;
         }
     }
     
