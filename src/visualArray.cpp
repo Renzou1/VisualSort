@@ -25,6 +25,7 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
     this->window_height =          window_height;
     this->window_width =           window_width;
     this->number_of_variables =    0;
+    this->time_counter =           0;
 
     this->small_font_ptr =         TTF_OpenFont("Rubik-Regular.ttf", INITIAL_FONT_SIZE / 2);
     if (small_font_ptr == NULL)
@@ -88,11 +89,10 @@ void VisualArray::renderArray()
              
         }
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
-        if(visualArray[i].isComparing())
+        if(visualArray[i].isComparing()) // tied to refresh rate I think, bad
         {
-            int time = 120;
-            int flag2 = visualArray[i].getFlag2();
-            if(flag2 < time/2)
+            unsigned int time = 240;
+            if(time_counter < time/2)
             {
                 SDL_Rect temp_square_rect = red_square_rect;
                 temp_square_rect.w = red_square_rect.w*0.8;
@@ -103,10 +103,10 @@ void VisualArray::renderArray()
                 temp_square_rect.y = red_square_rect.y + (length_difference/2);
 
                 SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &temp_square_rect);
-            }  else if (flag2 > time)
-            {  visualArray[i].resetFlag2();  }
+            }  else if (time_counter > time)
+            {  time_counter = 0;  }
 
-            visualArray[i].incrementFlag2();
+            time_counter++;
         }
         number_rect.x += RED_SQUARE_WIDTH;
         red_square_rect.x += RED_SQUARE_WIDTH;
@@ -146,15 +146,13 @@ void VisualArray::renderPointers()
         visualPointers[i].render(renderer_ptr);
     }
 }
-    
-
 
 void VisualArray::renderVariables(SDL_Renderer* renderer_ptr, 
                                   const unsigned int height, const unsigned int width)
 {
     for(unsigned int i = 0; i < number_of_variables; i++)
     {
-        variables[i].render(renderer_ptr, height, width, font_ptr);
+        visualVariables[i].render(renderer_ptr, height, width, font_ptr);
     }
 }
 
@@ -173,7 +171,7 @@ VisualPointer* VisualArray::getPointer(std::string name)
         }
     }
 
-    std::cout << "failed to find pointer named " << name << std::endl;
+    //std::cout << "failed to find pointer named " << name << std::endl;
     return NULL;
 }
 VisualPointer* VisualArray::getPointer(index_t index)
@@ -281,14 +279,37 @@ void VisualArray::addPointer(bool isAbovePointer, index_t index, TTF_Font* font_
 
 void VisualArray::addVariable(std::string name, const int value)
 {
-    variables[number_of_variables++] = VisualVariable(name, value);
+    visualVariables[number_of_variables++] = VisualVariable(name, value);
+}
+
+VisualVariable* VisualArray::getVariable(std::string name)
+{  
+    for(index_t i = 0; i < number_of_variables; i++)
+    {
+        if(visualVariables[i].getName() == name)
+        {
+            return &visualVariables[i];
+        }
+    }
+
+    std::cout << "failed to find variable named " << name << std::endl;
+    return NULL;
 }
 
 void VisualArray::setComparing(index_t index1, index_t index2, bool boolean)
 {
     if(boolean == true) {  comparisons++;  }
+    time_counter = 0;
     visualArray[index1].setComparing(boolean);
     visualArray[index2].setComparing(boolean);
+}
+
+void VisualArray::setComparing(index_t index, std::string variable_name, bool boolean)
+{
+    //if(boolean == true) {  comparisons++;  } decide on this later
+    time_counter = 0;
+    visualArray[index].setComparing(boolean);
+    getVariable(variable_name)->setComparing(boolean);
 }
 
 void VisualArray::swapElementsInArray(index_t index1, index_t index2)

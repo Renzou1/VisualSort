@@ -16,9 +16,6 @@ public:
     void setSkipRender(bool skipRender);
     bool isComparing();
     void setComparing(bool param);
-    int getFlag2();
-    void incrementFlag2();
-    void resetFlag2();
     SDL_Texture* getTexture();
     void destroy();
     void operator=(const VisualNumber& V);

@@ -29,11 +29,13 @@ public:
     void incrementPointer(std::string name, Configuration* config_ptr);
     void decrementPointer(std::string name, Configuration* config_ptr);
     void setComparing(const index_t index1, const index_t index2, bool boolean);
+    void setComparing(index_t index, std::string variable_name, bool boolean);
     void renderArray();
     void renderCopyInfo(std::string info);
     VisualPointer* getPointer(std::string name);
     VisualPointer* getPointer(const index_t index);
     int getVal(const index_t index);
+    VisualVariable* getVariable(std::string name);
     void addVariable(std::string name, const int value);
     void addPointer(bool isAbovePointer, const index_t index, TTF_Font* font_ptr, std::string name);
     void destroy();
@@ -55,7 +57,8 @@ private:
     unsigned int window_height;
     unsigned int window_width;
     unsigned int number_of_variables;
-    VisualVariable variables[2]; // grow as needed
+    unsigned int time_counter;
+    VisualVariable visualVariables[2]; // grow as needed
     SDL_Texture* red_square_texture_ptr;
     SDL_Rect initial_digit_rect;
     SDL_Renderer* renderer_ptr;

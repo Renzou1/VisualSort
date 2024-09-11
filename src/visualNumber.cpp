@@ -39,15 +39,6 @@ void VisualNumber::setComparing(bool param)
     }
 }
 
-int VisualNumber::getFlag2()
-{  return isComparingFlag2_;  }
-
-void VisualNumber::incrementFlag2()
-{  isComparingFlag2_++;  }
-
-void VisualNumber::resetFlag2()
-{  isComparingFlag2_ = 0;  }
-
 void VisualNumber::operator=(const VisualNumber& V)
 {
     val = V.val;
