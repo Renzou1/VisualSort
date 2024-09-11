@@ -19,7 +19,7 @@ VisualNumber::VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_p
 SDL_Texture* VisualNumber::getTexture()
 {  return number_texture;  }
 
-bool VisualNumber::getSkipRender()
+bool VisualNumber::shouldSkipRender()
 {  return skipRender;  }
 
 void VisualNumber::setSkipRender(bool _skipRender)

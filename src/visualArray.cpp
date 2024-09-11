@@ -52,7 +52,7 @@ void VisualArray::renderArray()
     alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width);
     for(unsigned int i = 0; i < size; i++)
     {   
-        if(visualArray[i].getSkipRender() == false)
+        if(visualArray[i].shouldSkipRender() == false)
         {
             if(visualArray[i].getVal() >= 10)
             {  

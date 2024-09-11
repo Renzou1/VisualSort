@@ -11,7 +11,7 @@ public:
     VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr);
     int increment();
     int getVal();
-    bool getSkipRender();
+    bool shouldSkipRender();
     void setSkipRender(bool skipRender);
     bool isComparing();
     void setComparing(bool param);

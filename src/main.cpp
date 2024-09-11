@@ -13,6 +13,8 @@
 // g++ -I include -o main src/* -lSDL2 -lSDL2_image -lSDL2_ttf -pthread -Wall
 // TODO: make makefile
 // TODO: insertion sort, quick sort, merge sort
+// TODO: change flag 2 name in visualNumber
+// TODO: render swap, increments and comparison count
 
 int main ( int argc, char *argv[] )
 {
@@ -27,11 +29,10 @@ int main ( int argc, char *argv[] )
 
     printf("1- Random numbers\n2- Choose numbers\n");
     int choice;
-    int i = 0;    
     scanf("%d", &choice);
     if(choice == 1)
     {
-        for(i = 0; i < size; i++)
+        for(int i = 0; i < size; i++)
         {
             array[i] = rand() % 100;
         }
@@ -39,7 +40,7 @@ int main ( int argc, char *argv[] )
     {
         std::cout << "Type your desired array:" << std::endl;
 
-        for(i = 0; i < size; i++)
+        for(int i = 0; i < size; i++)
         {
             scanf("%d", &array[i]);
         }
@@ -59,31 +60,30 @@ int main ( int argc, char *argv[] )
     int font_size = INITIAL_FONT_SIZE;
     if(font_size * 2 * size + font_size * 2 > width)
     {
+        // scales font size depending on screen width and array size
         font_size = (width - 200)/ (2 * size);
     }
-    std::cout << font_size;
-
 
     std::cout << "Please select the sorting algorithm.\n";
     std::cout << "1. selectionsort\n2. insertionsort\n3. quicksort\n4. mergesort\n";
-    unsigned int input;
-    scanf("%d", &input);
-    while(input < 0 || input > 4)
+    unsigned int algorithm;
+    scanf("%d", &algorithm);
+    while(algorithm < 0 || algorithm > 4)
     {
         std::cout << "invalid number, try again.\n";
-        scanf("%d", &input);
+        scanf("%d", &algorithm);
     }    
 
     TTF_Font* font_ptr = initializeFont(font_size);
     const int double_digit_width = getDoubleDigitWidth(font_ptr);
-    SDL_Window* window_ptr = initializeVisualSort(size, double_digit_width);
+    SDL_Window* window_ptr = initializeVisualSort(size, double_digit_width, algorithm);
     SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_PRESENTVSYNC);
 
     SDL_Event event;    
     Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr, size, double_digit_width};
 
-    switch (input){
-        case 1:
+    switch (algorithm){
+        case SELECTION_SORT:
             selectionSort(array, &config);
             break;
         //case 2:

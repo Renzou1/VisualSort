@@ -27,7 +27,7 @@ TTF_Font* initializeFont(const int font_size){
     return font_ptr;
 }
 
-SDL_Window* initializeVisualSort(const int size, const int double_digit_width)
+SDL_Window* initializeVisualSort(const int size, const int double_digit_width, const int algorithm)
 {
     if (SDL_Init(SDL_INIT_VIDEO) > 0)
     {
@@ -42,8 +42,23 @@ SDL_Window* initializeVisualSort(const int size, const int double_digit_width)
     // should be RED_SQUARE_WIDTH + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH
     const int window_width =  RED_SQUARE_WIDTH/2 + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH;
     const int window_height = 600;
+    std::string window_name = "VisualSort V0 - ";
+    switch(algorithm){
+        case SELECTION_SORT:
+            window_name += "selection sort";
+            break;
+        case INSERTION_SORT:
+            window_name += "insertion sort";
+            break;
+        case MERGE_SORT:
+            window_name += "merge sort";
+            break;
+        case QUICK_SORT:
+            window_name += "quicksort";
+            break;
+    }
     SDL_Window* window = SDL_CreateWindow(
-        "VisualSort V0", 
+        window_name.c_str(), 
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
         window_width , window_height, 
         SDL_WINDOW_SHOWN
@@ -51,7 +66,7 @@ SDL_Window* initializeVisualSort(const int size, const int double_digit_width)
 
     if(window == NULL)
     {
-        std::cout << "Window failed to init. Error: " << SDL_GetError() << std::endl;
+        std::cout << "Window failed to initialize. Error: " << SDL_GetError() << std::endl;
     }
 
     return window;

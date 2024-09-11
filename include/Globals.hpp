@@ -6,5 +6,9 @@
 #define RED_SQUARE_WIDTH 2 * double_digit_width
 #define SPEED 2
 #define WAIT_FOR_INPUT 1
+#define SELECTION_SORT 1
+#define INSERTION_SORT 2
+#define MERGE_SORT     3
+#define QUICK_SORT     4
 
 typedef unsigned int index_t;
