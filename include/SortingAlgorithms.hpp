@@ -42,8 +42,10 @@ void selectionSort(int array[], Configuration* config_ptr)
             visualArray.incrementPointer("j", config_ptr);
         }
         waitForInput(config_ptr, 0);
-        visualArray.swapElementsPointedBy("i", "min", config_ptr);
-        swap(&array[i], &array[min]);
+        if (visualArray.getPointer("i")->getIndex() != visualArray.getPointer("min")->getIndex()){
+            visualArray.swapElementsPointedBy("i", "min", config_ptr);
+            swap(&array[i], &array[min]);            
+        }
         waitForInput(config_ptr, 0);
         i++;
         visualArray.incrementPointer("i", config_ptr);
@@ -52,9 +54,5 @@ void selectionSort(int array[], Configuration* config_ptr)
         visualArray.slidePointer("min", "i", config_ptr);
     }
 
-    while(WAIT_FOR_INPUT == false) // busy waiting
-    {
-        waitForInput(config_ptr, 0);
-    }
-    SDL_Delay(1000);
+    waitToQuit(config_ptr);
 }

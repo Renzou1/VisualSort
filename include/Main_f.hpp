@@ -135,3 +135,17 @@ void waitForInput(Configuration* config_ptr, const unsigned int delay_before_inp
     }
 }
 
+void waitToQuit(Configuration* config_ptr)
+{
+    while(true)
+    {
+        while(SDL_PollEvent(config_ptr->event_ptr))
+        {
+            switch(config_ptr->event_ptr->type)
+            {
+                case SDL_QUIT:
+                    destroyVisualSort(config_ptr);  
+            }
+        }
+    }
+}

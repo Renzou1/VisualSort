@@ -15,6 +15,7 @@
 // TODO: insertion sort, quick sort, merge sort
 // TODO: change flag 2 name in visualNumber
 // TODO: render swap, increments and comparison count
+// TODO: should swap count when with itself in selection sort? currently we skip swap if index == index
 
 int main ( int argc, char *argv[] )
 {
