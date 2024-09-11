@@ -19,7 +19,7 @@ void selectionSort(int array[], Configuration* config_ptr)
     visualArray.addPointer(upPointer, j, config_ptr->font_ptr, "j");
     int min = 0;
     visualArray.addPointer(!upPointer, min, config_ptr->font_ptr, "min");
-    
+
     while(i < config_ptr->size - 1)
     {
         j = i + 1;
@@ -91,6 +91,14 @@ void selectionSort(int arr[], int size)
     }
 }
 */
+
+void insertionSort(int array[], Configuration* config_ptr)
+{
+    bool upPointer = true;
+    VisualArray VisualArray = makeVisualArray(array, 2, config_ptr);
+    VisualArray.addVariable("teste", 0);
+    waitForInput(config_ptr, 0);
+}
 
 /*  insertion sort base:
 void insertionSort(int arr[], int n)

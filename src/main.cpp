@@ -94,6 +94,7 @@ int main ( int argc, char *argv[] )
             selectionSort(array, &config);
             break;
         case INSERTION_SORT:
+            insertionSort(array, &config);
             break;
         case MERGE_SORT:
             break;

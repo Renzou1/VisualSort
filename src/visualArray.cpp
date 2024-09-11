@@ -24,6 +24,7 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
     this->font_size =              font_size;
     this->window_height =          window_height;
     this->window_width =           window_width;
+    this->number_of_variables =    0;
 
     this->small_font_ptr =         TTF_OpenFont("Rubik-Regular.ttf", INITIAL_FONT_SIZE / 2);
     if (small_font_ptr == NULL)
@@ -117,6 +118,7 @@ void VisualArray::renderArray()
     renderCopyInfo(info_string);
 
     renderPointers();
+    renderVariables(renderer_ptr, window_height, window_width);
 }
 
 void VisualArray::renderCopyInfo(std::string info){
@@ -142,6 +144,17 @@ void VisualArray::renderPointers()
     for(index_t i = 0; i < currentPointerIndex; i++)
     {
         visualPointers[i].render(renderer_ptr);
+    }
+}
+    
+
+
+void VisualArray::renderVariables(SDL_Renderer* renderer_ptr, 
+                                  const unsigned int height, const unsigned int width)
+{
+    for(unsigned int i = 0; i < number_of_variables; i++)
+    {
+        variables[i].render(renderer_ptr, height, width, font_ptr);
     }
 }
 
@@ -264,6 +277,11 @@ void VisualArray::addPointer(bool isAbovePointer, index_t index, TTF_Font* font_
                                                         index);
     currentPointerIndex++;
     SDL_FreeSurface(temp_surface);
+}
+
+void VisualArray::addVariable(std::string name, const int value)
+{
+    variables[number_of_variables++] = VisualVariable(name, value);
 }
 
 void VisualArray::setComparing(index_t index1, index_t index2, bool boolean)

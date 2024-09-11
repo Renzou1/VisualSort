@@ -2,9 +2,11 @@
 
 class VisualArray;
 class VisualPointer;
+class VisualVariable;
 struct Configuration;
 #include "VisualNumber.hpp"
 #include "VisualPointer.hpp"
+#include "VisualVariable.hpp"
 #include "Globals.hpp"
 #include <iostream>
 #include <string>
@@ -32,12 +34,14 @@ public:
     VisualPointer* getPointer(std::string name);
     VisualPointer* getPointer(const index_t index);
     int getVal(const index_t index);
+    void addVariable(std::string name, const int value);
     void addPointer(bool isAbovePointer, const index_t index, TTF_Font* font_ptr, std::string name);
     void destroy();
     void operator=(const VisualArray& V);
 private:
     void swapElementsInArray(const index_t index1, const index_t index2);
     void renderPointers();    
+    void renderVariables(SDL_Renderer* renderer_ptr, const unsigned int height, const unsigned int width);
     unsigned int size;
     unsigned int pointersSize;
     unsigned int currentPointerIndex;
@@ -50,6 +54,8 @@ private:
     unsigned int font_size;
     unsigned int window_height;
     unsigned int window_width;
+    unsigned int number_of_variables;
+    VisualVariable variables[2]; // grow as needed
     SDL_Texture* red_square_texture_ptr;
     SDL_Rect initial_digit_rect;
     SDL_Renderer* renderer_ptr;
