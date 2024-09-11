@@ -8,7 +8,7 @@ VisualPointer::VisualPointer()
 
 VisualPointer::VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect arrow_rect, 
                             TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, 
-                            std::string name, SDL_Texture* name_texture_ptr)
+                            std::string name, SDL_Texture* name_texture_ptr, index_t index)
 {
     this->isAbovePointer = isAbovePointer;
     if(isAbovePointer)
@@ -19,7 +19,7 @@ VisualPointer::VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect a
     this->name_texture_ptr = name_texture_ptr;
     this->name_rect = name_rect;
     this->arrow_rect = arrow_rect;
-    this->index = 0;
+    this->index = index;
 }
 
 index_t VisualPointer::getIndex()

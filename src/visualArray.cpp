@@ -25,7 +25,7 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
     this->window_height =          window_height;
     this->window_width =           window_width;
 
-    this->small_font_ptr =         TTF_OpenFont("Rubik-Regular.ttf", font_size / 2);
+    this->small_font_ptr =         TTF_OpenFont("Rubik-Regular.ttf", INITIAL_FONT_SIZE / 2);
     if (small_font_ptr == NULL)
     {
         std::cout << "Error opening font: " << SDL_GetError() << std::endl;
@@ -260,7 +260,8 @@ void VisualArray::addPointer(bool isAbovePointer, index_t index, TTF_Font* font_
     temp_name_rect.h = temp_surface->h;
     
     visualPointers[currentPointerIndex] = VisualPointer(isAbovePointer, temp_name_rect, temp_arrow_rect, 
-                                                        font_ptr, renderer_ptr, name, name_texture_ptr);
+                                                        font_ptr, renderer_ptr, name, name_texture_ptr,
+                                                        index);
     currentPointerIndex++;
     SDL_FreeSurface(temp_surface);
 }

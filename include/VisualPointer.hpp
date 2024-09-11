@@ -25,7 +25,8 @@ public:
     VisualPointer();
     VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect arrow_rect, 
                             TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, 
-                            std::string name, SDL_Texture* name_texture_ptr);
+                            std::string name, SDL_Texture* name_texture_ptr,
+                            index_t index);
     bool slidePointer(const index_t _index, Configuration config);
     index_t getIndex();
     void setIndex(const index_t _index)  {  index = _index;  }
