@@ -13,11 +13,24 @@ SDL_Texture* createTextureFromValue(const int value, TTF_Font* font_ptr, SDL_Ren
     return texture_ptr;
 }
 
-VisualNumber::VisualNumber(int value, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr)
+VisualNumber::VisualNumber(int value, TTF_Font* font_ptr, SDL_Rect* red_square_rect_ptr, 
+                           SDL_Renderer* renderer_ptr)
 {
     this->value = value;
     this->texture = createTextureFromValue(value, font_ptr, renderer_ptr);
     this->skipRender = false;
+    SDL_Rect compare_square_rect_;
+    this->compare_square_rect = compare_square_rect_;
+    this->compare_square_rect.w = red_square_rect_ptr->w*0.8;
+    this->compare_square_rect.h = red_square_rect_ptr->h*0.8;
+
+    int length_difference = red_square_rect_ptr->w - compare_square_rect.w;
+    this->compare_square_rect.x = red_square_rect_ptr->x + (length_difference/2);
+    this->compare_square_rect.y = red_square_rect_ptr->y + (length_difference/2);
+    std::cout << compare_square_rect.w << std::endl;
+    std::cout << compare_square_rect.h << std::endl;
+    std::cout << compare_square_rect.x << std::endl;
+    std::cout << compare_square_rect.y << std::endl;
 }
 
 SDL_Texture* VisualNumber::getTexture()
@@ -60,7 +73,6 @@ void VisualNumber::destroy()
 
 void VisualNumber::renderCopy(unsigned int* time_counter,
                               SDL_Rect* number_rect_ptr,
-                              SDL_Rect* red_square_rect_ptr,
                               SDL_Texture* red_square_texture_ptr,
                               SDL_Renderer* renderer_ptr)
 {
@@ -88,14 +100,6 @@ void VisualNumber::renderCopy(unsigned int* time_counter,
         unsigned int time = 240;
         if(*time_counter < time/2)
         {
-            SDL_Rect compare_square_rect;
-            compare_square_rect.w = red_square_rect_ptr->w*0.8;
-            compare_square_rect.h = red_square_rect_ptr->h*0.8;
-
-            int length_difference = red_square_rect_ptr->w - compare_square_rect.w;
-            compare_square_rect.x = red_square_rect_ptr->x + (length_difference/2);
-            compare_square_rect.y = red_square_rect_ptr->y + (length_difference/2);
-
             SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &compare_square_rect);
         }  else if (*time_counter > time)
         {  *time_counter = 0;  }
