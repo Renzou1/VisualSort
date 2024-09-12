@@ -9,20 +9,26 @@ class VisualNumber
 {
 public:
     VisualNumber();
-    VisualNumber(int val, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr);
+    VisualNumber(int value, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr);
     int increment();
-    int getVal();
+    int getValue();
     bool shouldSkipRender();
     void setSkipRender(bool skipRender);
-    bool isComparing();
+    bool getIsComparing();
     void setComparing(bool param);
     SDL_Texture* getTexture();
     void destroy();
     void operator=(const VisualNumber& V);
+    void renderCopy(const int single_digit_width, 
+                                  const int double_digit_width,
+                                  unsigned int* time_counter,
+                                  SDL_Rect* number_rect_ptr,
+                                  SDL_Rect* red_square_rect_ptr,
+                                  SDL_Texture* red_square_texture_ptr,
+                                  SDL_Renderer* renderer_ptr);
 private:
-    int val;
+    int value;
     bool skipRender;
-    bool isComparing_;
-    int isComparingFlag2_;
-    SDL_Texture* number_texture;
+    bool isComparing;
+    SDL_Texture* texture;
 };

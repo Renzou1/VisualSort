@@ -15,7 +15,7 @@ void VisualVariable::render(SDL_Renderer* renderer_ptr,
                             const unsigned int window_height, const unsigned int window_width, 
                             TTF_Font* font_ptr)
 {
-    std::string variable_string = name + "= " + std::to_string(value);
+    std::string variable_string = name + " = " + std::to_string(value);
     SDL_Color WHITE = {255, 255, 255};
     SDL_Surface* variable_surface = TTF_RenderText_Solid(font_ptr, variable_string.c_str(), WHITE);
     if (variable_surface == NULL){
@@ -26,7 +26,7 @@ void VisualVariable::render(SDL_Renderer* renderer_ptr,
     SDL_Rect info_rect;
     info_rect.w = variable_surface->w;
     info_rect.h = variable_surface->h;
-    info_rect.x = 0;
+    info_rect.x = window_width/2 - info_rect.w/2;
     info_rect.y = 0;    
 
     SDL_RenderCopy(renderer_ptr, variable_texture, NULL, &info_rect);

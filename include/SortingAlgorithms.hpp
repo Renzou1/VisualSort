@@ -107,8 +107,8 @@ void insertionSort(int array[], Configuration* config_ptr)
         int j = i - 1;
         visualArray.slidePointer("j", i - 1, config_ptr);
         waitForInput(config_ptr, DEFAULT_DELAY);
-        
-        while (j >= 0 && array[j] > key)
+
+        while (j >= 0 && array[j] > key) // missing: set compare in variable
         {
             array[j + 1] = array[j];
             j = j - 1;

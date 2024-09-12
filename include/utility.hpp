@@ -39,9 +39,8 @@ SDL_Window* initializeVisualSort(const int size, const int double_digit_width, c
         std::cout << "IMG_init has failed. Error: " << SDL_GetError() << std::endl;
     }
     
-    // should be RED_SQUARE_WIDTH + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH
     const int window_width =  RED_SQUARE_WIDTH/2 + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH;
-    const int window_height = 600 + RED_SQUARE_WIDTH/2;
+    const int window_height = 800;
     std::string window_name = "VisualSort V0 - ";
     switch(algorithm){
         case SELECTION_SORT:

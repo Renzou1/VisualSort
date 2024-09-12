@@ -58,6 +58,18 @@ void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr,
 
 void VisualArray::renderArray()
 {
+    std::string info_string = "Comparisons: " + std::to_string(comparisons) + " | ";
+    info_string += "Swaps: " + std::to_string(swaps) + " | ";
+    info_string += "Insertions: " + std::to_string(insertions);
+    
+    renderCopyInfo(info_string);
+    renderCopySquaresAndNumbers();
+    renderCopyPointers();
+    renderCopyVariables(renderer_ptr, window_height, window_width);
+}
+
+void VisualArray::renderCopySquaresAndNumbers()
+{
     SDL_Rect number_rect;
     number_rect.x = initial_digit_rect.x;
     number_rect.y = initial_digit_rect.y;
@@ -67,58 +79,16 @@ void VisualArray::renderArray()
 
     SDL_Rect red_square_rect;
     alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width);
+
     for(unsigned int i = 0; i < size; i++)
-    {   
-        if(visualArray[i].shouldSkipRender() == false)
-        {
-            if(visualArray[i].getVal() >= 10)
-            {  
-                number_rect.w = double_digit_width;  
-                SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);
-
-            }  else
-            {  
-                number_rect.w = single_digit_width;
-
-                int difference_in_centers = double_digit_width/2 - single_digit_width/2;
-                
-                number_rect.x += difference_in_centers;
-                SDL_RenderCopy(renderer_ptr, visualArray[i].getTexture(), NULL, &number_rect);
-                number_rect.x -= difference_in_centers;
-            }
-             
-        }
+    {
+        visualArray[i].renderCopy(single_digit_width, double_digit_width, &time_counter, 
+                                  &number_rect, &red_square_rect, red_square_texture_ptr, 
+                                  renderer_ptr);
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
-        if(visualArray[i].isComparing()) // tied to refresh rate I think, bad
-        {
-            unsigned int time = 240;
-            if(time_counter < time/2)
-            {
-                SDL_Rect temp_square_rect = red_square_rect;
-                temp_square_rect.w = red_square_rect.w*0.8;
-                temp_square_rect.h = red_square_rect.h*0.8;
-
-                int length_difference = red_square_rect.w - temp_square_rect.w;
-                temp_square_rect.x = red_square_rect.x + (length_difference/2);
-                temp_square_rect.y = red_square_rect.y + (length_difference/2);
-
-                SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &temp_square_rect);
-            }  else if (time_counter > time)
-            {  time_counter = 0;  }
-
-            time_counter++;
-        }
         number_rect.x += RED_SQUARE_WIDTH;
         red_square_rect.x += RED_SQUARE_WIDTH;
     }
-
-    std::string info_string = "Comparisons: " + std::to_string(comparisons) + " | ";
-    info_string += "Swaps: " + std::to_string(swaps) + " | ";
-    info_string += "Insertions: " + std::to_string(insertions);
-    renderCopyInfo(info_string);
-
-    renderPointers();
-    renderVariables(renderer_ptr, window_height, window_width);
 }
 
 void VisualArray::renderCopyInfo(std::string info){
@@ -139,7 +109,7 @@ void VisualArray::renderCopyInfo(std::string info){
     SDL_FreeSurface(info_surface);
 }
 
-void VisualArray::renderPointers()
+void VisualArray::renderCopyPointers()
 {
     for(index_t i = 0; i < currentPointerIndex; i++)
     {
@@ -147,7 +117,7 @@ void VisualArray::renderPointers()
     }
 }
 
-void VisualArray::renderVariables(SDL_Renderer* renderer_ptr, 
+void VisualArray::renderCopyVariables(SDL_Renderer* renderer_ptr, 
                                   const unsigned int height, const unsigned int width)
 {
     for(unsigned int i = 0; i < number_of_variables; i++)
@@ -158,7 +128,7 @@ void VisualArray::renderVariables(SDL_Renderer* renderer_ptr,
 
 int VisualArray::getVal(index_t index)
 {
-    return visualArray[index].getVal();
+    return visualArray[index].getValue();
 }
 
 VisualPointer* VisualArray::getPointer(std::string name)
@@ -334,7 +304,7 @@ void VisualArray::swap(index_t index1, index_t index2, Configuration* config_ptr
     int increment        = index1 - index2;
 
     SDL_Rect index_1_rect;
-    if (visualArray[index1].getVal() < 10){
+    if (visualArray[index1].getValue() < 10){
         index_1_rect.w = single_digit_width;
     }  else {
         index_1_rect.w = double_digit_width;
@@ -344,7 +314,7 @@ void VisualArray::swap(index_t index1, index_t index2, Configuration* config_ptr
     index_1_rect.x = index1_x;
 
     SDL_Rect index_2_rect;
-    if (visualArray[index2].getVal() < 10){
+    if (visualArray[index2].getValue() < 10){
         index_2_rect.w = single_digit_width;
     }  else {
         index_2_rect.w = double_digit_width;

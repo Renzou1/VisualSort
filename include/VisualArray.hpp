@@ -31,6 +31,7 @@ public:
     void setComparing(const index_t index1, const index_t index2, bool boolean);
     void setComparing(index_t index, std::string variable_name, bool boolean);
     void renderArray();
+    void renderCopySquaresAndNumbers();
     void renderCopyInfo(std::string info);
     VisualPointer* getPointer(std::string name);
     VisualPointer* getPointer(const index_t index);
@@ -42,8 +43,8 @@ public:
     void operator=(const VisualArray& V);
 private:
     void swapElementsInArray(const index_t index1, const index_t index2);
-    void renderPointers();    
-    void renderVariables(SDL_Renderer* renderer_ptr, const unsigned int height, const unsigned int width);
+    void renderCopyPointers();    
+    void renderCopyVariables(SDL_Renderer* renderer_ptr, const unsigned int height, const unsigned int width);
     unsigned int size;
     unsigned int pointersSize;
     unsigned int currentPointerIndex;

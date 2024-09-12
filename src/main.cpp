@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "Main_f.hpp"
+#include "utility.hpp"
 #include "Globals.hpp"
 #include "VisualArray.hpp"
 #include "VisualPointer.hpp"
@@ -18,6 +18,9 @@
 // TODO: should swap count when with itself in selection sort? currently we skip swap if index == index
 // TODO: make a visualArray::compare() that substitutes complicated if logic in SortingAlgorithms.hpp !maybe!
 // TODO: decide if comparing variables should count as comparison
+// TODO: set compare with variables
+// TODO: make GUI with QT
+// TODO: fix scanf when scanning number of elements
 
 int main ( int argc, char *argv[] )
 {
@@ -32,7 +35,7 @@ int main ( int argc, char *argv[] )
 
     printf("1- Random numbers\n2- Choose numbers\n");
     int choice;
-    scanf("%d", &choice);
+    scanf("%d", &choice); // if not number things go bad, fix
     if(choice == 1)
     {
         for(int i = 0; i < size; i++)
@@ -47,7 +50,6 @@ int main ( int argc, char *argv[] )
         {
             int temp;
             scanf("%d", &temp);
-            std::cout << "here" << std::endl;
             if (temp <  0){  temp*=-1;  }
             if (temp > 99){  temp%=100; }
             array[i] = temp;
