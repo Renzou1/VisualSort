@@ -4,17 +4,16 @@ VisualVariable::VisualVariable()
 :name(""), value(VisualNumber())
 {}
 
-VisualVariable::VisualVariable(std::string name, const int value_, TTF_Font* font_ptr, 
-                               SDL_Rect* red_square_rect_ptr, SDL_Renderer* renderer_ptr)
+VisualVariable::VisualVariable(std::string name, const int value_, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr)
 {
     this->name = name;
-    this->value = VisualNumber(value_, font_ptr, red_square_rect_ptr, renderer_ptr);
+    this->value = VisualNumber(value_, font_ptr, renderer_ptr);
 }
 
 
 void VisualVariable::render(SDL_Renderer* renderer_ptr, 
                             const unsigned int window_height, const unsigned int window_width, 
-                            TTF_Font* font_ptr, unsigned int* time_counter_ptr)
+                            TTF_Font* font_ptr)
 {
     std::string variable_string = name + " = " + std::to_string(value.getValue());
     SDL_Color WHITE = {255, 255, 255};
@@ -33,5 +32,5 @@ void VisualVariable::render(SDL_Renderer* renderer_ptr,
     SDL_RenderCopy(renderer_ptr, variable_texture, NULL, &info_rect);
     SDL_FreeSurface(variable_surface);
 
-    //value.renderCopy(time_counter_ptr, ..., )
+    //value.renderCopy()
 }

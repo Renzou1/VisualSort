@@ -3,8 +3,6 @@
 
 void destroyVisualSort(Configuration* config);
 
-void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr);
-
 VisualArray::VisualArray(const int array[], const unsigned int size, const unsigned int pointersSize, 
                         SDL_Rect initial_digit_rect, 
                         SDL_Renderer* renderer_ptr,
@@ -34,17 +32,11 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
     {
         std::cout << "Error opening font: " << SDL_GetError() << std::endl;
     } 
-    SDL_Rect red_square_rect;
-    alignSquareWithNumber(&initial_digit_rect, &red_square_rect);
-    this->red_square_rect.x = red_square_rect.x;
-    this->red_square_rect.y = red_square_rect.y;
-    this->red_square_rect.w = red_square_rect.w;
-    this->red_square_rect.h = red_square_rect.h;
 
     visualArray = new VisualNumber[size];
     for(unsigned int i = 0; i < size; i++)
     {
-        this->visualArray[i] = VisualNumber(array[i], font_ptr, &(this->red_square_rect), renderer_ptr);
+        this->visualArray[i] = VisualNumber(array[i], font_ptr, renderer_ptr);
     }
     visualPointers = new VisualPointer[pointersSize];
 }
@@ -64,7 +56,6 @@ void VisualArray::renderArray()
     info_string += "Swaps: " + std::to_string(swaps) + " | ";
     info_string += "Insertions: " + std::to_string(insertions);
     
-
     renderCopyInfo(info_string);
     renderCopySquaresAndNumbers();
     renderCopyPointers();
@@ -79,11 +70,15 @@ void VisualArray::renderCopySquaresAndNumbers()
     number_rect.h = initial_digit_rect.h;
     number_rect.w = -1;
     //width is set later because it depends on number of digits
-    alignSquareWithNumber(&initial_digit_rect, &red_square_rect);
+
+    SDL_Rect red_square_rect;
+    alignSquareWithNumber(&number_rect, &red_square_rect);
+
     for(unsigned int i = 0; i < size; i++)
     {
         visualArray[i].renderCopy(&time_counter, 
-                                  &number_rect, red_square_texture_ptr, renderer_ptr);
+                                  &number_rect, &red_square_rect, red_square_texture_ptr, 
+                                  renderer_ptr);
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
         number_rect.x += RED_SQUARE_WIDTH;
         red_square_rect.x += RED_SQUARE_WIDTH;
@@ -121,7 +116,7 @@ void VisualArray::renderCopyVariables(SDL_Renderer* renderer_ptr,
 {
     for(unsigned int i = 0; i < number_of_variables; i++)
     {
-        visualVariables[i].render(renderer_ptr, height, width, font_ptr, &time_counter);
+        visualVariables[i].render(renderer_ptr, height, width, font_ptr);
     }
 }
 
@@ -248,7 +243,7 @@ void VisualArray::addPointer(bool isAbovePointer, index_t index, TTF_Font* font_
 
 void VisualArray::addVariable(std::string name, const int value)
 {
-    visualVariables[number_of_variables++] = VisualVariable(name, value, font_ptr, &red_square_rect, renderer_ptr);
+    visualVariables[number_of_variables++] = VisualVariable(name, value, font_ptr, renderer_ptr);
 }
 
 VisualVariable* VisualArray::getVariable(std::string name)

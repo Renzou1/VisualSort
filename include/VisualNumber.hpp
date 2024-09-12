@@ -9,8 +9,7 @@ class VisualNumber
 {
 public:
     VisualNumber();
-    VisualNumber(int value, TTF_Font* font_ptr, SDL_Rect* red_square_rect_ptr, 
-                           SDL_Renderer* renderer_ptr);
+    VisualNumber(int value, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr);
     int increment();
     int getValue();
     void setValue(const int value_, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr);
@@ -23,6 +22,7 @@ public:
     void operator=(const VisualNumber& V);
     void renderCopy(unsigned int* time_counter,
                     SDL_Rect* number_rect_ptr,
+                    SDL_Rect* red_square_rect_ptr,
                     SDL_Texture* red_square_texture_ptr,
                     SDL_Renderer* renderer_ptr);
 private:
@@ -30,5 +30,4 @@ private:
     bool skipRender;
     bool isComparing;
     SDL_Texture* texture;
-    SDL_Rect compare_square_rect;
 };

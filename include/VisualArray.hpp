@@ -60,7 +60,6 @@ private:
     VisualVariable visualVariables[2]; // grow as needed
     SDL_Texture* red_square_texture_ptr;
     SDL_Rect initial_digit_rect;
-    SDL_Rect red_square_rect;
     SDL_Renderer* renderer_ptr;
     TTF_Font* font_ptr;
     TTF_Font* small_font_ptr;
