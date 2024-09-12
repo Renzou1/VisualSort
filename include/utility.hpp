@@ -5,13 +5,6 @@
 #include "Globals.hpp"
 #include "VisualArray.hpp"
 
-const int getDoubleDigitWidth(TTF_Font* font_ptr){
-    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "10", {255, 255, 255});
-    const int double_digit_width = temp_surface->w;
-    SDL_FreeSurface (temp_surface);
-    return double_digit_width;
-}
-
 TTF_Font* initializeFont(const int font_size){
     if(TTF_Init() != 0)
     {
@@ -27,7 +20,7 @@ TTF_Font* initializeFont(const int font_size){
     return font_ptr;
 }
 
-SDL_Window* initializeVisualSort(const int size, const int double_digit_width, const int algorithm)
+SDL_Window* initializeVisualSort(const int size, const int algorithm)
 {
     if (SDL_Init(SDL_INIT_VIDEO) > 0)
     {
@@ -75,8 +68,7 @@ VisualArray makeVisualArray(const int array[], const int pointersSize, Configura
 {
     SDL_Surface* temp_surface = TTF_RenderText_Solid(config_ptr->font_ptr, "10", {255, 255, 255});
     SDL_Rect initial_digit_rect;
-    const int double_digit_width = temp_surface->w;
-    initial_digit_rect.w = double_digit_width;
+    initial_digit_rect.w = DOUBLE_DIGIT_WIDTH;
     initial_digit_rect.h = temp_surface->h;    
     initial_digit_rect.x = RED_SQUARE_WIDTH;
     initial_digit_rect.y = DISTANCE_TO_TOP_OF_SCREEN;

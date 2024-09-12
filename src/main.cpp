@@ -9,6 +9,7 @@
 #include "VisualPointer.hpp"
 #include "VisualNumber.hpp"
 #include "SortingAlgorithms.hpp"
+#include "dimensions.hpp"
 
 // g++ -I include -o main src/* -lSDL2 -lSDL2_image -lSDL2_ttf -pthread -Wall
 // TODO: make makefile
@@ -85,12 +86,12 @@ int main ( int argc, char *argv[] )
     }    
 
     TTF_Font* font_ptr = initializeFont(font_size);
-    const int double_digit_width = getDoubleDigitWidth(font_ptr);
-    SDL_Window* window_ptr = initializeVisualSort(size, double_digit_width, algorithm);
+    setGlobalTextDimensions(font_ptr);
+    SDL_Window* window_ptr = initializeVisualSort(size, algorithm);
     SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_PRESENTVSYNC);
 
     SDL_Event event;    
-    Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr, size, double_digit_width, font_size};
+    Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr, size, font_size};
 
     switch (algorithm){
         case SELECTION_SORT:

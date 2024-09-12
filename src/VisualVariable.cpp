@@ -31,4 +31,6 @@ void VisualVariable::render(SDL_Renderer* renderer_ptr,
 
     SDL_RenderCopy(renderer_ptr, variable_texture, NULL, &info_rect);
     SDL_FreeSurface(variable_surface);
+
+    //value.renderCopy()
 }

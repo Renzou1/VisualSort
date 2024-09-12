@@ -58,9 +58,7 @@ void VisualNumber::operator=(const VisualNumber& V)
 void VisualNumber::destroy()
 {  SDL_DestroyTexture(texture);  }
 
-void VisualNumber::renderCopy(const int single_digit_width, 
-                              const int double_digit_width,
-                              unsigned int* time_counter,
+void VisualNumber::renderCopy(unsigned int* time_counter,
                               SDL_Rect* number_rect_ptr,
                               SDL_Rect* red_square_rect_ptr,
                               SDL_Texture* red_square_texture_ptr,
@@ -70,14 +68,14 @@ void VisualNumber::renderCopy(const int single_digit_width,
     {
         if(value >= 10)
         {  
-            number_rect_ptr->w = double_digit_width;  
+            number_rect_ptr->w = DOUBLE_DIGIT_WIDTH;  
             SDL_RenderCopy(renderer_ptr, texture, NULL, number_rect_ptr);
 
         }  else
         {  
-            number_rect_ptr->w = single_digit_width;
+            number_rect_ptr->w = SINGLE_DIGIT_WIDTH;
 
-            int difference_in_centers = double_digit_width/2 - single_digit_width/2;
+            int difference_in_centers = DOUBLE_DIGIT_WIDTH/2 - SINGLE_DIGIT_WIDTH/2;
             
             number_rect_ptr->x += difference_in_centers;
             SDL_RenderCopy(renderer_ptr, texture, NULL, number_rect_ptr);

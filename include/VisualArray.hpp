@@ -49,9 +49,6 @@ private:
     unsigned int size;
     unsigned int pointersSize;
     unsigned int currentPointerIndex;
-    unsigned int single_digit_width;
-    unsigned int double_digit_width;
-    unsigned int text_height;
     unsigned int swaps;
     unsigned int insertions;
     unsigned int comparisons;

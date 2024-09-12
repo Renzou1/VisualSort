@@ -33,12 +33,6 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
         std::cout << "Error opening font: " << SDL_GetError() << std::endl;
     } 
 
-    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, "0", WHITE);
-    this->single_digit_width =     temp_surface->w;
-    this->text_height =            temp_surface->h;
-    SDL_FreeSurface(temp_surface);
-    this->double_digit_width =     initial_digit_rect.w; // width is almost identical to font size, but not quite
-
     visualArray = new VisualNumber[size];
     for(unsigned int i = 0; i < size; i++)
     {
@@ -47,13 +41,13 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
     visualPointers = new VisualPointer[pointersSize];
 }
 
-void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr, const unsigned int double_digit_width)
+void alignSquareWithNumber(SDL_Rect* number_rect_ptr, SDL_Rect* square_rect_ptr)
 {
     square_rect_ptr->w      = RED_SQUARE_WIDTH;
     square_rect_ptr->h      = square_rect_ptr->w;
-    square_rect_ptr->x      = number_rect_ptr->x - double_digit_width/2;
+    square_rect_ptr->x      = number_rect_ptr->x - DOUBLE_DIGIT_WIDTH/2;
     int number_center       = number_rect_ptr->y + number_rect_ptr->h/2;
-    square_rect_ptr->y      = number_center - double_digit_width;
+    square_rect_ptr->y      = number_center - DOUBLE_DIGIT_WIDTH;
 }
 
 void VisualArray::renderArray()
@@ -78,11 +72,11 @@ void VisualArray::renderCopySquaresAndNumbers()
     //width is set later because it depends on number of digits
 
     SDL_Rect red_square_rect;
-    alignSquareWithNumber(&number_rect, &red_square_rect, double_digit_width);
+    alignSquareWithNumber(&number_rect, &red_square_rect);
 
     for(unsigned int i = 0; i < size; i++)
     {
-        visualArray[i].renderCopy(single_digit_width, double_digit_width, &time_counter, 
+        visualArray[i].renderCopy(&time_counter, 
                                   &number_rect, &red_square_rect, red_square_texture_ptr, 
                                   renderer_ptr);
         SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &red_square_rect);
@@ -220,12 +214,12 @@ void VisualArray::addPointer(bool isAbovePointer, index_t index, TTF_Font* font_
     SDL_Texture* name_texture_ptr = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
 
     SDL_Rect temp_name_rect;
-    temp_name_rect.x = initial_digit_rect.x + RED_SQUARE_WIDTH * index + double_digit_width/2 - temp_surface->w/2;
+    temp_name_rect.x = initial_digit_rect.x + RED_SQUARE_WIDTH * index + DOUBLE_DIGIT_WIDTH/2 - temp_surface->w/2;
 
     SDL_Rect temp_arrow_rect;
-    temp_arrow_rect.w = double_digit_width * 1.25;
-    temp_arrow_rect.h = double_digit_width * 1.25;
-    temp_arrow_rect.x = initial_digit_rect.x + RED_SQUARE_WIDTH * index - temp_arrow_rect.w/2 + double_digit_width/2;
+    temp_arrow_rect.w = DOUBLE_DIGIT_WIDTH * 1.25;
+    temp_arrow_rect.h = DOUBLE_DIGIT_WIDTH * 1.25;
+    temp_arrow_rect.x = initial_digit_rect.x + RED_SQUARE_WIDTH * index - temp_arrow_rect.w/2 + DOUBLE_DIGIT_WIDTH/2;
 
     if(isAbovePointer)
     {
@@ -310,9 +304,9 @@ void VisualArray::swap(index_t index1, index_t index2, Configuration* config_ptr
 
     SDL_Rect index_1_rect;
     if (visualArray[index1].getValue() < 10){
-        index_1_rect.w = single_digit_width;
+        index_1_rect.w = SINGLE_DIGIT_WIDTH;
     }  else {
-        index_1_rect.w = double_digit_width;
+        index_1_rect.w = DOUBLE_DIGIT_WIDTH;
     }
     index_1_rect.h = initial_digit_rect.h; 
     index_1_rect.y = initial_digit_rect.y;
@@ -320,9 +314,9 @@ void VisualArray::swap(index_t index1, index_t index2, Configuration* config_ptr
 
     SDL_Rect index_2_rect;
     if (visualArray[index2].getValue() < 10){
-        index_2_rect.w = single_digit_width;
+        index_2_rect.w = SINGLE_DIGIT_WIDTH;
     }  else {
-        index_2_rect.w = double_digit_width;
+        index_2_rect.w = DOUBLE_DIGIT_WIDTH;
     }
     index_2_rect.h = initial_digit_rect.h; 
     index_2_rect.y = initial_digit_rect.y;

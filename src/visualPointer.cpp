@@ -37,7 +37,7 @@ bool VisualPointer::slidePointer(index_t _index, Configuration config)
     int initial_x = name_rect.x;
     int distanceToIndex = _index - index;
     int increment = _index - index;
-    int goal_x = initial_x + distanceToIndex * config.double_digit_width*2;
+    int goal_x = initial_x + distanceToIndex * DOUBLE_DIGIT_WIDTH*2;
     
     //if(_index > index)
     //{
