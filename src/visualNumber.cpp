@@ -5,18 +5,25 @@ VisualNumber::VisualNumber()
 :value(0), skipRender(false), isComparing(false), texture(NULL)
 {}
 
+SDL_Texture* createTextureFromValue(const int value, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr)
+{
+    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, std::to_string(value).c_str(), WHITE);
+    SDL_Texture* texture_ptr = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
+    SDL_FreeSurface(temp_surface);    
+    return texture_ptr;
+}
+
 VisualNumber::VisualNumber(int value, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr)
 {
     this->value = value;
-    //create number texture:
-    SDL_Surface* temp_surface = TTF_RenderText_Solid(font_ptr, std::to_string(value).c_str(), WHITE);
-    texture = SDL_CreateTextureFromSurface(renderer_ptr, temp_surface);
-    SDL_FreeSurface(temp_surface);
+    this->texture = createTextureFromValue(value, font_ptr, renderer_ptr);
     this->skipRender = false;
 }
 
 SDL_Texture* VisualNumber::getTexture()
 {  return texture;  }
+
+
 
 bool VisualNumber::shouldSkipRender()
 {  return skipRender;  }
@@ -26,6 +33,12 @@ void VisualNumber::setSkipRender(bool _skipRender)
 
 int VisualNumber::getValue()
 {  return value;  }
+
+void VisualNumber::setValue(const int value_, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr)
+{
+    value = value_;
+    texture = createTextureFromValue(value, font_ptr, renderer_ptr);
+}
 
 bool VisualNumber::getIsComparing()
 {  return isComparing;  }
@@ -74,7 +87,7 @@ void VisualNumber::renderCopy(const int single_digit_width,
     }
     if(isComparing) // tied to refresh rate I think, bad
     {
-        unsigned int time = 240; // maybe move this out of function
+        unsigned int time = 240;
         if(*time_counter < time/2)
         {
             SDL_Rect compare_square_rect;

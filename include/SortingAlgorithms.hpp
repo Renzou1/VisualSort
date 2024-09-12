@@ -103,7 +103,7 @@ void insertionSort(int array[], Configuration* config_ptr)
     for (int i = 1; i < config_ptr->size; ++i)
     {
         int key = array[i];
-        visualArray.getVariable("key")->setValue(array[i]);
+        visualArray.updateVariable("key", array[i]);
         int j = i - 1;
         visualArray.slidePointer("j", i - 1, config_ptr);
         waitForInput(config_ptr, DEFAULT_DELAY);

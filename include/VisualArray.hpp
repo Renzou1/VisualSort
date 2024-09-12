@@ -38,6 +38,7 @@ public:
     int getVal(const index_t index);
     VisualVariable* getVariable(std::string name);
     void addVariable(std::string name, const int value);
+    void updateVariable(std::string name, const int value);
     void addPointer(bool isAbovePointer, const index_t index, TTF_Font* font_ptr, std::string name);
     void destroy();
     void operator=(const VisualArray& V);

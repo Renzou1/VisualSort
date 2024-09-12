@@ -249,7 +249,7 @@ void VisualArray::addPointer(bool isAbovePointer, index_t index, TTF_Font* font_
 
 void VisualArray::addVariable(std::string name, const int value)
 {
-    visualVariables[number_of_variables++] = VisualVariable(name, value);
+    visualVariables[number_of_variables++] = VisualVariable(name, value, font_ptr, renderer_ptr);
 }
 
 VisualVariable* VisualArray::getVariable(std::string name)
@@ -264,6 +264,11 @@ VisualVariable* VisualArray::getVariable(std::string name)
 
     std::cout << "failed to find variable named " << name << std::endl;
     return NULL;
+}
+
+void VisualArray::updateVariable(std::string name, const int value)
+{
+    getVariable(name)->setValue(value, font_ptr, renderer_ptr);
 }
 
 void VisualArray::setComparing(index_t index1, index_t index2, bool boolean)
