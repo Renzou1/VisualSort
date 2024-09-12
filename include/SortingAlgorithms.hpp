@@ -100,7 +100,8 @@ void insertionSort(int array[], Configuration* config_ptr)
     visualArray.addPointer(upPointer, i, config_ptr->font_ptr, "i");
     int j = i - 1;
     visualArray.addPointer(downPointer, j, config_ptr->font_ptr, "j");
-    visualArray.addVariable("key", array[i]);
+    visualArray.addVariable("key", 0);
+    waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);
 
     while(i < config_ptr->size)
     {
@@ -118,7 +119,7 @@ void insertionSort(int array[], Configuration* config_ptr)
             visualArray.setComparing(j, "key", false);
 
             array[j + 1] = array[j];
-            visualArray.insert(j + 1, j, config_ptr);
+            visualArray.insert(j, j + 1, config_ptr);
             waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);
 
             visualArray.slidePointer("j", j - 1, config_ptr);
