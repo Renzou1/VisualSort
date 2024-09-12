@@ -18,12 +18,12 @@ VisualNumber::VisualNumber(int value, TTF_Font* font_ptr, SDL_Renderer* renderer
     this->value = value;
     this->texture = createTextureFromValue(value, font_ptr, renderer_ptr);
     this->skipRender = false;
+    this->x = 0;
+    this->y = 0;
 }
 
 SDL_Texture* VisualNumber::getTexture()
 {  return texture;  }
-
-
 
 bool VisualNumber::shouldSkipRender()
 {  return skipRender;  }
@@ -60,10 +60,12 @@ void VisualNumber::destroy()
 
 void VisualNumber::renderCopy(unsigned int* time_counter,
                               SDL_Rect* number_rect_ptr,
-                              SDL_Rect* red_square_rect_ptr,
                               SDL_Texture* red_square_texture_ptr,
                               SDL_Renderer* renderer_ptr)
 {
+    number_rect_ptr->h = TEXT_HEIGHT;
+    this->x = number_rect_ptr->x;
+    this->y = number_rect_ptr->y;
     if(skipRender == false)
     {
         if(value >= 10)
@@ -89,12 +91,14 @@ void VisualNumber::renderCopy(unsigned int* time_counter,
         if(*time_counter < time/2)
         {
             SDL_Rect compare_square_rect;
-            compare_square_rect.w = red_square_rect_ptr->w*0.8;
-            compare_square_rect.h = red_square_rect_ptr->h*0.8;
+            compare_square_rect.w = RED_SQUARE_WIDTH*0.8;
+            compare_square_rect.h = RED_SQUARE_WIDTH*0.8;
 
-            int length_difference = red_square_rect_ptr->w - compare_square_rect.w;
-            compare_square_rect.x = red_square_rect_ptr->x + (length_difference/2);
-            compare_square_rect.y = red_square_rect_ptr->y + (length_difference/2);
+            int number_center       = number_rect_ptr->y + number_rect_ptr->h/2;
+
+            int length_difference = RED_SQUARE_WIDTH - compare_square_rect.w;
+            compare_square_rect.x = number_rect_ptr->x - DOUBLE_DIGIT_WIDTH/2 + (length_difference/2);
+            compare_square_rect.y = number_center - DOUBLE_DIGIT_WIDTH + (length_difference/2);
 
             SDL_RenderCopy(renderer_ptr, red_square_texture_ptr, NULL, &compare_square_rect);
         }  else if (*time_counter > time)

@@ -14,7 +14,6 @@
 #define MERGE_SORT     3
 #define QUICK_SORT     4
 
-typedef unsigned int index_t;
 const SDL_Color WHITE = {255, 255, 255};
 
 extern unsigned int SINGLE_DIGIT_WIDTH;

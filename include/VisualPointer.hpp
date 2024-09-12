@@ -6,17 +6,7 @@
 #include <string>
 #include "VisualArray.hpp"
 #include "Globals.hpp"
-
-typedef struct Configuration
-{
-    SDL_Renderer* renderer_ptr;
-    VisualArray* visualArray_ptr;
-    SDL_Event* event_ptr;
-    TTF_Font* font_ptr;
-    SDL_Window* window_ptr;
-    const int size;
-    const unsigned int font_size;
-} Configuration;
+#include "configuration.hpp"
 
 class VisualPointer
 {
@@ -25,10 +15,10 @@ public:
     VisualPointer(bool isAbovePointer, SDL_Rect name_rect, SDL_Rect arrow_rect, 
                             TTF_Font* font_ptr, SDL_Renderer* renderer_ptr, 
                             std::string name, SDL_Texture* name_texture_ptr,
-                            index_t index);
-    bool slidePointer(const index_t _index, Configuration config);
-    index_t getIndex();
-    void setIndex(const index_t _index)  {  index = _index;  }
+                            int index);
+    bool slidePointer(int _index, Configuration config, VisualArray* visualArray_ptr);
+    int getIndex();
+    void setIndex(const int _index)  {  index = _index;  }
     std::string getName();
     SDL_Rect* getNameRect() {  return &name_rect;  }
     SDL_Rect* getArrowRect() {  return &arrow_rect;  }
@@ -39,7 +29,7 @@ public:
     void operator=(const VisualPointer& V);
 private:
     std::string name;
-    index_t index;
+    int index;
     bool isAbovePointer;
     SDL_Texture* name_texture_ptr;
     SDL_Texture* arrow_texture_ptr;

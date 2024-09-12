@@ -66,19 +66,16 @@ SDL_Window* initializeVisualSort(const int size, const int algorithm)
 
 VisualArray makeVisualArray(const int array[], const int pointersSize, Configuration* config_ptr)
 {
-    SDL_Surface* temp_surface = TTF_RenderText_Solid(config_ptr->font_ptr, "10", {255, 255, 255});
     SDL_Rect initial_digit_rect;
     initial_digit_rect.w = DOUBLE_DIGIT_WIDTH;
-    initial_digit_rect.h = temp_surface->h;    
+    initial_digit_rect.h = TEXT_HEIGHT;    
     initial_digit_rect.x = RED_SQUARE_WIDTH;
     initial_digit_rect.y = DISTANCE_TO_TOP_OF_SCREEN;
-    SDL_FreeSurface (temp_surface);
     int window_height, window_width;
     SDL_GetWindowSize(config_ptr->window_ptr, &window_width, &window_height);
 
     VisualArray visualArray(array, config_ptr->size, pointersSize, initial_digit_rect, 
     config_ptr->renderer_ptr, config_ptr->font_ptr, config_ptr->font_size, window_height, window_width);
-    config_ptr->visualArray_ptr = &visualArray;
     return visualArray;
 }
 
@@ -92,20 +89,20 @@ void destroyVisualSort(SDL_Window* window, TTF_Font* font, VisualArray* visualAr
     std::exit(0);
 }
 
-void destroyVisualSort(Configuration* config)
+void destroyVisualSort(Configuration* config, VisualArray* visualArray_ptr)
 {
     SDL_DestroyWindow(config->window_ptr);
     TTF_CloseFont(config->font_ptr);
-    config->visualArray_ptr->destroy();
+    visualArray_ptr->destroy();
     TTF_Quit();
     SDL_Quit();
     std::exit(0);
 }
 
-void waitForInput(Configuration* config_ptr, const unsigned int delay_before_input)
+void waitForInput(Configuration* config_ptr, const unsigned int delay_before_input, VisualArray* visualArray_ptr)
 {
     SDL_RenderClear(config_ptr->renderer_ptr);
-    config_ptr->visualArray_ptr->renderArray();
+    visualArray_ptr->renderArray();
     SDL_RenderPresent(config_ptr->renderer_ptr);
     SDL_Delay(delay_before_input / SPEED);
     if(WAIT_FOR_INPUT == false)
@@ -117,18 +114,18 @@ void waitForInput(Configuration* config_ptr, const unsigned int delay_before_inp
             switch(config_ptr->event_ptr->type)
             {
                 case SDL_QUIT:
-                    destroyVisualSort(config_ptr);  
+                    destroyVisualSort(config_ptr, visualArray_ptr);  
                 case SDL_KEYDOWN:
                     return;  
             }
         }
         SDL_RenderClear(config_ptr->renderer_ptr);
-        config_ptr->visualArray_ptr->renderArray();
+        visualArray_ptr->renderArray();
         SDL_RenderPresent(config_ptr->renderer_ptr);
     }
 }
 
-void waitToQuit(Configuration* config_ptr)
+void waitToQuit(Configuration* config_ptr, VisualArray* visualArray_ptr)
 {
     while(true)
     {
@@ -137,7 +134,7 @@ void waitToQuit(Configuration* config_ptr)
             switch(config_ptr->event_ptr->type)
             {
                 case SDL_QUIT:
-                    destroyVisualSort(config_ptr);  
+                    destroyVisualSort(config_ptr, visualArray_ptr);  
             }
         }
     }

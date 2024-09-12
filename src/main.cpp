@@ -91,7 +91,7 @@ int main ( int argc, char *argv[] )
     SDL_Renderer* renderer_ptr = SDL_CreateRenderer(window_ptr, -1, SDL_RENDERER_PRESENTVSYNC);
 
     SDL_Event event;    
-    Configuration config = {renderer_ptr, NULL, &event, font_ptr, window_ptr, size, font_size};
+    Configuration config = {renderer_ptr, &event, font_ptr, window_ptr, size, font_size};
 
     switch (algorithm){
         case SELECTION_SORT:
