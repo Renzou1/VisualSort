@@ -25,6 +25,7 @@ public:
     void swap(const int index1, const int index2, Configuration* config_ptr);
     void insert(VisualNumber* inserted, int inserted_into_index, Configuration* config_ptr);
     void insert(int inserted_index, int inserted_into_index, Configuration* config_ptr);
+    void insert(VisualNumber* inserted, VisualNumber* inserted_into, Configuration* config_ptr);
     void slidePointer(std::string name, const int _index, Configuration* config_ptr);
     void slidePointer(std::string name, std::string name2, Configuration* config_ptr);
     void incrementPointer(std::string name, Configuration* config_ptr);
@@ -39,6 +40,7 @@ public:
     VisualPointer* getPointer(const int index);
     int getVal(const int index);
     VisualVariable* getVariable(std::string name);
+    VisualNumber* getVisualNumber(const int index) {  return &visualArray[index];  };
     void addVariable(std::string name, const int value);
     void updateVariable(std::string name, const int value);
     void addPointer(bool isAbovePointer, const int index, TTF_Font* font_ptr, std::string name);

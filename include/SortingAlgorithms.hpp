@@ -106,7 +106,9 @@ void insertionSort(int array[], Configuration* config_ptr)
     while(i < config_ptr->size)
     {
         int key = array[i];
-        visualArray.updateVariable("key", array[i]);
+        //visualArray.updateVariable("key", array[i]);
+        visualArray.insert(visualArray.getVisualNumber(i), visualArray.getVariable("key")->getNumber(),
+                           config_ptr);
         waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);
         j = i - 1;
         visualArray.slidePointer("j", i - 1, config_ptr);
@@ -132,7 +134,7 @@ void insertionSort(int array[], Configuration* config_ptr)
         visualArray.setComparing(j, "key", false);
 
         array[j + 1] = key;
-        visualArray.insert(visualArray.getVariable("key")->getValue(), j + 1, config_ptr);
+        visualArray.insert(visualArray.getVariable("key")->getNumber(), j + 1, config_ptr);
         waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);
 
         ++i;
@@ -166,7 +168,9 @@ int partition(int array[], int low, int high, VisualArray* visualArray_ptr, Conf
 {
     // Choose the pivot
     int pivot = array[high];
-    visualArray_ptr->updateVariable("pivot", array[high]);
+    //visualArray_ptr->updateVariable("pivot", array[high]);
+    visualArray_ptr->insert(visualArray_ptr->getVisualNumber(high), 
+                            visualArray_ptr->getVariable("pivot")->getNumber(), config_ptr);
     waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);
   
     // Index of smaller element and indicates 
@@ -213,20 +217,23 @@ int partition(int array[], int low, int high, VisualArray* visualArray_ptr, Conf
 
 void quickSort(int array[], int low, int high, Configuration* config_ptr, VisualArray* visualArray_ptr)
 {
-    visualArray_ptr->setComparing(low, high, true);
-    waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);
 
     visualArray_ptr->slidePointer("low", low, config_ptr);
     waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);
 
     visualArray_ptr->slidePointer("high", high, config_ptr);
-    waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);
+    waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);    
+
+    //visualArray_ptr->setComparing(low, high, true); // this is wrong, should compare variable
+                                                    // values not the indexes?
+    //waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);
+
     if (low < high) {
       
-        visualArray_ptr->setComparing(low, high, false);
+        //visualArray_ptr->setComparing(low, high, false);
 
         // partition_indexis the partition return index of pivot
-        int partition_idx= partition(array, low, high, visualArray_ptr, config_ptr);
+        int partition_idx = partition(array, low, high, visualArray_ptr, config_ptr);
         visualArray_ptr->updateVariable("partition_idx", partition_idx);
         waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);
 
@@ -235,7 +242,7 @@ void quickSort(int array[], int low, int high, Configuration* config_ptr, Visual
         quickSort(array, low, partition_idx- 1, config_ptr, visualArray_ptr);
         quickSort(array, partition_idx+ 1, high, config_ptr, visualArray_ptr);
     }
-    visualArray_ptr->setComparing(low, high, false);
+    //visualArray_ptr->setComparing(low, high, false);
 }
 
 void quickSort(int array[], int low, int high, Configuration* config_ptr)

@@ -384,12 +384,15 @@ SDL_Rect clone_rect_from(VisualNumber* visualNumber)
 
 void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Configuration* config_ptr)
 {
+    insert(inserted, &visualArray[inserted_into_index], config_ptr);
+}
+
+void VisualArray::insert(VisualNumber* inserted, VisualNumber* inserted_into, Configuration* config_ptr)
+{
     insertions++;
     
     SDL_Renderer* renderer_ptr = config_ptr->renderer_ptr;
     SDL_Event* event_ptr = config_ptr->event_ptr;
-
-    VisualNumber* inserted_into = &visualArray[inserted_into_index];
 
     VisualNumber* inserted_clone = new VisualNumber(inserted->getValue(), font_ptr, renderer_ptr);
     inserted_clone->setX(inserted->getX());
@@ -438,9 +441,9 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
     
     SDL_Rect inserted_rect = clone_rect_from(inserted_clone);
     SDL_Rect inserted_into_rect = clone_rect_from(inserted_into);
+    bool quit = false;
 
-    while(inserted_rect.x < inserted_into_x * x_direction || 
-          inserted_rect.y < inserted_into_y * y_direction)
+    while(!quit)
     {
         while (SDL_PollEvent(event_ptr))
         {
@@ -449,11 +452,7 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
                 destroyVisualSort(config_ptr, this);
             }
         }
-        for(int i = 0; 
-            i < SPEED && 
-            (inserted_rect.x < inserted_into_x * x_direction || 
-            inserted_rect.y < inserted_into_y * y_direction); 
-            i++)
+        for(int i = 0; i < SPEED; i++)
         {
             if(x_difference > y_difference)
             {
@@ -479,18 +478,28 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
                     slope_counter -= (short) slope_counter;
                 }
             }
-        }
+            // accounts for imprecision
+            short current_x_difference = abs(inserted_rect.x - inserted_into_rect.x);
+            short current_y_difference = abs(inserted_rect.y - inserted_into_rect.y);
 
-        // accounts for imprecision
-        short current_x_difference = inserted_rect.x - inserted_into_x;
-        if(current_x_difference > -increment_x && current_x_difference < increment_x)
-        {
-            inserted_rect.x = inserted_into_x * x_direction;
-        }
-        short current_y_difference = inserted_rect.y - inserted_into_y;
-        if(current_y_difference > -increment_y && current_y_difference < increment_y)
-        {
-            inserted_rect.y = inserted_into_y * y_direction;
+            bool x_is_close_enough = current_x_difference <= abs(increment_x);
+            bool y_is_close_enough = (current_y_difference <= abs(increment_y));
+            bool both_are_changing = (y_difference != 0 && x_difference != 0);
+
+            if((x_is_close_enough || y_is_close_enough) && both_are_changing)
+            {
+                inserted_rect.x = inserted_into_rect.x * x_direction;
+                inserted_rect.y = inserted_into_rect.y * y_direction;
+                quit = true;
+                break;
+
+            }  else if(x_is_close_enough && y_is_close_enough)
+            {
+                inserted_rect.x = inserted_into_rect.x * x_direction;
+                inserted_rect.y = inserted_into_rect.y * y_direction;
+                quit = true;
+                break;
+            }
         }
 
         SDL_RenderClear(renderer_ptr);
@@ -499,8 +508,8 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
         renderCopyArray();
         SDL_RenderPresent(renderer_ptr);
     } 
-    visualArray[inserted_into_index].destroy();
-    visualArray[inserted_into_index] = *inserted_clone;
+    inserted_into->destroy();
+    *inserted_into = *inserted_clone;
 }
 
 void VisualArray::insert(int inserted_index, int inserted_into_index, Configuration* config_ptr)

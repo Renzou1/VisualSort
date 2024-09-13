@@ -76,32 +76,20 @@ void VisualVariable::renderCopyArray(VisualVariable visualVariables[], short num
         {
             rects[i].y += TEXT_HEIGHT/4;
         }
-        total_width += rects[i].w;
+        total_width += rects[i].w + DOUBLE_DIGIT_WIDTH; // always double digit because its smoother
         if(i + 1 < number_of_variables)
         {
             total_width += DISTANCE_BETWEEN_VARIABLE_STRINGS;
-        }
-        if(visualVariables[i].getValue()->getValue() < 10)
-        {
-            total_width += SINGLE_DIGIT_WIDTH;
-        }  else {
-            total_width += DOUBLE_DIGIT_WIDTH;
         }
     }
 
     for(int i = 0, cumulative_width = 0; i < number_of_variables; i++)
     {
         rects[i].x = window_width/2 - total_width/2 + cumulative_width;
-        cumulative_width += rects[i].w;
+        cumulative_width += rects[i].w + DOUBLE_DIGIT_WIDTH; // always double digit because its smoother;
         if(i + 1 < number_of_variables)
         {
             cumulative_width += DISTANCE_BETWEEN_VARIABLE_STRINGS;
-        }
-        if(visualVariables[i].getValue()->getValue() < 10)
-        {
-            cumulative_width += SINGLE_DIGIT_WIDTH;
-        }  else {
-            cumulative_width += DOUBLE_DIGIT_WIDTH;
         }
     }
 
@@ -110,13 +98,13 @@ void VisualVariable::renderCopyArray(VisualVariable visualVariables[], short num
     {
         number_rects[i].y = 20;
         number_rects[i].x = rects[i].x + rects[i].w;
-        visualVariables[i].getValue()->setX(number_rects[i].x);
-        visualVariables[i].getValue()->setY(number_rects[i].y);
+        visualVariables[i].getNumber()->setX(number_rects[i].x);
+        visualVariables[i].getNumber()->setY(number_rects[i].y);
     }
 
     for(int i = 0; i < number_of_variables; i++)
     {
-        visualVariables[i].getValue()->renderCopy(time_counter_ptr, &number_rects[i], 
+        visualVariables[i].getNumber()->renderCopy(time_counter_ptr, &number_rects[i], 
                                                 red_square_texture_ptr, renderer_ptr);
         SDL_RenderCopy(renderer_ptr, textures[i], NULL, &rects[i]);
         SDL_FreeSurface(surfaces[i]); 

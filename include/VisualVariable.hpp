@@ -14,7 +14,7 @@ public:
     VisualVariable(std::string name, const int value_,  TTF_Font* font_ptr, SDL_Renderer* renderer_ptr);
     void setValue(const int value_, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr) 
         {  value.setValue(value_, font_ptr, renderer_ptr);  };
-    VisualNumber* getValue() {  return &value;  }
+    VisualNumber* getNumber() {  return &value;  }
     std::string getName() {  return name;  };
     void renderCopy(SDL_Renderer* renderer_ptr, 
                             const unsigned short window_height, const unsigned short window_width, 
