@@ -16,10 +16,16 @@ public:
         {  value.setValue(value_, font_ptr, renderer_ptr);  };
     VisualNumber* getValue() {  return &value;  }
     std::string getName() {  return name;  };
-    void render(SDL_Renderer* renderer_ptr, 
+    void renderCopy(SDL_Renderer* renderer_ptr, 
                             const unsigned short window_height, const unsigned short window_width, 
                             TTF_Font* font_ptr, unsigned short* time_counter_ptr,
                             SDL_Texture* red_square_texture_ptr);
+    void renderCopyArray(VisualVariable visualVarables[], short number_of_variables,
+                                     SDL_Renderer* renderer_ptr, 
+                                     const unsigned short window_height, 
+                                     const unsigned short window_width, 
+                                     TTF_Font* font_ptr, unsigned short* time_counter_ptr,
+                                     SDL_Texture* red_square_texture_ptr);
     void setComparing(bool boolean) {  value.setComparing(boolean);  };
 private:
     std::string name;

@@ -42,11 +42,11 @@ SDL_Window* initializeVisualSort(const int size, const int algorithm)
         case INSERTION_SORT:
             window_name += "insertion sort";
             break;
-        case MERGE_SORT:
-            window_name += "merge sort";
-            break;
         case QUICK_SORT:
             window_name += "quicksort";
+            break;            
+        case MERGE_SORT:
+            window_name += "merge sort";
             break;
     }
     SDL_Window* window = SDL_CreateWindow(

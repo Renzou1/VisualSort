@@ -24,7 +24,7 @@ public:
     SDL_Rect* getArrowRect() {  return &arrow_rect;  }
     SDL_Texture* getNameTexturePtr()  {  return name_texture_ptr;  }
     SDL_Texture* getArrowTexturePtr()  {  return arrow_texture_ptr;  }
-    void render(SDL_Renderer* renderer_ptr);
+    void renderCopy(SDL_Renderer* renderer_ptr);
     void destroy();
     void operator=(const VisualPointer& V);
 private:

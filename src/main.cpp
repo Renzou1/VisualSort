@@ -101,9 +101,10 @@ int main ( int argc, char *argv[] )
         case INSERTION_SORT:
             insertionSort(array, &config);
             break;
-        case MERGE_SORT:
-            break;
         case QUICK_SORT:
+            quickSort(array, &config);
+            break;
+        case MERGE_SORT:
             break;
         
     }

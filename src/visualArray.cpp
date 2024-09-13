@@ -107,17 +107,16 @@ void VisualArray::renderCopyPointers()
 {
     for(unsigned int i = 0; i < currentPointerIndex; i++)
     {
-        visualPointers[i].render(renderer_ptr);
+        visualPointers[i].renderCopy(renderer_ptr);
     }
 }
 
 void VisualArray::renderCopyVariables(SDL_Renderer* renderer_ptr, 
                                   const unsigned short height, const unsigned short width)
 {
-    for(unsigned int i = 0; i < number_of_variables; i++)
-    {
-        visualVariables[i].render(renderer_ptr, height, width, font_ptr, &time_counter, red_square_texture_ptr);
-    }
+    visualVariables[0].renderCopyArray(visualVariables, number_of_variables, renderer_ptr, 
+                                        window_height, window_width, font_ptr, &time_counter, 
+                                        red_square_texture_ptr);
 }
 
 int VisualArray::getVal(int index)
@@ -466,7 +465,7 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
                 }
             }
         }
-        
+
         // accounts for imprecision
         short current_x_difference = inserted_rect.x - inserted_into_x;
         if(current_x_difference > -increment_x && current_x_difference < increment_x)

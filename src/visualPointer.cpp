@@ -59,7 +59,7 @@ bool VisualPointer::slidePointer(int _index, Configuration config, VisualArray* 
     return true;
 }
 
-void VisualPointer::render(SDL_Renderer* renderer_ptr)
+void VisualPointer::renderCopy(SDL_Renderer* renderer_ptr)
 {
     SDL_RenderCopy(renderer_ptr, name_texture_ptr, NULL, &name_rect);
     SDL_RenderCopy(renderer_ptr, arrow_texture_ptr, NULL, &arrow_rect);
