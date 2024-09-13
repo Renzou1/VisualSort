@@ -72,7 +72,7 @@ void VisualVariable::renderCopyArray(VisualVariable visualVariables[], short num
         rects[i].w = surfaces[i]->w;
         rects[i].h = surfaces[i]->h;
         rects[i].y = 20;
-        if(surfaces[i]->h < TEXT_HEIGHT) // if font is smol
+        if(surfaces[i]->h < (int) TEXT_HEIGHT) // if font is smol
         {
             rects[i].y += TEXT_HEIGHT/4;
         }
