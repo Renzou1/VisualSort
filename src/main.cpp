@@ -22,6 +22,7 @@
 // TODO: set compare with variables
 // TODO: make GUI with QT
 // TODO: fix scanf when scanning number of elements
+// TODO: add slope to insertion sort algo
 
 int main ( int argc, char *argv[] )
 {

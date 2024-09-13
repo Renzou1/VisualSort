@@ -358,10 +358,33 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
     inserted_into->setSkipRender(true);
 
     int inserted_x = inserted_clone->getX();
+    int inserted_y = inserted_clone->getY();
     int inserted_into_x    = inserted_into->getX();
     int inserted_into_y = inserted_into->getY();
-    int increment_x        = (inserted_x - inserted_into_x)/(int)RED_SQUARE_WIDTH;
-    int increment_y = (inserted->getY() - inserted_into_y)/(int)RED_SQUARE_WIDTH;
+    float x_difference = inserted_x - inserted_into_x;
+    float y_difference = inserted_y - inserted_into_y;
+
+    float slope;
+    if ((y_difference) > (x_difference))
+    {
+        if(x_difference == 0)
+        {
+            slope = 0;
+        }  else {
+            slope = (y_difference) / (x_difference);
+        }
+
+    }  else if (y_difference == 0)
+    {
+        slope = 0;
+    }  else {
+        slope = (x_difference) / (y_difference);
+    }
+    if (slope < 0) {  slope*=-1;  }
+    int increment_x        = (x_difference)/(int)RED_SQUARE_WIDTH;
+    int increment_y = (y_difference)/(int)RED_SQUARE_WIDTH;
+    int slope_counter = 0;
+    printf("x_difference, y_difference, slope: %f, %f, %f", x_difference, y_difference, slope);
     
     SDL_Rect inserted_rect;
     if (inserted_clone->getValue() < 10){
@@ -384,7 +407,7 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
     inserted_into_rect.x = inserted_into->getX();
     printf("inserted x: %d, inserted_into x: %d\n", inserted_rect.x, inserted_into_x);
 
-    while(inserted_rect.x != inserted_into_x && inserted_rect.y != inserted_into_y)
+    while(inserted_rect.x != inserted_into_x || inserted_rect.y != inserted_into_y)
     {
         while (SDL_PollEvent(event_ptr))
         {
@@ -393,10 +416,39 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
                 destroyVisualSort(config_ptr, this);
             }
         }
-        for(int i = 0; i < SPEED && inserted_rect.x != inserted_into_x; i++)
+        for(int i = 0; i < SPEED && (inserted_rect.x != inserted_into_x || inserted_rect.y != inserted_into_y); i++)
         {
-            inserted_rect.x -= increment_x;
-            inserted_rect.y -= increment_y;
+            if(x_difference > y_difference)
+            {
+                printf("previous_x: %d, goal_x: %d\n", inserted_rect.x, inserted_into_x);
+                inserted_rect.x -= increment_x;
+
+                float slope_increment = increment_x * slope;
+                printf("increment: %f, slope: %f\n", increment_x * slope, slope);
+                if (slope_increment < 0) {  slope_increment*=-1;  }
+                slope_counter += slope_increment;
+                printf("slope_counter: %d", slope_counter);
+                printf("current_x: %d\n", inserted_rect.x);  
+                printf("previous_y: %d, goal_y %d\n", inserted_rect.y, inserted_into_y);
+                if (slope_counter > 1)
+                {
+                    inserted_rect.y -= (int) slope_counter;
+                    slope_counter -= (int) slope_counter;                 
+                }                
+            }  else{
+                inserted_rect.y -= increment_y;
+
+                float slope_increment = increment_y * slope;
+                if (slope_increment < 0) {  slope_increment*=-1;  }
+                slope_counter += slope_increment;
+                if(slope_counter > 1)
+                {
+                    inserted_rect.x -= (int) slope_counter;
+                    slope_counter -= (int) slope_counter;
+                }
+            }
+
+  
         }
 
         SDL_RenderClear(renderer_ptr);
