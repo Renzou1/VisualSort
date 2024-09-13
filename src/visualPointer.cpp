@@ -52,7 +52,7 @@ bool VisualPointer::slidePointer(int _index, Configuration config, VisualArray* 
         SDL_RenderClear(renderer_ptr);
         SDL_RenderCopy(renderer_ptr, name_texture_ptr, NULL, &name_rect);
         SDL_RenderCopy(renderer_ptr, arrow_texture_ptr, NULL, &arrow_rect);
-        visualArray_ptr->renderArray();
+        visualArray_ptr->renderCopyArray();
         SDL_RenderPresent(renderer_ptr);
     }
     index = _index;

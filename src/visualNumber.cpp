@@ -37,6 +37,7 @@ int VisualNumber::getValue()
 void VisualNumber::setValue(const int value_, TTF_Font* font_ptr, SDL_Renderer* renderer_ptr)
 {
     value = value_;
+    SDL_DestroyTexture(texture);
     texture = createTextureFromValue(value, font_ptr, renderer_ptr);
 }
 
@@ -53,12 +54,14 @@ void VisualNumber::operator=(const VisualNumber& V)
     value = V.value;
     skipRender = V.skipRender;
     texture = V.texture;
+    x = V.x;
+    y = V.y;
 }
 
 void VisualNumber::destroy()
 {  SDL_DestroyTexture(texture);  }
 
-void VisualNumber::renderCopy(unsigned int* time_counter,
+void VisualNumber::renderCopy(unsigned short* time_counter,
                               SDL_Rect* number_rect_ptr,
                               SDL_Texture* red_square_texture_ptr,
                               SDL_Renderer* renderer_ptr)

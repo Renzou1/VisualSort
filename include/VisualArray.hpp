@@ -14,13 +14,13 @@ struct Configuration;
 class VisualArray
 {
 public:
-    VisualArray(const int array[], const unsigned int size, const unsigned int pointersSize, 
+    VisualArray(const int array[], const unsigned short size, const unsigned short pointersSize, 
                 SDL_Rect initial_digit_rect, 
                 SDL_Renderer* renderer_ptr,
                 TTF_Font* font_ptr,
-                unsigned int font_size,
-                const int window_height,
-                const int window_width);
+                unsigned short font_size,
+                const short window_height,
+                const short window_width);
     void split();
     void swapElementsPointedBy(std::string pointer1, std::string pointer2, Configuration* config_ptr);
     void swap(const int index1, const int index2, Configuration* config_ptr);
@@ -32,7 +32,7 @@ public:
     void decrementPointer(std::string name, Configuration* config_ptr);
     void setComparing(const int index1, const int index2, bool boolean);
     void setComparing(int index, std::string variable_name, bool boolean);
-    void renderArray();
+    void renderCopyArray();
     void renderCopySquaresAndNumbers();
     void renderCopyInfo(std::string info);
     VisualPointer* getPointer(std::string name);
@@ -47,18 +47,18 @@ public:
 private:
     void swapElementsInArray(const int index1, const int index2);
     void renderCopyPointers();    
-    void renderCopyVariables(SDL_Renderer* renderer_ptr, const unsigned int height, const unsigned int width);
-    unsigned int size;
-    unsigned int pointersSize;
-    unsigned int currentPointerIndex;
-    unsigned int swaps;
-    unsigned int insertions;
-    unsigned int comparisons;
-    unsigned int font_size;
-    unsigned int window_height;
-    unsigned int window_width;
-    unsigned int number_of_variables;
-    unsigned int time_counter;
+    void renderCopyVariables(SDL_Renderer* renderer_ptr, const unsigned short height, const unsigned short width);
+    unsigned short size;
+    unsigned short pointersSize;
+    unsigned short currentPointerIndex;
+    unsigned short swaps;
+    unsigned short insertions;
+    unsigned short comparisons;
+    unsigned short font_size;
+    unsigned short window_height;
+    unsigned short window_width;
+    unsigned short number_of_variables;
+    unsigned short time_counter;
     VisualVariable visualVariables[2]; // grow as needed
     SDL_Texture* red_square_texture_ptr;
     SDL_Rect initial_digit_rect;

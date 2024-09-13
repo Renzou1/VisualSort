@@ -10,6 +10,6 @@ typedef struct Configuration
     SDL_Event* event_ptr;
     TTF_Font* font_ptr;
     SDL_Window* window_ptr;
-    const int size;
-    const unsigned int font_size;
+    const short size;
+    const unsigned short font_size;
 } Configuration;

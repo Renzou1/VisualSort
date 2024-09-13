@@ -18,21 +18,21 @@ public:
     void setSkipRender(bool skipRender);
     bool getIsComparing();
     void setComparing(bool param);
-    int getX() {  return x;  };
-    int getY(){  return y;  };
-    void setX(int x_) {  x = x_;  };
-    void setY(int y_) {  y = y_;  };
+    short getX() {  return x;  };
+    short getY(){  return y;  };
+    void setX(short x_) {  x = x_;  };
+    void setY(short y_) {  y = y_;  };
     SDL_Texture* getTexture();
     void destroy();
     void operator=(const VisualNumber& V);
-    void renderCopy(unsigned int* time_counter,
+    void renderCopy(unsigned short* time_counter,
                               SDL_Rect* number_rect_ptr,
                               SDL_Texture* red_square_texture_ptr,
                               SDL_Renderer* renderer_ptr);
 private:
     int value;
-    int x;
-    int y;
+    short x;
+    short y;
     bool skipRender;
     bool isComparing;
     SDL_Texture* texture;

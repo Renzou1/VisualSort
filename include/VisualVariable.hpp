@@ -17,8 +17,8 @@ public:
     VisualNumber* getValue() {  return &value;  }
     std::string getName() {  return name;  };
     void render(SDL_Renderer* renderer_ptr, 
-                            const unsigned int window_height, const unsigned int window_width, 
-                            TTF_Font* font_ptr, unsigned int* time_counter_ptr,
+                            const unsigned short window_height, const unsigned short window_width, 
+                            TTF_Font* font_ptr, unsigned short* time_counter_ptr,
                             SDL_Texture* red_square_texture_ptr);
     void setComparing(bool boolean) {  value.setComparing(boolean);  };
 private:

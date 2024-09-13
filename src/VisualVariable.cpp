@@ -12,8 +12,8 @@ VisualVariable::VisualVariable(std::string name, const int value_, TTF_Font* fon
 
 
 void VisualVariable::render(SDL_Renderer* renderer_ptr, 
-                            const unsigned int window_height, const unsigned int window_width, 
-                            TTF_Font* font_ptr, unsigned int* time_counter_ptr,
+                            const unsigned short window_height, const unsigned short window_width, 
+                            TTF_Font* font_ptr, unsigned short* time_counter_ptr,
                             SDL_Texture* red_square_texture_ptr)
 {
     std::string variable_string = name + " = ";// + std::to_string(value.getValue());

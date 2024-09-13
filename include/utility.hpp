@@ -102,7 +102,7 @@ void destroyVisualSort(Configuration* config, VisualArray* visualArray_ptr)
 void waitForInput(Configuration* config_ptr, const unsigned int delay_before_input, VisualArray* visualArray_ptr)
 {
     SDL_RenderClear(config_ptr->renderer_ptr);
-    visualArray_ptr->renderArray();
+    visualArray_ptr->renderCopyArray();
     SDL_RenderPresent(config_ptr->renderer_ptr);
     SDL_Delay(delay_before_input / SPEED);
     if(WAIT_FOR_INPUT == false)
@@ -120,7 +120,7 @@ void waitForInput(Configuration* config_ptr, const unsigned int delay_before_inp
             }
         }
         SDL_RenderClear(config_ptr->renderer_ptr);
-        visualArray_ptr->renderArray();
+        visualArray_ptr->renderCopyArray();
         SDL_RenderPresent(config_ptr->renderer_ptr);
     }
 }

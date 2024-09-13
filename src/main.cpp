@@ -22,24 +22,22 @@
 // TODO: set compare with variables
 // TODO: make GUI with QT
 // TODO: fix scanf when scanning number of elements
-// TODO: add slope to insertion sort algo
 // TODO: change font path
-// TODO: see comment on insert, bug found
 
 int main ( int argc, char *argv[] )
 {
     srand(time(NULL));
     std::cout << "How many elements in your array? (60 max)" << std::endl;
 
-    int size;
-    scanf("%d", &size);
+    short size;
+    scanf("%hd", &size);
     if (size < 2 ) { size =  2; }
     if (size > 60) { size = 60; }
     int* array = (int*)malloc(sizeof(int)* size); 
 
     printf("1- Random numbers\n2- Choose numbers\n");
-    int choice;
-    scanf("%d", &choice); // if not number things go bad, fix
+    short choice;
+    scanf("%hd", &choice); // if not number things go bad, fix
     if(choice == 1)
     {
         for(int i = 0; i < size; i++)
@@ -61,8 +59,8 @@ int main ( int argc, char *argv[] )
     }
     
     SDL_DisplayMode dm;
-    unsigned int width;
-    const int default_width = 1920;
+    unsigned short width;
+    const short default_width = 1920;
     if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
     {
         SDL_Log("SDL_GetDesktopDisplayMode failed: %s; will assume screen width of 1920", SDL_GetError());
@@ -71,7 +69,7 @@ int main ( int argc, char *argv[] )
         width = dm.w;
     }
 
-    unsigned int font_size = INITIAL_FONT_SIZE;
+    unsigned short font_size = INITIAL_FONT_SIZE;
     if(font_size * 2 * size + font_size * 2 > width)
     {
         // scales font size depending on screen width and array size
@@ -80,12 +78,12 @@ int main ( int argc, char *argv[] )
 
     std::cout << "Please select the sorting algorithm.\n";
     std::cout << "1. selectionsort\n2. insertionsort\n3. quicksort\n4. mergesort\n";
-    unsigned int algorithm;
-    scanf("%d", &algorithm);
+    unsigned short algorithm;
+    scanf("%hd", &algorithm);
     while(algorithm < 0 || algorithm > 4)
     {
         std::cout << "invalid number, try again.\n";
-        scanf("%d", &algorithm);
+        scanf("%hd", &algorithm);
     }    
 
     TTF_Font* font_ptr = initializeFont(font_size);
