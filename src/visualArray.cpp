@@ -353,6 +353,21 @@ void swap_shorts(short& v1, short& v2)
     v2 = temp;
 }
 
+SDL_Rect clone_rect_from(VisualNumber* visualNumber)
+{
+    SDL_Rect new_rect;
+
+    new_rect.h = TEXT_HEIGHT; 
+    new_rect.y = visualNumber->getY();
+    new_rect.x = visualNumber->getX();
+    if (visualNumber->getValue() < 10){
+        new_rect.w = SINGLE_DIGIT_WIDTH;
+    }  else {
+        new_rect.w = DOUBLE_DIGIT_WIDTH;
+    }    
+    return new_rect;
+}
+
 void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Configuration* config_ptr)
 {
     insertions++;
@@ -361,7 +376,6 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
     SDL_Event* event_ptr = config_ptr->event_ptr;
 
     VisualNumber* inserted_into = &visualArray[inserted_into_index];
-    inserted_into->setSkipRender(true); // doesnt work for some reason but its fine    
 
     VisualNumber* inserted_clone = new VisualNumber(inserted->getValue(), font_ptr, renderer_ptr);
     inserted_clone->setX(inserted->getX());
@@ -371,17 +385,19 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
     short inserted_y = inserted->getY();
     short inserted_into_x = inserted_into->getX();
     short inserted_into_y = inserted_into->getY();
-    short x_direction = 1;
-    short y_direction = 1;
+    const short REGULAR = 1;
+    const short REVERSED = -1;
+    short x_direction = REGULAR;
+    short y_direction = REGULAR;
     if (inserted_into_x < inserted_x) // bresenham type inversion
     {
         swap_shorts(inserted_into_x, inserted_x);
-        x_direction = -1;
+        x_direction = REVERSED;
     }
     if (inserted_into_y < inserted_y)
     {
         swap_shorts(inserted_into_y, inserted_y);
-        y_direction = -1;
+        y_direction = REVERSED;
     }
     float x_difference = inserted_into_x - inserted_x;
     float y_difference = inserted_into_y - inserted_y;
@@ -406,25 +422,8 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
     short increment_y = ((y_difference)/(short)RED_SQUARE_WIDTH) * y_direction;
     float slope_counter = 0;
     
-    SDL_Rect inserted_rect;
-    if (inserted_clone->getValue() < 10){
-        inserted_rect.w = SINGLE_DIGIT_WIDTH;
-    }  else {
-        inserted_rect.w = DOUBLE_DIGIT_WIDTH;
-    }
-    inserted_rect.h = TEXT_HEIGHT; 
-    inserted_rect.y = inserted_clone->getY();
-    inserted_rect.x = inserted_clone->getX();
-
-    SDL_Rect inserted_into_rect;
-    if (inserted_into->getValue() < 10){
-        inserted_into_rect.w = SINGLE_DIGIT_WIDTH;
-    }  else {
-        inserted_into_rect.w = DOUBLE_DIGIT_WIDTH;
-    }
-    inserted_into_rect.h = TEXT_HEIGHT; 
-    inserted_into_rect.y = inserted_into->getY();
-    inserted_into_rect.x = inserted_into->getX();
+    SDL_Rect inserted_rect = clone_rect_from(inserted_clone);
+    SDL_Rect inserted_into_rect = clone_rect_from(inserted_into);
 
     while(inserted_rect.x < inserted_into_x * x_direction || 
           inserted_rect.y < inserted_into_y * y_direction)
@@ -467,14 +466,25 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
                 }
             }
         }
+        
+        // accounts for imprecision
+        short current_x_difference = inserted_rect.x - inserted_into_x;
+        if(current_x_difference > -increment_x && current_x_difference < increment_x)
+        {
+            inserted_rect.x = inserted_into_x * x_direction;
+        }
+        short current_y_difference = inserted_rect.y - inserted_into_y;
+        if(current_y_difference > -increment_y && current_y_difference < increment_y)
+        {
+            inserted_rect.y = inserted_into_y * y_direction;
+        }
 
         SDL_RenderClear(renderer_ptr);
-        SDL_RenderCopy(renderer_ptr, inserted_clone->getTexture(), NULL, &inserted_rect);
-        SDL_RenderCopy(renderer_ptr, inserted_into->getTexture(), NULL, &inserted_into_rect);
+        inserted->renderCopy(&time_counter, &inserted_rect, red_square_texture_ptr, renderer_ptr);
+        inserted_into->renderCopy(&time_counter, &inserted_into_rect, red_square_texture_ptr, renderer_ptr);
         renderCopyArray();
         SDL_RenderPresent(renderer_ptr);
     } 
-    inserted_into->setSkipRender(false); 
     visualArray[inserted_into_index].destroy();
     visualArray[inserted_into_index] = *inserted_clone;
 }
