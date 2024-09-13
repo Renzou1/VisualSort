@@ -33,7 +33,9 @@ void VisualVariable::render(SDL_Renderer* renderer_ptr,
     SDL_Rect number_rect;
     // only needs these two
     number_rect.x = info_rect.x + info_rect.w;
+    value.setX(number_rect.x);
     number_rect.y = info_rect.y;
+    value.setY(number_rect.y);
 
     value.renderCopy(time_counter_ptr, &number_rect, red_square_texture_ptr, renderer_ptr);    
 

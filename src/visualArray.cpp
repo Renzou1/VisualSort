@@ -105,7 +105,7 @@ void VisualArray::renderCopyInfo(std::string info){
 
 void VisualArray::renderCopyPointers()
 {
-    for(int i = 0; i < currentPointerIndex; i++)
+    for(unsigned int i = 0; i < currentPointerIndex; i++)
     {
         visualPointers[i].render(renderer_ptr);
     }
@@ -127,7 +127,7 @@ int VisualArray::getVal(int index)
 
 VisualPointer* VisualArray::getPointer(std::string name)
 {  
-    for(int i = 0; i < currentPointerIndex; i++)
+    for(unsigned int i = 0; i < currentPointerIndex; i++)
     {
         if(visualPointers[i].getName() == name)
         {
@@ -140,7 +140,7 @@ VisualPointer* VisualArray::getPointer(std::string name)
 }
 VisualPointer* VisualArray::getPointer(int index)
 {   
-    for(int i = 0; i < currentPointerIndex; i++)
+    for(unsigned int i = 0; i < currentPointerIndex; i++)
     {
         if(visualPointers[i].getIndex() == index)
         {
@@ -247,7 +247,7 @@ void VisualArray::addVariable(std::string name, const int value)
 
 VisualVariable* VisualArray::getVariable(std::string name)
 {  
-    for(int i = 0; i < number_of_variables; i++)
+    for(unsigned int i = 0; i < number_of_variables; i++)
     {
         if(visualVariables[i].getName() == name)
         {
@@ -353,14 +353,16 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
     SDL_Renderer* renderer_ptr = config_ptr->renderer_ptr;
     SDL_Event* event_ptr = config_ptr->event_ptr;
     VisualNumber* inserted_clone = new VisualNumber(inserted->getValue(), font_ptr, renderer_ptr);
+    inserted_clone->setX(inserted->getX());
+    inserted_clone->setY(inserted->getY());
     inserted_into->setSkipRender(true);
 
     int inserted_x = inserted_clone->getX();
     int inserted_into_x    = inserted_into->getX();
     int inserted_into_y = inserted_into->getY();
-    int increment_x        = inserted_x - inserted_into_x;
-    int increment_y = inserted_clone->getY() - inserted_into->getY();
-
+    int increment_x        = (inserted_x - inserted_into_x)/(int)RED_SQUARE_WIDTH;
+    int increment_y = (inserted->getY() - inserted_into_y)/(int)RED_SQUARE_WIDTH;
+    
     SDL_Rect inserted_rect;
     if (inserted_clone->getValue() < 10){
         inserted_rect.w = SINGLE_DIGIT_WIDTH;
@@ -380,6 +382,7 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
     inserted_into_rect.h = TEXT_HEIGHT; 
     inserted_into_rect.y = inserted_into->getY();
     inserted_into_rect.x = inserted_into->getX();
+    printf("inserted x: %d, inserted_into x: %d\n", inserted_rect.x, inserted_into_x);
 
     while(inserted_rect.x != inserted_into_x && inserted_rect.y != inserted_into_y)
     {
