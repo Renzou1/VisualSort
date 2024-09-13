@@ -21,7 +21,6 @@ public:
                 unsigned short font_size,
                 const short window_height,
                 const short window_width);
-    void split();
     void swapElementsPointedBy(std::string pointer1, std::string pointer2, Configuration* config_ptr);
     void swap(const int index1, const int index2, Configuration* config_ptr);
     void insert(VisualNumber* inserted, int inserted_into_index, Configuration* config_ptr);
@@ -32,6 +31,7 @@ public:
     void decrementPointer(std::string name, Configuration* config_ptr);
     void setComparing(const int index1, const int index2, bool boolean);
     void setComparing(int index, std::string variable_name, bool boolean);
+    void setComparing(std::string variable_1_name, std::string variable_2_name, bool boolean);
     void renderCopyArray();
     void renderCopySquaresAndNumbers();
     void renderCopyInfo(std::string info);
@@ -59,7 +59,7 @@ private:
     unsigned short window_width;
     unsigned short number_of_variables;
     unsigned short time_counter;
-    VisualVariable visualVariables[3]; // grow as needed
+    VisualVariable visualVariables[4]; // grow as needed
     SDL_Texture* red_square_texture_ptr;
     SDL_Rect initial_digit_rect;
     SDL_Renderer* renderer_ptr;

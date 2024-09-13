@@ -72,6 +72,10 @@ void VisualVariable::renderCopyArray(VisualVariable visualVariables[], short num
         rects[i].w = surfaces[i]->w;
         rects[i].h = surfaces[i]->h;
         rects[i].y = 20;
+        if(surfaces[i]->h < TEXT_HEIGHT) // if font is smol
+        {
+            rects[i].y += TEXT_HEIGHT/4;
+        }
         total_width += rects[i].w;
         if(i + 1 < number_of_variables)
         {
@@ -104,7 +108,7 @@ void VisualVariable::renderCopyArray(VisualVariable visualVariables[], short num
     SDL_Rect number_rects[number_of_variables];
     for(int i = 0; i < number_of_variables; i++)
     {
-        number_rects[i].y = rects[i].y;
+        number_rects[i].y = 20;
         number_rects[i].x = rects[i].x + rects[i].w;
         visualVariables[i].getValue()->setX(number_rects[i].x);
         visualVariables[i].getValue()->setY(number_rects[i].y);

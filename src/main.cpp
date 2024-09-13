@@ -102,7 +102,7 @@ int main ( int argc, char *argv[] )
             insertionSort(array, &config);
             break;
         case QUICK_SORT:
-            quickSort(array, &config);
+            quickSort(array, 0, size - 1, &config);
             break;
         case MERGE_SORT:
             break;

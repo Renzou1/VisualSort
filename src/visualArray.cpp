@@ -114,8 +114,13 @@ void VisualArray::renderCopyPointers()
 void VisualArray::renderCopyVariables(SDL_Renderer* renderer_ptr, 
                                   const unsigned short height, const unsigned short width)
 {
+    TTF_Font* variable_font = font_ptr;
+    if (number_of_variables > 3)
+    {
+        variable_font = small_font_ptr;
+    }
     visualVariables[0].renderCopyArray(visualVariables, number_of_variables, renderer_ptr, 
-                                        window_height, window_width, font_ptr, &time_counter, 
+                                        window_height, window_width, variable_font, &time_counter, 
                                         red_square_texture_ptr);
 }
 
@@ -278,6 +283,16 @@ void VisualArray::setComparing(int index, std::string variable_name, bool boolea
     visualArray[index].setComparing(boolean);
     getVariable(variable_name)->setComparing(boolean);
 }
+
+void VisualArray::setComparing(std::string variable_1_name, std::string variable_2_name, bool boolean)
+{
+    if(boolean == true) {  comparisons++;  }
+    time_counter = 0;
+    getVariable(variable_1_name)->setComparing(boolean);
+    getVariable(variable_2_name)->setComparing(boolean);
+}
+
+
 
 void VisualArray::swapElementsInArray(int index1, int index2)
 {
