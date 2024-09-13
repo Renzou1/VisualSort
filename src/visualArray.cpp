@@ -383,7 +383,7 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
     if (slope < 0) {  slope*=-1;  }
     int increment_x        = (x_difference)/(int)RED_SQUARE_WIDTH;
     int increment_y = (y_difference)/(int)RED_SQUARE_WIDTH;
-    int slope_counter = 0;
+    float slope_counter = 0;
     printf("x_difference, y_difference, slope: %f, %f, %f", x_difference, y_difference, slope);
     
     SDL_Rect inserted_rect;
@@ -427,7 +427,7 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
                 printf("increment: %f, slope: %f\n", increment_x * slope, slope);
                 if (slope_increment < 0) {  slope_increment*=-1;  }
                 slope_counter += slope_increment;
-                printf("slope_counter: %d", slope_counter);
+                printf("slope_counter: %f", slope_counter);
                 printf("current_x: %d\n", inserted_rect.x);  
                 printf("previous_y: %d, goal_y %d\n", inserted_rect.y, inserted_into_y);
                 if (slope_counter > 1)
