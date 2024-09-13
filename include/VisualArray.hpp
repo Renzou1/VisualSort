@@ -59,7 +59,7 @@ private:
     unsigned short window_width;
     unsigned short number_of_variables;
     unsigned short time_counter;
-    VisualVariable visualVariables[4]; // grow as needed
+    VisualVariable visualVariables[2]; // grow as needed
     SDL_Texture* red_square_texture_ptr;
     SDL_Rect initial_digit_rect;
     SDL_Renderer* renderer_ptr;

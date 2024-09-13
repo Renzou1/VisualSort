@@ -34,7 +34,6 @@ SDL_Window* initializeVisualSort(const int size, const int algorithm)
     
     const int window_width =  RED_SQUARE_WIDTH/2 + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH;
     const int window_height = 800;
-    int quick_sort_expansion = 0;
     std::string window_name = "VisualSort V0 - ";
     switch(algorithm){
         case SELECTION_SORT:
@@ -45,7 +44,6 @@ SDL_Window* initializeVisualSort(const int size, const int algorithm)
             break;
         case QUICK_SORT:
             window_name += "quicksort";
-            //quick_sort_expansion = RED_SQUARE_WIDTH * 2;
             break;            
         case MERGE_SORT:
             window_name += "merge sort";
@@ -54,7 +52,7 @@ SDL_Window* initializeVisualSort(const int size, const int algorithm)
     SDL_Window* window = SDL_CreateWindow(
         window_name.c_str(), 
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
-        window_width + quick_sort_expansion, window_height, 
+        window_width, window_height, 
         SDL_WINDOW_SHOWN
         );
 

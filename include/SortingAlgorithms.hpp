@@ -213,48 +213,54 @@ int partition(int array[], int low, int high, VisualArray* visualArray_ptr, Conf
 
 void quickSort(int array[], int low, int high, Configuration* config_ptr, VisualArray* visualArray_ptr)
 {
-    visualArray_ptr->setComparing("low", "high", true);
-    visualArray_ptr->updateVariable("low", low);
-    visualArray_ptr->updateVariable("high", high);
+    visualArray_ptr->setComparing(low, high, true);
+    waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);
+
+    visualArray_ptr->slidePointer("low", low, config_ptr);
+    waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);
+
+    visualArray_ptr->slidePointer("high", high, config_ptr);
     waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);
     if (low < high) {
       
-        visualArray_ptr->setComparing("low", "high", false);
-        // idx is the partition return index of pivot
-        int idx = partition(array, low, high, visualArray_ptr, config_ptr);
-        visualArray_ptr->updateVariable("idx", idx);
+        visualArray_ptr->setComparing(low, high, false);
+
+        // partition_indexis the partition return index of pivot
+        int partition_idx= partition(array, low, high, visualArray_ptr, config_ptr);
+        visualArray_ptr->updateVariable("partition_idx", partition_idx);
         waitForInput(config_ptr, DEFAULT_DELAY, visualArray_ptr);
 
         // Recursion calls for smaller elements
         // and greater or equals elements
-        quickSort(array, low, idx - 1, config_ptr, visualArray_ptr);
-        quickSort(array, idx + 1, high, config_ptr, visualArray_ptr);
+        quickSort(array, low, partition_idx- 1, config_ptr, visualArray_ptr);
+        quickSort(array, partition_idx+ 1, high, config_ptr, visualArray_ptr);
     }
-    visualArray_ptr->setComparing("low", "high", false);
+    visualArray_ptr->setComparing(low, high, false);
 }
 
 void quickSort(int array[], int low, int high, Configuration* config_ptr)
 {
-    VisualArray visualArray = makeVisualArray(array, 2, config_ptr);
+    VisualArray visualArray = makeVisualArray(array, 4, config_ptr);
     visualArray.addVariable("pivot", 0);
-    visualArray.addVariable("low", low);
-    visualArray.addVariable("high", high);
-    int idx = 0;
-    visualArray.addVariable("idx", 0);
+    int partition_idx = 0;
+    visualArray.addVariable("partition_idx", 0); 
+
+    visualArray.addPointer(belowPointer, low, config_ptr->font_ptr, "low");
+    visualArray.addPointer(belowPointer, high, config_ptr->font_ptr, "high");
     visualArray.addPointer(abovePointer, 0, config_ptr->font_ptr, "i");
-    visualArray.addPointer(belowPointer, 0, config_ptr->font_ptr, "j");
+    visualArray.addPointer(abovePointer, 0, config_ptr->font_ptr, "j");
     waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);
     if (low < high) {
       
-        // idx is the partition return index of pivot
-        idx = partition(array, low, high, &visualArray, config_ptr);
-        visualArray.updateVariable("idx", idx);
+        // partition_indexis the partition return index of pivot
+        partition_idx = partition(array, low, high, &visualArray, config_ptr);
+        visualArray.updateVariable("partition_idx", partition_idx);
         waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);
 
         // Recursion calls for smaller elements
         // and greater or equals elements
-        quickSort(array, low, idx - 1, config_ptr, &visualArray);
-        quickSort(array, idx + 1, high, config_ptr, &visualArray);
+        quickSort(array, low, partition_idx - 1, config_ptr, &visualArray);
+        quickSort(array, partition_idx + 1, high, config_ptr, &visualArray);
     }
 }
 
@@ -289,13 +295,13 @@ void quickSort(int arr[], int low, int high) {
   
     if (low < high) {
       
-        // idx is the partition return index of pivot
-        int idx = partition(arr, low, high);
+        // partition_indexis the partition return index of pivot
+        int partition_idx= partition(arr, low, high);
 
         // Recursion calls for smaller elements
         // and greater or equals elements
-        quickSort(arr, low, idx - 1);
-        quickSort(arr, idx + 1, high);
+        quickSort(arr, low, partition_idx- 1);
+        quickSort(arr, partition_idx+ 1, high);
     }
 }
 */
