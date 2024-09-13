@@ -13,6 +13,7 @@
 #define INSERTION_SORT 2
 #define MERGE_SORT     3
 #define QUICK_SORT     4
+#define FONT_PATH "/home/renzo/vscodeprojects/VisualSort/Rubik-Regular.ttf"
 
 const SDL_Color WHITE = {255, 255, 255};
 

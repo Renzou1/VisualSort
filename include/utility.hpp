@@ -11,7 +11,7 @@ TTF_Font* initializeFont(const int font_size){
         std::cout << "TTF_init has failed. Error: " << TTF_GetError() << std::endl;
     }
 
-    TTF_Font* font_ptr =  TTF_OpenFont("Rubik-Regular.ttf", font_size);
+    TTF_Font* font_ptr =  TTF_OpenFont(FONT_PATH, font_size);
     if( font_ptr == NULL )
     {
         std::cout << "Couldn't find font." << std::endl;

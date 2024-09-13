@@ -27,7 +27,7 @@ VisualArray::VisualArray(const int array[], const unsigned int size, const unsig
     this->number_of_variables =    0;
     this->time_counter =           0;
 
-    this->small_font_ptr =         TTF_OpenFont("Rubik-Regular.ttf", INITIAL_FONT_SIZE / 2);
+    this->small_font_ptr =         TTF_OpenFont(FONT_PATH, INITIAL_FONT_SIZE / 2);
     if (small_font_ptr == NULL)
     {
         std::cout << "Error opening font: " << SDL_GetError() << std::endl;
@@ -346,6 +346,13 @@ void VisualArray::swap(int index1, int index2, Configuration* config_ptr)
     swapElementsInArray(index1, index2);
 }
 
+void swap_ints(int& v1, int& v2)
+{
+    int temp = v1;
+    v1 = v2;
+    v2 = temp;
+}
+
 void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Configuration* config_ptr)
 {
     insertions++;
@@ -359,10 +366,22 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
 
     int inserted_x = inserted_clone->getX();
     int inserted_y = inserted_clone->getY();
-    int inserted_into_x    = inserted_into->getX();
+    int inserted_into_x = inserted_into->getX();
     int inserted_into_y = inserted_into->getY();
-    float x_difference = inserted_x - inserted_into_x;
-    float y_difference = inserted_y - inserted_into_y;
+    short x_direction = 1;
+    short y_direction = 1;
+    if (inserted_into_x < inserted_x) // bresenham type inversion
+    {
+        swap_ints(inserted_into_x, inserted_x);
+        x_direction = -1;
+    }
+    if (inserted_into_y < inserted_y)
+    {
+        swap_ints(inserted_into_y, inserted_y);
+        y_direction = -1;
+    }
+    float x_difference = inserted_into_x - inserted_x;
+    float y_difference = inserted_into_y - inserted_y;
 
     float slope;
     if ((y_difference) > (x_difference))
@@ -371,20 +390,18 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
         {
             slope = 0;
         }  else {
-            slope = (y_difference) / (x_difference);
+            slope = (x_difference) / (y_difference);
         }
 
     }  else if (y_difference == 0)
     {
         slope = 0;
     }  else {
-        slope = (x_difference) / (y_difference);
+        slope = (y_difference) / (x_difference);
     }
-    if (slope < 0) {  slope*=-1;  }
-    int increment_x        = (x_difference)/(int)RED_SQUARE_WIDTH;
-    int increment_y = (y_difference)/(int)RED_SQUARE_WIDTH;
+    int increment_x = ((x_difference)/(int)RED_SQUARE_WIDTH) * x_direction;
+    int increment_y = ((y_difference)/(int)RED_SQUARE_WIDTH) * y_direction;
     float slope_counter = 0;
-    printf("x_difference, y_difference, slope: %f, %f, %f", x_difference, y_difference, slope);
     
     SDL_Rect inserted_rect;
     if (inserted_clone->getValue() < 10){
@@ -405,9 +422,8 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
     inserted_into_rect.h = TEXT_HEIGHT; 
     inserted_into_rect.y = inserted_into->getY();
     inserted_into_rect.x = inserted_into->getX();
-    printf("inserted x: %d, inserted_into x: %d\n", inserted_rect.x, inserted_into_x);
 
-    while(inserted_rect.x != inserted_into_x || inserted_rect.y != inserted_into_y)
+    while(inserted_rect.x < inserted_into_x * x_direction|| inserted_rect.y < inserted_into_y * y_direction)
     {
         while (SDL_PollEvent(event_ptr))
         {
@@ -416,34 +432,29 @@ void VisualArray::insert(VisualNumber* inserted, int inserted_into_index, Config
                 destroyVisualSort(config_ptr, this);
             }
         }
-        for(int i = 0; i < SPEED && (inserted_rect.x != inserted_into_x || inserted_rect.y != inserted_into_y); i++)
+        for(int i = 0; i < SPEED && (inserted_rect.x < inserted_into_x * x_direction || inserted_rect.y < inserted_into_y * y_direction); i++)
         {
             if(x_difference > y_difference)
             {
-                printf("previous_x: %d, goal_x: %d\n", inserted_rect.x, inserted_into_x);
-                inserted_rect.x -= increment_x;
+                inserted_rect.x += increment_x;
 
                 float slope_increment = increment_x * slope;
-                printf("increment: %f, slope: %f\n", increment_x * slope, slope);
-                if (slope_increment < 0) {  slope_increment*=-1;  }
+                if (slope_increment < 0){  slope_increment*=-1;  }
                 slope_counter += slope_increment;
-                printf("slope_counter: %f", slope_counter);
-                printf("current_x: %d\n", inserted_rect.x);  
-                printf("previous_y: %d, goal_y %d\n", inserted_rect.y, inserted_into_y);
                 if (slope_counter > 1)
                 {
-                    inserted_rect.y -= (int) slope_counter;
+                    inserted_rect.y += (int) slope_counter;
                     slope_counter -= (int) slope_counter;                 
                 }                
             }  else{
-                inserted_rect.y -= increment_y;
+                inserted_rect.y += increment_y;
 
                 float slope_increment = increment_y * slope;
-                if (slope_increment < 0) {  slope_increment*=-1;  }
+                if (slope_increment < 0){  slope_increment*=-1;  }
                 slope_counter += slope_increment;
                 if(slope_counter > 1)
                 {
-                    inserted_rect.x -= (int) slope_counter;
+                    inserted_rect.x += (int) slope_counter;
                     slope_counter -= (int) slope_counter;
                 }
             }

@@ -23,6 +23,8 @@
 // TODO: make GUI with QT
 // TODO: fix scanf when scanning number of elements
 // TODO: add slope to insertion sort algo
+// TODO: change font path
+// TODO: see comment on insert, bug found
 
 int main ( int argc, char *argv[] )
 {
