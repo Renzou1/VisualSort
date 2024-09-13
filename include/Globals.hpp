@@ -6,6 +6,7 @@
 #define INDEX_TEXTURE_OFFSET 22
 #define DISTANCE_TO_TOP_OF_SCREEN 375 //350
 #define RED_SQUARE_WIDTH (2 * DOUBLE_DIGIT_WIDTH)
+#define WINDOW_HEIGHT 800
 #define DISTANCE_BETWEEN_VARIABLE_STRINGS (RED_SQUARE_WIDTH / 4)
 #define SPEED 3
 #define DEFAULT_DELAY 200
@@ -14,7 +15,7 @@
 #define INSERTION_SORT 2
 #define QUICK_SORT     3
 #define MERGE_SORT     4
-#define FONT_PATH "/home/renzo/vscodeprojects/VisualSort/Rubik-Regular.ttf"
+#define FONT_PATH "Rubik-Regular.ttf"
 
 const SDL_Color WHITE = {255, 255, 255};
 

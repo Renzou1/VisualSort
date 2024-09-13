@@ -65,6 +65,7 @@ void selectionSort(int array[], Configuration* config_ptr)
         }
     }
 
+    visualArray.renderSorted(DISTANCE_TO_TOP_OF_SCREEN - RED_SQUARE_WIDTH);
     waitToQuit(config_ptr, &visualArray);
 }
 
@@ -142,6 +143,7 @@ void insertionSort(int array[], Configuration* config_ptr)
         waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);
     }
     
+    visualArray.renderSorted(DISTANCE_TO_TOP_OF_SCREEN - RED_SQUARE_WIDTH);
     waitToQuit(config_ptr, &visualArray);
 }
 
@@ -269,6 +271,9 @@ void quickSort(int array[], int low, int high, Configuration* config_ptr)
         quickSort(array, low, partition_idx - 1, config_ptr, &visualArray);
         quickSort(array, partition_idx + 1, high, config_ptr, &visualArray);
     }
+
+    visualArray.renderSorted(DISTANCE_TO_TOP_OF_SCREEN + RED_SQUARE_WIDTH);
+    waitToQuit(config_ptr, &visualArray);
 }
 
 /* quicksort base:

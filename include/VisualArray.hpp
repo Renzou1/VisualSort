@@ -35,7 +35,8 @@ public:
     void setComparing(std::string variable_1_name, std::string variable_2_name, bool boolean);
     void renderCopyArray();
     void renderCopySquaresAndNumbers();
-    void renderCopyInfo(std::string info);
+    void renderCopyInfo(std::string info, int y, TTF_Font* font_ptr_);
+    void renderSorted(int y);
     VisualPointer* getPointer(std::string name);
     VisualPointer* getPointer(const int index);
     int getVal(const int index);

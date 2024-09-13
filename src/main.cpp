@@ -11,18 +11,13 @@
 #include "SortingAlgorithms.hpp"
 #include "dimensions.hpp"
 
-// g++ -I include -o main src/* -lSDL2 -lSDL2_image -lSDL2_ttf -pthread -Wall
+// g++ -I include -o visualSort src/* -lSDL2 -lSDL2_image -lSDL2_ttf -pthread -Wall
 // TODO: make makefile
-// TODO: insertion sort, quick sort, merge sort
-// TODO: change flag 2 name in visualNumber
-// TODO: render swap, increments and comparison count
+// TODO: merge sort
 // TODO: should swap count when with itself in selection sort? currently we skip swap if index == index
-// TODO: make a visualArray::compare() that substitutes complicated if logic in SortingAlgorithms.hpp !maybe!
 // TODO: decide if comparing variables should count as comparison
-// TODO: set compare with variables
 // TODO: make GUI with QT
 // TODO: fix scanf when scanning number of elements
-// TODO: change font path
 
 int main ( int argc, char *argv[] )
 {

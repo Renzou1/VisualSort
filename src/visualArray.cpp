@@ -56,7 +56,7 @@ void VisualArray::renderCopyArray()
     info_string += "Swaps: " + std::to_string(swaps) + " | ";
     info_string += "Insertions: " + std::to_string(insertions);
     
-    renderCopyInfo(info_string);
+    renderCopyInfo(info_string, -1, small_font_ptr);
     renderCopySquaresAndNumbers();
     renderCopyPointers();
     renderCopyVariables(renderer_ptr, window_height, window_width);
@@ -85,9 +85,9 @@ void VisualArray::renderCopySquaresAndNumbers()
     }
 }
 
-void VisualArray::renderCopyInfo(std::string info){
+void VisualArray::renderCopyInfo(std::string info, int y, TTF_Font* font_ptr_){
     
-    SDL_Surface* info_surface = TTF_RenderText_Solid(small_font_ptr, info.c_str(), WHITE);
+    SDL_Surface* info_surface = TTF_RenderText_Solid(font_ptr_, info.c_str(), WHITE);
     if (info_surface == NULL){
         std::cout << "Error:" << TTF_GetError() << std::endl;
     }
@@ -97,10 +97,23 @@ void VisualArray::renderCopyInfo(std::string info){
     info_rect.w = info_surface->w;
     info_rect.h = info_surface->h;
     info_rect.x = window_width/2 - info_rect.w/2;
-    info_rect.y = window_height - info_rect.h;    
+    if(y == -1)
+    {
+        info_rect.y = window_height - info_rect.h; 
+
+    }  else info_rect.y = y;
+      
 
     SDL_RenderCopy(renderer_ptr, info_texture, NULL, &info_rect);
     SDL_FreeSurface(info_surface);
+}
+
+void VisualArray::renderSorted(int y)
+{
+    SDL_RenderClear(renderer_ptr);
+    renderCopyInfo("Sorted!", y, font_ptr);
+    renderCopyArray();
+    SDL_RenderPresent(renderer_ptr);
 }
 
 void VisualArray::renderCopyPointers()
@@ -416,27 +429,27 @@ void VisualArray::insert(VisualNumber* inserted, VisualNumber* inserted_into, Co
         swap_shorts(inserted_into_y, inserted_y);
         y_direction = REVERSED;
     }
-    float x_difference = inserted_into_x - inserted_x;
-    float y_difference = inserted_into_y - inserted_y;
+    float initial_x_difference = inserted_into_x - inserted_x;
+    float initial_y_difference = inserted_into_y - inserted_y;
 
     float slope;
-    if ((y_difference) > (x_difference))
+    if ((initial_y_difference) > (initial_x_difference))
     {
-        if(x_difference == 0)
+        if(initial_x_difference == 0)
         {
             slope = 0;
         }  else {
-            slope = (x_difference) / (y_difference);
+            slope = (initial_x_difference) / (initial_y_difference);
         }
 
-    }  else if (y_difference == 0)
+    }  else if (initial_y_difference == 0)
     {
         slope = 0;
     }  else {
-        slope = (y_difference) / (x_difference);
+        slope = (initial_y_difference) / (initial_x_difference);
     }
-    short increment_x = ((x_difference)/(short)RED_SQUARE_WIDTH) * x_direction;
-    short increment_y = ((y_difference)/(short)RED_SQUARE_WIDTH) * y_direction;
+    short increment_x = ((initial_x_difference)/(short)RED_SQUARE_WIDTH) * x_direction;
+    short increment_y = ((initial_y_difference)/(short)RED_SQUARE_WIDTH) * y_direction;
     float slope_counter = 0;
     
     SDL_Rect inserted_rect = clone_rect_from(inserted_clone);
@@ -454,7 +467,7 @@ void VisualArray::insert(VisualNumber* inserted, VisualNumber* inserted_into, Co
         }
         for(int i = 0; i < SPEED; i++)
         {
-            if(x_difference > y_difference)
+            if(initial_x_difference > initial_y_difference)
             {
                 inserted_rect.x += increment_x;
 
@@ -483,20 +496,20 @@ void VisualArray::insert(VisualNumber* inserted, VisualNumber* inserted_into, Co
             short current_y_difference = abs(inserted_rect.y - inserted_into_rect.y);
 
             bool x_is_close_enough = current_x_difference <= abs(increment_x);
-            bool y_is_close_enough = (current_y_difference <= abs(increment_y));
-            bool both_are_changing = (y_difference != 0 && x_difference != 0);
+            bool y_is_close_enough = current_y_difference <= abs(increment_y);
+            bool both_are_changing = initial_y_difference != 0 && initial_x_difference != 0;
 
             if((x_is_close_enough || y_is_close_enough) && both_are_changing)
             {
-                inserted_rect.x = inserted_into_rect.x * x_direction;
-                inserted_rect.y = inserted_into_rect.y * y_direction;
+                inserted_rect.x = inserted_into_rect.x;
+                inserted_rect.y = inserted_into_rect.y;
                 quit = true;
                 break;
 
             }  else if(x_is_close_enough && y_is_close_enough)
             {
-                inserted_rect.x = inserted_into_rect.x * x_direction;
-                inserted_rect.y = inserted_into_rect.y * y_direction;
+                inserted_rect.x = inserted_into_rect.x;
+                inserted_rect.y = inserted_into_rect.y;
                 quit = true;
                 break;
             }
