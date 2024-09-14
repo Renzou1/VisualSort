@@ -1,10 +1,8 @@
 *.exe
 *.dll
 .vscode
-Makefile
 include/SDL2
 lib
 output
-Makefile
 main
 VisualSort

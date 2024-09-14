@@ -11,18 +11,17 @@
 #include "SortingAlgorithms.hpp"
 #include "dimensions.hpp"
 
-// g++ -I include -o visualSort src/* -lSDL2 -lSDL2_image -lSDL2_ttf -pthread -Wall
-// TODO: make makefile
 // TODO: merge sort
 // TODO: should swap count when with itself in selection sort? currently we skip swap if index == index
 // TODO: decide if comparing variables should count as comparison
 // TODO: make GUI with QT
 // TODO: fix scanf when scanning number of elements
+// TODO: let user have control over speed, wait for input
 
 int main ( int argc, char *argv[] )
 {
     srand(time(NULL));
-    std::cout << "How many elements in your array? (60 max)" << std::endl;
+    std::cout << "How many elements in your array? (Recommended: 5 to 15)" << std::endl;
 
     short size;
     scanf("%hd", &size);
@@ -52,34 +51,34 @@ int main ( int argc, char *argv[] )
             array[i] = temp;
         }
     }
-    
+
+    std::cout << "Please select the sorting algorithm.\n";
+    std::cout << "1. selectionsort\n2. insertionsort\n3. quicksort\n";//4. mergesort\n";
+    unsigned short algorithm;
+    scanf("%hd", &algorithm);
+    while(algorithm < 0 || algorithm > 3)
+    {
+        std::cout << "invalid number, try again.\n";
+        scanf("%hd", &algorithm);
+    }   
+
     SDL_DisplayMode dm;
     unsigned short width;
     const short default_width = 1920;
     if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
     {
-        SDL_Log("SDL_GetDesktopDisplayMode failed: %s; will assume screen width of 1920", SDL_GetError());
+        SDL_Log("SDL_GetDesktopDisplayMode failed: %s\n will assume screen width of 1920", SDL_GetError());
         width = default_width;
     }  else {
         width = dm.w;
     }
 
     unsigned short font_size = INITIAL_FONT_SIZE;
-    if(font_size * 2 * size + font_size * 2 > width)
+    if(font_size * 2 * size + font_size * 2 > width - 200)
     {
         // scales font size depending on screen width and array size
-        font_size = (width - 200)/ (2 * size);
+        font_size = (short) ((width - 200)/ (1.8 * (size + 5)));
     }
-
-    std::cout << "Please select the sorting algorithm.\n";
-    std::cout << "1. selectionsort\n2. insertionsort\n3. quicksort\n4. mergesort\n";
-    unsigned short algorithm;
-    scanf("%hd", &algorithm);
-    while(algorithm < 0 || algorithm > 4)
-    {
-        std::cout << "invalid number, try again.\n";
-        scanf("%hd", &algorithm);
-    }    
 
     TTF_Font* font_ptr = initializeFont(font_size);
     setGlobalTextDimensions(font_ptr);
