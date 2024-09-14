@@ -34,7 +34,7 @@ SDL_Window* initializeVisualSort(const int size, const int algorithm)
     
     const int window_width =  RED_SQUARE_WIDTH/2 + RED_SQUARE_WIDTH * size + RED_SQUARE_WIDTH;
     const int window_height = WINDOW_HEIGHT;
-    std::string window_name = "VisualSort V0 - ";
+    std::string window_name = "VisualSort V1 - ";
     switch(algorithm){
         case SELECTION_SORT:
             window_name += "selection sort";
