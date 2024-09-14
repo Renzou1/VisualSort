@@ -429,27 +429,27 @@ void VisualArray::insert(VisualNumber* inserted, VisualNumber* inserted_into, Co
         swap_shorts(inserted_into_y, inserted_y);
         y_direction = REVERSED;
     }
-    float initial_x_difference = inserted_into_x - inserted_x;
-    float initial_y_difference = inserted_into_y - inserted_y;
+    short x_difference = inserted_into_x - inserted_x;
+    short y_difference = inserted_into_y - inserted_y;
 
     float slope;
-    if ((initial_y_difference) > (initial_x_difference))
+    if ((y_difference) > (x_difference))
     {
-        if(initial_x_difference == 0)
+        if(x_difference == 0)
         {
             slope = 0;
         }  else {
-            slope = (initial_x_difference) / (initial_y_difference);
+            slope = (x_difference) / (float) (y_difference);
         }
 
-    }  else if (initial_y_difference == 0)
+    }  else if (y_difference == 0)
     {
         slope = 0;
     }  else {
-        slope = (initial_y_difference) / (initial_x_difference);
+        slope = (y_difference) / (float) (x_difference);
     }
-    short increment_x = ((initial_x_difference)/(short)RED_SQUARE_WIDTH) * x_direction;
-    short increment_y = ((initial_y_difference)/(short)RED_SQUARE_WIDTH) * y_direction;
+    short increment_x = ((x_difference)/(short)RED_SQUARE_WIDTH) * x_direction;
+    short increment_y = ((y_difference)/(short)RED_SQUARE_WIDTH) * y_direction;
     float slope_counter = 0;
     
     SDL_Rect inserted_rect = clone_rect_from(inserted_clone);
@@ -467,9 +467,16 @@ void VisualArray::insert(VisualNumber* inserted, VisualNumber* inserted_into, Co
         }
         for(int i = 0; i < SPEED; i++)
         {
-            if(initial_x_difference > initial_y_difference)
+            if(x_difference > y_difference)
             {
                 inserted_rect.x += increment_x;
+                if(abs(inserted_rect.x - inserted_into_rect.x) <= abs(increment_x))
+                {
+                    inserted_rect.x = inserted_into_rect.x;
+                    inserted_rect.y = inserted_into_rect.y;
+                    quit = true;
+                    break;
+                }
 
                 float slope_increment = increment_x * slope;
                 if (slope_increment < 0){  slope_increment*=-1;  }
@@ -481,6 +488,13 @@ void VisualArray::insert(VisualNumber* inserted, VisualNumber* inserted_into, Co
                 }                
             }  else{
                 inserted_rect.y += increment_y;
+                if(abs(inserted_rect.y - inserted_into_rect.y) <= abs(increment_y))
+                {
+                    inserted_rect.x = inserted_into_rect.x;
+                    inserted_rect.y = inserted_into_rect.y;
+                    quit = true;
+                    break;
+                }
 
                 float slope_increment = increment_y * slope;
                 if (slope_increment < 0){  slope_increment*=-1;  }
@@ -491,28 +505,6 @@ void VisualArray::insert(VisualNumber* inserted, VisualNumber* inserted_into, Co
                     slope_counter -= (short) slope_counter;
                 }
             }
-            // accounts for imprecision
-            short current_x_difference = abs(inserted_rect.x - inserted_into_rect.x);
-            short current_y_difference = abs(inserted_rect.y - inserted_into_rect.y);
-
-            bool x_is_close_enough = current_x_difference <= abs(increment_x);
-            bool y_is_close_enough = current_y_difference <= abs(increment_y);
-            bool both_are_changing = initial_y_difference != 0 && initial_x_difference != 0;
-
-            if((x_is_close_enough || y_is_close_enough) && both_are_changing)
-            {
-                inserted_rect.x = inserted_into_rect.x;
-                inserted_rect.y = inserted_into_rect.y;
-                quit = true;
-                break;
-
-            }  else if(x_is_close_enough && y_is_close_enough)
-            {
-                inserted_rect.x = inserted_into_rect.x;
-                inserted_rect.y = inserted_into_rect.y;
-                quit = true;
-                break;
-            }
         }
 
         SDL_RenderClear(renderer_ptr);
@@ -522,6 +514,7 @@ void VisualArray::insert(VisualNumber* inserted, VisualNumber* inserted_into, Co
         SDL_RenderPresent(renderer_ptr);
     } 
     inserted_into->destroy();
+    // inserts into array
     *inserted_into = *inserted_clone;
 }
 
