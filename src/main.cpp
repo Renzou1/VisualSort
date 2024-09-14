@@ -12,11 +12,6 @@
 #include "dimensions.hpp"
 
 // TODO: merge sort
-// TODO: should swap count when with itself in selection sort? currently we skip swap if index == index
-// TODO: decide if comparing variables should count as comparison
-// TODO: make GUI with QT
-// TODO: fix scanf when scanning number of elements
-// TODO: let user have control over speed, wait for input
 
 int main ( int argc, char *argv[] )
 {
