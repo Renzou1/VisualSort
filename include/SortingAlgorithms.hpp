@@ -118,8 +118,11 @@ void insertionSort(int array[], Configuration* config_ptr)
             waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);            
         }
 
-        visualArray.setComparing(j, "key", true);
-        waitForInput(config_ptr, DEFAULT_DELAY / 2, &visualArray);
+        if(j >= 0)
+        {
+            visualArray.setComparing(j, "key", true);
+            waitForInput(config_ptr, DEFAULT_DELAY / 2, &visualArray);            
+        }
         while (j >= 0 && array[j] > key)
         {
             visualArray.setComparing(j, "key", false);
@@ -132,8 +135,11 @@ void insertionSort(int array[], Configuration* config_ptr)
             j = j - 1;
             waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);
 
-            visualArray.setComparing(j, "key", true);
-            waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);
+            if(j >= 0)
+            {
+                visualArray.setComparing(j, "key", true);
+                waitForInput(config_ptr, DEFAULT_DELAY, &visualArray);
+            }
         }
         visualArray.setComparing(j, "key", false);
 
